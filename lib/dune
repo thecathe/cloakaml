@@ -1,3 +1,6 @@
 (library
  (name cloakaml)
- (modules turn))
+ (libraries cloakaml.roles)
+ (wrapped true))
+
+(include_subdirs unqualified)

@@ -1,0 +1,9 @@
+(library
+ (name investigative)
+ (public_name cloakaml.roles.investigative)
+ (libraries cloakaml.roles.investigative.alignment
+ cloakaml.roles.investigative.role)
+ (modules investigative)
+ (wrapped true))
+
+(include_subdirs no)

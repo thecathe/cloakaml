@@ -1,0 +1,7 @@
+(library
+ (name alignment)
+ (public_name cloakaml.roles.investigative.alignment)
+ (modules commandant detective police seer sheriff alignment)
+ (wrapped true))
+
+(include_subdirs no)

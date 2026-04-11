@@ -1,0 +1,7 @@
+(library
+ (name role)
+ (public_name cloakaml.roles.investigative.role)
+ (modules fortune_teller oracle psychic tracker watcher wizard role)
+ (wrapped true))
+
+(include_subdirs no)

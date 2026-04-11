@@ -1,0 +1,8 @@
+(library
+ (name roles)
+ (public_name cloakaml.roles)
+ (libraries cloakaml.roles.investigative cloakaml.roles.omniscient)
+ (modules moderator townsfolk scourge roles)
+ (wrapped true))
+
+(include_subdirs no)
