@@ -5,5 +5,5 @@ type t =
 | Townsfolk 
 (** {i aka: villagers, innocents, team members.} *)
 
-| Scourge of Scourge.t
+| Scourge
 (** {i aka: mafia, werewolves, witches, imposters, demons.} *)

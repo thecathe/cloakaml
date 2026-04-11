@@ -1,0 +1,8 @@
+(library
+ (name player)
+ (public_name cloakaml.player)
+
+ (modules player)
+ (wrapped true))
+
+(include_subdirs no)
