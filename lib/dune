@@ -1,6 +1,6 @@
 (library
  (name cloakaml)
- (libraries cloakaml.roles)
+ (libraries cloakaml.game)
  (wrapped true))
 
 (include_subdirs unqualified)

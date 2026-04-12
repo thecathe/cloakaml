@@ -1,4 +1,4 @@
-exception NoPlayers
+(* exception NoPlayers
 
 (** is a placehodler *)
 module Role = struct
@@ -71,4 +71,4 @@ module Examples = struct
       let alignment = Alignment.Innocent
       let is_public = false
     end)
-end
+end *)

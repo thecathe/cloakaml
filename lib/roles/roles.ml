@@ -2,8 +2,8 @@ type t =
 | Moderator
 (** {i aka: storyteller, i.e., the computer in town-of-salem.} *)
 
-| Townsfolk 
+| Innocent 
 (** {i aka: villagers, innocents, team members.} *)
 
-| Scourge
+| Evil
 (** {i aka: mafia, werewolves, witches, imposters, demons.} *)

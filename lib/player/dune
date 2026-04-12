@@ -1,7 +1,7 @@
 (library
  (name player)
  (public_name cloakaml.player)
-
+ (libraries cloakaml.alignment)
  (modules player)
  (wrapped true))
 
