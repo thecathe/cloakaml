@@ -77,7 +77,15 @@ type t =
   | Imp
   (** each night, choose a player: they die. if you kill yourself this way, a minion becomes the imp.
   *)
-[@@deriving show, eq]
+[@@deriving show, enum, eq]
+
+(** {2 Role groups} *)
+
+val townsfolk : t list
+val outsiders : t list
+val minions : t list
+val demons : t list
+
 
 (** {2 Role properties} *)
 

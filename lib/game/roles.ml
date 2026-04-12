@@ -25,7 +25,7 @@ type t =
   | Baron
   (* demons *)
   | Imp
-[@@deriving show { with_path = false }, eq]
+[@@deriving show { with_path = false }, enum, eq]
 
 type kind =
   | Townsfolk
@@ -73,6 +73,14 @@ let is_outsider (x : t) : bool =
 
 let is_minion (x : t) : bool = match kind x with Minion -> true | _ -> false
 let is_demon (x : t) : bool = match kind x with Demon -> true | _ -> false
+
+(* *)
+
+(* TODO: programmatically return list of roles that [is_townsfolk] (same for outsiders, minions and demons) *)
+(* let townsfolk : t list = 
+  of_enum
+;; *)
+
 
 (* *)
 let is_good (x : t) : bool = is_townfolk x || is_outsider x
