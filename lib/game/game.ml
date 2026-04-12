@@ -1,110 +1,4 @@
-module Roles = struct
-  type t =
-    (* townsfolk *)
-    | Washerwoman
-    | Librarian
-    | Investigator
-    | Chef
-    | Empath
-    | FortuneTeller
-    | Undertaker
-    | Monk
-    | Ravenkeeper
-    | Virgin
-    | Slayer
-    | Soldier
-    | Mayor
-    (* outsiders *)
-    | Butler
-    | Drunk
-    | Recluse
-    | Saint
-    (* minions *)
-    | Poisoner
-    | Spy
-    | ScarletWoman
-    | Baron
-    (* demons *)
-    | Imp
-  [@@deriving show { with_path = false }]
-
-  type kind =
-    | Townsfolk
-    | Outsider
-    | Minion
-    | Demon
-  [@@deriving show { with_path = false }]
-
-  let kind : t -> kind = function
-    (* townsfolk *)
-    | Washerwoman -> Townsfolk
-    | Librarian -> Townsfolk
-    | Investigator -> Townsfolk
-    | Chef -> Townsfolk
-    | Empath -> Townsfolk
-    | FortuneTeller -> Townsfolk
-    | Undertaker -> Townsfolk
-    | Monk -> Townsfolk
-    | Ravenkeeper -> Townsfolk
-    | Virgin -> Townsfolk
-    | Slayer -> Townsfolk
-    | Soldier -> Townsfolk
-    | Mayor -> Townsfolk
-    (* outsiders *)
-    | Butler -> Outsider
-    | Drunk -> Outsider
-    | Recluse -> Outsider
-    | Saint -> Outsider
-    (* minions *)
-    | Poisoner -> Minion
-    | Spy -> Minion
-    | ScarletWoman -> Minion
-    | Baron -> Minion
-    (* demons *)
-    | Imp -> Demon
-  ;;
-
-  let is_townfolk (x : t) : bool =
-    match kind x with Townsfolk -> true | _ -> false
-  ;;
-
-  let is_outsider (x : t) : bool =
-    match kind x with Outsider -> true | _ -> false
-  ;;
-
-  let is_minion (x : t) : bool = match kind x with Minion -> true | _ -> false
-  let is_demon (x : t) : bool = match kind x with Demon -> true | _ -> false
-
-  (* *)
-  let is_good (x : t) : bool = is_townfolk x || is_outsider x
-  let is_evil (x : t) : bool = is_minion x || is_demon x
-
-  type alignment =
-    | Good
-    | Evil
-  [@@deriving show { with_path = false }]
-
-  exception CannotDetermineAlignment of t
-
-  let alignment (x : t) : alignment =
-    if is_good x
-    then Good
-    else if is_evil x
-    then Evil
-    else raise (CannotDetermineAlignment x)
-  ;;
-
-  exception CantDetermineAllies of (t * t)
-
-  let allied (a : t) (b : t) : bool =
-    match alignment a, alignment b with
-    | Good, Good -> true
-    | Evil, Evil -> true
-    | _, _ -> false
-  ;;
-
-  let opposed (a : t) (b : t) : bool = allied a b |> Bool.not
-end
+module Roles = Roles
 
 module type Player_Type = sig
   type t =
@@ -141,34 +35,38 @@ module Player : Player_Type = struct
 end
 
 module type Players_Type = sig
-  type t = Set.Make(Player).t
-  type elt = Player.t
+  include Set.S with type elt = Player.t
 
-  val add : elt -> t -> t
-  val min : t -> elt
-
-  exception TooFewPlayers
-
+  val add_role : Roles.t -> t -> t
   val create : elt list -> t
   val alive : t -> t
   val dead : t -> t
   val allied : elt -> t -> t
   val opposed : elt -> t -> t
 
-  type neighbours =
-    { left : Player.t
-    ; right : Player.t
-    }
-  [@@deriving show]
+  module Neighbours : sig
+    type t =
+      { left : Player.t
+      ; right : Player.t
+      }
+    [@@deriving show]
 
-  (** [neighbours x ys] returns the neighbours of [x] in [ys], i.e., those indexed either side of [x]. {b Note:} requires that [x] be in [ys]. {b Note:} if there is only one valid neighbour, then both {!left} and {!right} will refer to the same {!Player.t}. {b Note:} raises [NoNeighbour] in the event that [x] would be it's own neighbours.
+    exception NoNeighboursFound
+    exception InvalidPlayerIndex
+    exception RootPlayerNotFound of Player.t
+
+    val find : Player.t -> Player.t list -> t
+    val find_opt : ?rooted:bool -> Player.t -> Player.t list -> t option
+  end
+
+  (** [neighbours x ys] returns the neighbours of [x] in [ys], i.e., those indexed either side of [x]. {b Note:} requires that [x] be in [ys]. {b Note:} if there is only one valid neighbour, then both {!Neighbours.left} and {!Neighbours.right} will refer to the same {!Player.t}. {b Note:} raises [NoNeighbour] in the event that [x] would be it's own neighbours.
   *)
-  val neighbours : elt -> t -> neighbours
+  val neighbours : elt -> t -> Neighbours.t
 
-  val allied_neighbours : elt -> t -> neighbours
-  val opposed_neighbours : elt -> t -> neighbours
-  val alive_neighbours : elt -> t -> neighbours
-  val dead_neighbours : elt -> t -> neighbours
+  val allied_neighbours : elt -> t -> Neighbours.t
+  val opposed_neighbours : elt -> t -> Neighbours.t
+  val alive_neighbours : elt -> t -> Neighbours.t
+  val dead_neighbours : elt -> t -> Neighbours.t
 end
 
 module MakePlayers (Args : sig
@@ -176,87 +74,94 @@ module MakePlayers (Args : sig
   end) : Players_Type = struct
   (**  *)
 
-  module Players = Set.Make (Player)
+  module Players : Set.S with type elt = Player.t = Set.Make (Player)
+  include Players
 
-  let add = Players.add
-  let min = Players.min_elt
-
-  exception TooFewPlayers
-
-  let create (xs : Player.t list) : Players.t =
-    if List.length xs < Args.minimum_num_players
-    then raise TooFewPlayers
-    else Players.of_list xs
+  let add_role (x : Roles.t) (ys : t) : t =
+    add (Player.create (cardinal ys) x) ys
   ;;
 
-  let alive : Players.t -> Players.t = Players.filter Player.alive
-  let dead : Players.t -> Players.t = Players.filter Player.dead
+  let create (xs : elt list) : t = of_list xs
+  let alive : t -> t = filter Player.alive
+  let dead : t -> t = filter Player.dead
+  let allied (x : elt) : t -> t = filter (Player.allied x)
+  let opposed (x : elt) : t -> t = filter (Player.opposed x)
 
-  let allied (x : Player.t) : Players.t -> Players.t =
-    Players.filter (Player.allied x)
+  module Neighbours = struct
+    type t =
+      { left : Player.t
+      ; right : Player.t
+      }
+    [@@deriving show]
+
+    exception NoNeighboursFound
+    exception InvalidPlayerIndex
+    exception RootPlayerNotFound of Player.t
+
+    let find (x : Player.t) (ys : Player.t list) : t =
+      match List.find_index (Player.equal x) ys with
+      | None -> raise (RootPlayerNotFound x)
+      | Some offset ->
+        let get : int -> Player.t =
+          try List.nth ys with Invalid_argument _ -> raise InvalidPlayerIndex
+        in
+        let max : int = List.length ys in
+        let wraparound (n : int) : int =
+          let n' : int = n mod max in
+          if n' < 0 then max - 1 else n'
+        in
+        let seek (dir : int) : Player.t = get (wraparound (offset + dir)) in
+        let left : Player.t = seek (-1) in
+        let right : Player.t = seek 1 in
+        let nobody : Player.t -> bool = Player.equal x in
+        if nobody left && nobody right then raise NoNeighboursFound;
+        { left; right }
+    ;;
+
+    (** ... if [rooted] is [true] then any {!RootPlayerNotFound} exceptions are propagated.
+    *)
+    let find_opt ?(rooted : bool = true) (x : Player.t) (ys : Player.t list)
+      : t option
+      =
+      try Some (find x ys) with
+      | NoNeighboursFound -> None
+      | RootPlayerNotFound x ->
+        if rooted then raise (RootPlayerNotFound x) else None
+    ;;
+
+    let num_aligned (a : Roles.alignment) (x : Player.t) (ys : Player.t list)
+      : int
+      =
+      match find_opt x ys with
+      | None -> 0
+      | Some { left; right } ->
+        let f (z : Player.t) : int =
+          if Roles.alignment z.role |> Roles.equal_alignment a then 1 else 0
+        in
+        f left + f right
+    ;;
+  end
+
+  let neighbours (x : elt) (ys : t) : Neighbours.t =
+    to_list ys |> Neighbours.find x
   ;;
 
-  let opposed (x : Player.t) : Players.t -> Players.t =
-    Players.filter (Player.opposed x)
-  ;;
+  
+     let filter_neighbours (f : t -> t) (x : elt) (ys : t) : Neighbours.t =
+     f ys |> add x |> neighbours x
+     ;;
 
-  type neighbours =
-    { left : Player.t
-    ; right : Player.t
-    }
-  [@@deriving show { with_path = false }]
+     let allied_neighbours (x : elt) : t -> Neighbours.t =
+     filter_neighbours (allied x) x
+     ;;
 
-  exception NoNeighbour
-  exception PlayerNotIncluded
-  exception NegativeIndex
+     let opposed_neighbours (x : elt) : t -> Neighbours.t =
+     filter_neighbours (opposed x) x
+     ;;
 
-  let neighbours (x : Player.t) (ys : Players.t) : neighbours =
-    let max : int = Players.cardinal ys in
-    let zs : Player.t list = Players.to_list ys in
-    let get : int -> Player.t =
-      try List.nth zs with Invalid_argument _ -> raise NegativeIndex
-    in
-    match List.find_index (Player.equal x) zs with
-    | None -> raise PlayerNotIncluded
-    | Some offset ->
-      let index (n : int) : int = if n < 0 then max - 1 else n in
-      let seek (dir : int) : Player.t = get (index ((offset + dir) mod max)) in
-      let left : Player.t = seek (-1) in
-      let right : Player.t = seek 1 in
-      (* if the left and right are [x] then there are no valid neighbours. *)
-      (* note: this still allows them to be the same non-self player. *)
-      let self : Player.t -> bool = Player.equal x in
-      if self left && self right then raise NoNeighbour;
-      { left; right }
-  ;;
-
-  let filter_neighbours
-        (f : Players.t -> Players.t)
-        (x : Player.t)
-        (ys : Players.t)
-    : neighbours
-    =
-    f ys |> add x |> neighbours x
-  ;;
-
-  let allied_neighbours (x : Player.t) : Players.t -> neighbours =
-    filter_neighbours (allied x) x
-  ;;
-
-  let opposed_neighbours (x : Player.t) : Players.t -> neighbours =
-    filter_neighbours (opposed x) x
-  ;;
-
-  let alive_neighbours : Player.t -> Players.t -> neighbours =
-    filter_neighbours alive
-  ;;
-
-  let dead_neighbours : Player.t -> Players.t -> neighbours =
-    filter_neighbours dead
-  ;;
-
-  type t = Players.t
-  type elt = Player.t
+     let alive_neighbours : elt -> t -> Neighbours.t = filter_neighbours alive
+     let dead_neighbours : elt -> t -> Neighbours.t = filter_neighbours dead
+  
 end
 
 module Players : Players_Type = MakePlayers (struct
