@@ -108,7 +108,6 @@ let alignment (x : t) : alignment =
   else raise (CannotDetermineAlignment x)
 ;;
 
-exception CantDetermineAllies of (t * t)
 
 let allied (a : t) (b : t) : bool =
   match alignment a, alignment b with

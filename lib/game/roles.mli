@@ -79,14 +79,6 @@ type t =
   *)
 [@@deriving show, enum, eq]
 
-(** {2 Role groups} *)
-
-val roles : t list
-val townsfolk : t list
-val outsiders : t list
-val minions : t list
-val demons : t list
-
 (** {2 Role properties} *)
 
 val kind : t -> kind
@@ -97,11 +89,20 @@ val is_demon : t -> bool
 val is_good : t -> bool
 val is_evil : t -> bool
 
+(** {2 Role groups} *)
+
+exception RoleEnumOutOfBounds
+
+val roles : t list
+val townsfolk : t list
+val outsiders : t list
+val minions : t list
+val demons : t list
+
+(** {2 Role alignment }*)
+
 exception CannotDetermineAlignment of t
 
 val alignment : t -> alignment
-
-exception CantDetermineAllies of (t * t)
-
 val allied : t -> t -> bool
 val opposed : t -> t -> bool
