@@ -71,13 +71,13 @@ type t =
   | Saint (** If you {b die} by {i execution}, your team {b loses}. *)
   (* minions *)
   | Poisoner
-  (** Each {{!Round.Phase.Night}Night}, choose a player: they are {i poisoned} tonight and tomorrow-day. (this {i secretly} removes/negates their ability.)
+  (** Each {{!Round.Phase.Night}Night}, choose a player: they are {i poisoned} tonight and tomorrow-day. (This {i secretly} removes/negates their ability.)
   *)
   | Spy
   (** Each {{!Round.Phase.Night}Night}, you see the {b grimoire}. You might register as {!Good} and as a {!Townsfolk} or {!Outsider}, even if {b dead}. {i (The {b grimoire} shows the state-of-the-game.)}
   *)
   | ScarletWoman
-  (** If there are 5 or more players {b alive} & the {!Demon} dies, you become the {!Demon}. ({!Traveller}s don't count.)
+  (** If there are 5 or more players {b alive} and the {!Demon} dies, you become the {!Demon}. ({!Traveller}s don't count.)
   *)
   | Baron (** There are extra {!Outsider}s in play (+2). *)
   (* demons *)

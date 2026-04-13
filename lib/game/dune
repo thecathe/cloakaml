@@ -1,9 +1,19 @@
 (library
  (name game)
  (public_name cloakaml.game)
- (preprocess (pps ppx_deriving.std))
+ (preprocess
+  (pps ppx_deriving.std))
  ; (libraries cloakaml.alignment)
- (modules roles player neighbours players round rounds live_round game)
+ (modules
+  roles
+  player
+  neighbours
+  players
+  round
+  rounds
+  abilities
+  live_round
+  game)
  (wrapped true))
 
 (include_subdirs no)

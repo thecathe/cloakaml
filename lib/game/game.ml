@@ -4,6 +4,7 @@ module Neighbours = Neighbours
 module Players = Players
 module Round = Round
 module Rounds = Rounds
+module Abilities = Abilities
 
 let players : Players.t =
   Players.create
