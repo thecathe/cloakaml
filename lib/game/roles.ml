@@ -76,11 +76,18 @@ let is_demon (x : t) : bool = match kind x with Demon -> true | _ -> false
 
 (* *)
 
-(* TODO: programmatically return list of roles that [is_townsfolk] (same for outsiders, minions and demons) *)
-(* let townsfolk : t list = 
-  of_enum
-;; *)
+exception RoleEnumOutOfBounds
 
+(** [roles] ... (* TODO: can we cache this? some reference wrapper where [let |() = ...] programmatically sets it when module first loaded? *) *)
+let roles : t list =
+  List.init (max + 1) (fun n ->
+    match of_enum n with Some x -> x | None -> raise RoleEnumOutOfBounds)
+;;
+
+let townsfolk : t list = List.filter is_townfolk roles
+let outsiders : t list = List.filter is_outsider roles
+let minions : t list = List.filter is_minion roles
+let demons : t list = List.filter is_demon roles
 
 (* *)
 let is_good (x : t) : bool = is_townfolk x || is_outsider x

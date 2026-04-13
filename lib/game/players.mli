@@ -1,5 +1,7 @@
 include Set.S with type elt = Player.t (** @closed *)
 
+val show : t -> string
+
 val add_role : Roles.t -> t -> t
 val create : elt list -> t
 val alive : t -> t

@@ -81,11 +81,11 @@ type t =
 
 (** {2 Role groups} *)
 
+val roles : t list
 val townsfolk : t list
 val outsiders : t list
 val minions : t list
 val demons : t list
-
 
 (** {2 Role properties} *)
 

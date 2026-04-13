@@ -1,6 +1,15 @@
 module Players : Set.S with type elt = Player.t = Set.Make (Player)
 include Players
 
+let show (xs : t) : string =
+  String.cat
+    (fold
+       (fun x acc -> String.cat (Player.show x) "\n" |> String.cat acc)
+       xs
+       "[\n")
+    "]"
+;;
+
 let add_role (x : Roles.t) (ys : t) : t = add (Player.create (cardinal ys) x) ys
 let create (xs : elt list) : t = of_list xs
 let alive : t -> t = filter Player.alive
