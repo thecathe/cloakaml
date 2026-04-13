@@ -66,13 +66,18 @@ module Setup = struct
       tbl
     ;;
 
-    let available_roles (x : Roles.kind) (m : role_status_map) : Roles.t list =
+    type pull_role =
+      { role : Roles.kind
+      ; map : role_status_map
+      }
+
+    let available_roles (x : pull_role) : Roles.t list =
       Hashtbl.fold
         (fun k v acc ->
-          if Roles.equal_kind x (Roles.kind k) && Bool.not v
+          if Roles.equal_kind x.role (Roles.kind k) && Bool.not v
           then k :: acc
           else acc)
-        m
+        x.map
         []
     ;;
 
@@ -86,34 +91,27 @@ module Setup = struct
            xs)
     ;;
 
-    let pull_role (x : Roles.kind) (m : role_status_map) : Roles.t =
-      let xs = available_roles x m in
+    let pull_role (x : pull_role) : Roles.t =
+      let xs = available_roles x in
       let y = List.nth xs (Random.int (List.length xs)) in
-      Hashtbl.replace m y true;
+      Hashtbl.replace x.map y true;
       y
     ;;
 
-    let rec fill_role
-              (x : Roles.kind)
-              (m : role_status_map)
-              (n : int)
-              (acc : Players.t)
-      : Players.t
-      =
+    let rec fill_role (x : pull_role) (n : int) (acc : Players.t) : Players.t =
       if n <= 0
       then acc
-      else Players.add_role (pull_role x m) acc |> fill_role x m (n - 1)
+      else Players.add_role (pull_role x) acc |> fill_role x (n - 1)
     ;;
 
     let fill_roles (x : t) : Players.t =
       Printf.printf "dist: %s\n" (show x);
-      let m : role_status_map = fresh_role_status_map () in
-      (* Printf.printf "status: %s\n" (show_role_status_map m); *)
+      let map : role_status_map = fresh_role_status_map () in
       Players.empty
-      |> fill_role Roles.Townsfolk m x.townsfolk
-      |> fill_role Roles.Outsider m x.outsiders
-      |> fill_role Roles.Minion m x.minions
-      |> fill_role Roles.Demon m x.demons
+      |> fill_role { map; role = Townsfolk } x.townsfolk
+      |> fill_role { map; role = Outsider } x.outsiders
+      |> fill_role { map; role = Minion } x.minions
+      |> fill_role { map; role = Demon } x.demons
     ;;
 
     let players (n : int) : Players.t = get n |> fill_roles
