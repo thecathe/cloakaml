@@ -19,7 +19,7 @@
  (name cloakaml)
  (synopsis "A short synopsis")
  (description "A longer description")
- (depends ocaml)
+ (depends ocaml deriving odoc yojson)
  (tags
   ("add topics" "to describe" your project)))
 

@@ -30,5 +30,9 @@ in
       zsh
       opam
     ];
+    shellHook = ''
+      eval $(opam env)
+      opam switch cloakaml
+    '';
   }
 # ) { }
