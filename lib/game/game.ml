@@ -32,7 +32,7 @@ module Setup = struct
       make ~townsfolk ~outsiders ~minions ~demons
     ;;
 
-    (** see {{:https://i.redd.it/cunojgi5omnd1.jpeg}here}. *)
+    (** see {{:https://i.redd.it/cunojgi5omnd1.jpeg}here} for the distributions for {b Blood on the Clocktower}. *)
     let get : int -> t = function
       | 5 -> make 3 0 1 1
       | 6 -> make 3 1 1 1
