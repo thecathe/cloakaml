@@ -8,13 +8,17 @@ type alignment =
 (** {1 Role.kind} *)
 
 type kind =
-  | Townsfolk (** a {!alignment.Good} character with a beneficial ability. *)
-  | Outsider (** a {!alignment.Good} character with a hindering ability. *)
+  | Townsfolk (** a {!Good} character with a {i beneficial} ability. *)
+  | Outsider (** a {!Good} character with a {i hindering} ability. *)
   | Minion
-  (** an {!alignment.Evil} character with an ability that hinders the {!alignment.Good} team.
-  *)
+  (** An {!Evil} character with an ability that hinders the {!Good} team. *)
   | Demon
-  (** an {!alignment.Evil} character with the ability to {b kill} at night. *)
+  (** An {!Evil} character with the ability to {b kill} at {{!Round.Phase.Night}Night}.
+  *)
+  | Traveller
+  (** May join the game at any time, and may leave the game at any time. *)
+  | Fabled (** {i Characters for the {b Storyteller}.} *)
+  | Loric (** {i Characters for the {b Storyteller}.} *)
 [@@deriving show, eq]
 
 (** {1 Role.t} *)
@@ -22,60 +26,63 @@ type kind =
 type t =
   (* townsfolk *)
   | Washerwoman
-  (** you start knowing that 1 of 2 players is a particular townsfolk. *)
+  (** You start knowing that 1 of 2 players is a particular {!Townsfolk}. *)
   | Librarian
-  (** you start knowing that 1 of 2 players is a particular outsider (or that zero are in play).
+  (** You start knowing that 1 of 2 players is a particular {!Outsider} (or that zero are in play).
   *)
   | Investigator
-  (** you start knowing that 1 of 2 players is a particular minion. *)
-  | Chef (** you start knowing how many pairs of evil players there are. *)
-  | Empath (** each night, learn how many of your two neighbours are evil. *)
+  (** You start knowing that 1 of 2 players is a particular {!Minion}. *)
+  | Chef (** You start knowing how many pairs of {!Evil} players there are. *)
+  | Empath
+  (** Each {{!Round.Phase.Night}Night}, learn how many of your two {{!Neighbours.t}Neighbours} are {!Evil}.
+  *)
   | FortuneTeller
-  (** each night, choose 2 players: you learn if either is a demon. there is a good player that registers as a demon to you (i.e., {b red herring}).
+  (** Each {{!Round.Phase.Night}Night}, choose 2 players: you learn if either is a {!Demon}. There is a {!Good} player that registers as a {!Demon} to you (i.e., {b red herring}).
   *)
   | Undertaker
-  (** each night, you learn which character/role died by execution the previous day.
+  (** Each {{!Round.Phase.Night}Night}, you learn which {{!Roles.t}Role} died by execution the previous {{!Round.Phase.Day}Day}.
   *)
   | Monk
-  (** each night, choose a player (not yourself): they are safe from the demon tonight.
+  (** Each {{!Round.Phase.Night}Night}, choose a player (not yourself): they are {b safe} from the {!Demon} tonight.
   *)
   | Ravenkeeper
-  (** if you die at night, you are worken to choose a player: you learn their character.
+  (** If you {b die} at {{!Round.Phase.Night}Night}, you are woken to choose a player: you learn their {{!Roles.t}Role}.
   *)
   | Virgin
-  (** the 1st time you are nominated, if the nominator is a townsfolk, they are executed immediately.
+  (** The first time you are {i nominated}, if the {b nominator} is a {!Townsfolk}, they are {i executed} immediately.
   *)
   | Slayer
-  (** once per game, during the day, publically choose a player: if they are the demon, they die.
+  (** Once per game, during the {{!Round.Phase.Day}Day}, publically choose a player: if they are the {!Demon}, they {b die}.
   *)
-  | Soldier (** you are safe from the demon. *)
+  | Soldier (** You are {b safe} from the {!Demon}. *)
   | Mayor
-  (** if only 3 players live & no execution occurs, your team wins. if you die at night, another player might die instead.
+  (** If only 3 players live & no execution occurs, your team {b wins}. If you {b die} at {{!Round.Phase.Night}Night}, another player {i might} {b die} instead.
   *)
   (* outsiders *)
   | Butler
-  (** each night, choose a player (not yourself): tomorrow, you may only vote if they are voting too.
+  (** Each {{!Round.Phase.Night}Night}, choose a player (not yourself): {i tomorrow}, you may only vote if they are voting too.
   *)
   | Drunk
-  (** you do not know you are the drunk. you thikm you are a townsfolk character, but you are not.
+  (** You do not know you are the drunk, i.e., you think you are a {!Townsfolk} character, but you are not.
   *)
   | Recluse
-  (** you might register as evil & as a minion or demon, even if dead. *)
-  | Saint (** if you die by execution, your team looses. *)
+  (** Tou might register as {!Evil} and as a {!Minion} or {!Demon}, even if {b dead}.
+  *)
+  | Saint (** If you {b die} by {i execution}, your team {b loses}. *)
   (* minions *)
   | Poisoner
-  (** each night, choose a player: they are poisoned tonight and tomorrow day. (this {i secretly} removes/negates their ability.)
+  (** Each {{!Round.Phase.Night}Night}, choose a player: they are {i poisoned} tonight and tomorrow-day. (this {i secretly} removes/negates their ability.)
   *)
   | Spy
-  (** each night, you see the grimoire. you might register as good & as a townsfolk or outsider, even if dead. (i.e., the grimoire shows the state-of-the-game.)
+  (** Each {{!Round.Phase.Night}Night}, you see the {b grimoire}. You might register as {!Good} and as a {!Townsfolk} or {!Outsider}, even if {b dead}. {i (The {b grimoire} shows the state-of-the-game.)}
   *)
   | ScarletWoman
-  (** if there are 5 or more players alive & the demon dies, you become the demon. (Travellers don't count.)
+  (** If there are 5 or more players {b alive} & the {!Demon} dies, you become the {!Demon}. ({!Traveller}s don't count.)
   *)
-  | Baron (** there are extra outsiders in play (+2). *)
+  | Baron (** There are extra {!Outsider}s in play (+2). *)
   (* demons *)
   | Imp
-  (** each night, choose a player: they die. if you kill yourself this way, a minion becomes the imp.
+  (** Each {{!Round.Phase.Night}Night}, choose a player: they {b die}. If you kill yourself this way, a {!Minion} becomes the {!Imp}.
   *)
 [@@deriving show, enum, eq]
 
@@ -99,7 +106,7 @@ val outsiders : t list
 val minions : t list
 val demons : t list
 
-(** {2 Role alignment }*)
+(** {2 Role alignment}*)
 
 exception CannotDetermineAlignment of t
 

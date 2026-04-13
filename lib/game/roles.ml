@@ -32,6 +32,9 @@ type kind =
   | Outsider
   | Minion
   | Demon
+  | Traveller
+  | Fabled
+  | Loric
 [@@deriving show { with_path = false }, eq]
 
 let kind : t -> kind = function
