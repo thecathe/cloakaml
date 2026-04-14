@@ -1,5 +1,6 @@
 (executable
  (public_name cloakaml)
  (name main)
- (preprocess (pps ppx_deriving.std))
+ (preprocess
+  (pps ppx_deriving.std))
  (libraries cloakaml))

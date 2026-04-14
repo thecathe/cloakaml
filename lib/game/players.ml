@@ -3,11 +3,8 @@ include Players
 
 let show (xs : t) : string =
   String.cat
-    (fold
-       (fun x acc -> String.cat (Player.show x) "\n" |> String.cat acc)
-       xs
-       "[\n")
-    "]"
+    (fold (fun x acc -> Printf.sprintf "%s\n  %s" acc (Player.show x)) xs "[")
+    "\n]"
 ;;
 
 let add_role (x : Roles.t) (ys : t) : t = add (Player.create (cardinal ys) x) ys
@@ -40,27 +37,43 @@ let random ?(f : (t -> t) option) (xs : t) : Player.t =
 
 let alive : t -> t = filter Player.alive
 let dead : t -> t = filter Player.dead
+let poisoned : t -> t = filter Player.poisoned
+let status (x : Player.Status.t) : t -> t = filter (Player.status x)
 let allied (x : Player.t) : t -> t = filter (Player.allied x)
 let opposed (x : Player.t) : t -> t = filter (Player.opposed x)
 
-let neighbours (x : Player.t) (ys : t) : Neighbours.t =
-  to_list ys |> Neighbours.find x
+exception NoPlayerWithRole of Roles.t
+
+let group : Roles.group -> t -> t = function
+  | Roles.Role x ->
+    fun ys ->
+      (try filter (fun y -> Roles.equal x y.role) ys with
+       | Not_found -> raise (NoPlayerWithRole x))
+  | Roles.Kind x -> kinds x
+  | Roles.Alignment x -> aligned x
 ;;
 
-let filter_neighbours (f : t -> t) (x : Player.t) (ys : t) : Neighbours.t =
-  f ys |> add x |> neighbours x
+(** helper function for applying filters that require target to be in resulting set.
+*)
+let incl_self (f : Player.t -> t -> t) (x : Player.t) : t -> t =
+  fun xs -> f x xs |> add x
+;;
+
+let neighbours ?(f : t -> t = fun x -> x) (x : Player.t) (ys : t) : Neighbours.t
+  =
+  f ys |> to_list |> Neighbours.find x
 ;;
 
 let allied_neighbours (x : Player.t) : t -> Neighbours.t =
-  filter_neighbours (allied x) x
+  neighbours ~f:(incl_self allied x) x
 ;;
 
 let opposed_neighbours (x : Player.t) : t -> Neighbours.t =
-  filter_neighbours (opposed x) x
+  neighbours ~f:(incl_self opposed x) x
 ;;
 
-let alive_neighbours : Player.t -> t -> Neighbours.t = filter_neighbours alive
-let dead_neighbours : Player.t -> t -> Neighbours.t = filter_neighbours dead
+let alive_neighbours : Player.t -> t -> Neighbours.t = neighbours ~f:alive
+let dead_neighbours : Player.t -> t -> Neighbours.t = neighbours ~f:dead
 
 let with_active_abilities : t -> t =
   filter (fun y ->

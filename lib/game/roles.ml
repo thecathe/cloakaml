@@ -137,6 +137,17 @@ let allied (a : t) (b : t) : bool =
 
 let opposed (a : t) (b : t) : bool = allied a b |> Bool.not
 
+
+type group =
+  | Role of t
+  | Kind of kind
+  | Alignment of alignment
+[@@deriving show { with_path = false }, eq]
+
+(* type item = | *)
+
+(* let group *)
+
 module Map : Hashtbl.S with type key = t = Hashtbl.Make (struct
     type k = t
     type t = k

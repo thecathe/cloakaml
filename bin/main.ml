@@ -1,82 +1,173 @@
 let () = print_endline "Hello, World!"
-
-(*********************************************)
+let log : string -> unit = Printf.printf "%s\n"
+let logl (x : string) : unit = Printf.sprintf "\n%s" x |> log
 
 open Game
 
-let setup_players (n:int) : Players.t = 
-  let players = Setup.players n in
-  Printf.printf "players (%i) %s\n" n (Players.show players);
-  players;;
+module Utils = struct
+  let setup_players (n : int) : Players.t =
+    let players = Setup.players n in
+    Printf.printf "players (%i) %s\n" n (Players.show players);
+    players
+  ;;
 
-let setup_round (n:int) : Round.t =  Setup.round Day n
+  let setup_round (n : int) : Round.t = Setup.round Day n
+
+  let get_neighbours
+        ?(f : Player.t -> Players.t -> Players.t = fun x -> fun ys -> ys)
+        (xs : Players.t)
+        ?(player = Players.random xs)
+        ()
+    : Neighbours.t
+    =
+    Printf.sprintf "neighbours (of %s)" (Player.show player) |> log;
+    let neighbours = Players.neighbours ~f:(f player) player xs in
+    Printf.sprintf "neighbours: %s" (Neighbours.show neighbours) |> log;
+    neighbours
+  ;;
+end
+
+module Tests = struct
+  open Utils
+
+  let players_setup (n : int) =
+    let _ = setup_players n in
+    ()
+  ;;
+
+  let neighbours (xs : Players.t) ?(player = Players.random xs) () : unit =
+    try
+      let _ = get_neighbours xs ~player () in
+      ()
+    with
+    | Neighbours.NoNeighboursFound ->
+      Printf.sprintf "Err: no neighbours found: %s" (Players.show xs) |> log
+  ;;
+
+  let player_neighbours (n : int) ?(players = setup_players n) () : unit =
+    neighbours players ()
+  ;;
+
+  let neighbours_filter
+        (xs : Players.t)
+        ?(player = Players.random xs)
+        (f : Players.t -> Players.t)
+    : unit
+    =
+    try
+      let _ =
+        get_neighbours ~f:(Players.incl_self (fun _ -> f)) xs ~player ()
+      in
+      ()
+    with
+    | Neighbours.NoNeighboursFound ->
+      Printf.sprintf "Err: no neighbours found: %s" (Players.show xs) |> log
+  ;;
+
+  let player_neighbours_group player players (x : Roles.group) : unit =
+    Printf.sprintf "neighbours (group: %s)" (Roles.show_group x) |> log;
+    neighbours_filter players ~player (Players.group x)
+  ;;
+
+  let player_neighbours_group_kind player players : unit =
+    logl "neighbours: kinds";
+    player_neighbours_group player players (Roles.Kind Townsfolk);
+    player_neighbours_group player players (Roles.Kind Outsider);
+    player_neighbours_group player players (Roles.Kind Minion);
+    player_neighbours_group player players (Roles.Kind Demon)
+  ;;
+
+  let player_neighbours_group_alignment player players : unit =
+    logl "neighbours: alignment";
+    player_neighbours_group player players (Roles.Alignment Good);
+    player_neighbours_group player players (Roles.Alignment Evil)
+  ;;
+
+  let player_neighbours_groups (n : int) ?(players = setup_players n) () : unit =
+    let player = Players.random players in
+    player_neighbours_group_kind player players;
+    player_neighbours_group_alignment player players
+  ;;
+
+  let player_neighbours_status player players (x : Player.Status.t) : unit =
+    Printf.sprintf "neighbours (status: %s)" (Player.Status.show x) |> logl;
+    neighbours_filter players ~player (Players.status x)
+  ;;
+
+  let player_neighbours_statuses (n : int) ?(players = setup_players n) ()
+    : unit
+    =
+    let player = Players.random players in
+    player_neighbours_status player players Player.Status.Alive;
+    player_neighbours_status player players Player.Status.Dead;
+    (* player_neighbours_status player players Player.Status.Poisoned; *)
+    ()
+  ;;
+end
 
 (*********************************************)
 
+module Run = struct
+  open Tests
 
-(** {b test:} neighbours *)
-let () =
-  print_endline "\ntest: neighbours";
-  let min = Players.min_elt Debug.players in
-  Printf.printf "min %s\n" (Roles.show min.role);
-  let neighbours = Players.neighbours min Debug.players in
-  Printf.printf "allied neighbours %s\n" (Neighbours.show neighbours);
-  ()
-;;
+  let log (x : string) (n : int) : unit =
+    Printf.sprintf "test (n: %i) : %s " n x |> logl
+  ;;
 
-(** {b test:} filter alignment neighbours *)
-let () =
-  print_endline "\ntest: filter alignment neighbours";
-  let min = Players.min_elt Debug.players in
-  Printf.printf "min %s\n" (Roles.show min.role);
-  let allies = Players.allied_neighbours min Debug.players in
-  let opposed = Players.opposed_neighbours min Debug.players in
-  Printf.printf "allied neighbours %s\n" (Neighbours.show allies);
-  Printf.printf "opposed neighbours %s\n" (Neighbours.show opposed);
-  ()
-;;
+  let players_setup (n : int) : unit =
+    log "setup players" n;
+    players_setup n
+  ;;
 
-(** {b test:} player setup 5 *)
-let () =
-  print_endline "\ntest: player setup 5";
-  let players = Setup.players 5 in
-  Printf.printf "players %s\n" (Players.show players);
-  let min = Players.min_elt players in
-  Printf.printf "min %s\n" (Roles.show min.role);
-  let allies = Players.allied_neighbours min players in
-  let opposed = Players.opposed_neighbours min players in
-  Printf.printf "allied neighbours %s\n" (Neighbours.show allies);
-  Printf.printf "opposed neighbours %s\n" (Neighbours.show opposed);
-  ()
-;;
+  let player_neighbours (n : int) : unit =
+    log "neighbours" n;
+    player_neighbours n ()
+  ;;
 
-(** {b test:} player setup 10 *)
-let () =
-  print_endline "\ntest: player setup 10";
-  let players = Setup.players 10 in
-  Printf.printf "players %s\n" (Players.show players);
-  let min = Players.min_elt players in
-  Printf.printf "min %s\n" (Roles.show min.role);
-  let allies = Players.allied_neighbours min players in
-  let opposed = Players.opposed_neighbours min players in
-  Printf.printf "allied neighbours %s\n" (Neighbours.show allies);
-  Printf.printf "opposed neighbours %s\n" (Neighbours.show opposed);
-  ()
-;; 
+  let player_neighbours_groups (n : int) : unit =
+    log "neighbours (filter groups)" n;
+    player_neighbours_groups n ()
+  ;;
 
-(** {b test:} player setup 15 *)
-let () =
-  print_endline "\ntest: player setup 15";
-  let players = Setup.players 15 in
-  Printf.printf "players %s\n" (Players.show players);
-  let min = Players.min_elt players in
-  Printf.printf "min %s\n" (Roles.show min.role);
-  let allies = Players.allied_neighbours min players in
-  let opposed = Players.opposed_neighbours min players in
-  Printf.printf "allied neighbours %s\n" (Neighbours.show allies);
-  Printf.printf "opposed neighbours %s\n" (Neighbours.show opposed);
-  ()
-;;
+  let player_neighbours_statuses (n : int) : unit =
+    log "neighbours (filter statuses)" n;
+    player_neighbours_statuses n ()
+  ;;
+end
+
+(** {1 Tests} *)
+
+(** [n] is the number of players to use in the tests. *)
+let n : int = 5
+
+(** {2 Player Setup} *)
+
+(** {b Test:} show randomally generated set of [n] players. *)
+let () = Run.players_setup n
+
+(** {2 Neighbours} *)
+
+(** {b Test:} show neighbours of random player out of set of [n] players. *)
+let () = Run.player_neighbours n
+
+(** {3 Filter Neighbours by Role Groups} *)
+
+(** {b Test:} show neighbours by groups. *)
+let () = Run.player_neighbours_groups n
+
+(** {b Test:} show neighbours by statuses. *)
+let () = Run.player_neighbours_statuses n
+
+(** {2 Round} *)
+
+(** {3 Progression} *)
+
+(** {b Test:} *)
+let () = ()
+
+(** {3 Abilities} *)
+
+(** {3 s} *)
 
 let round_active_abilities (round : Round.t) : unit =
   Printf.printf "players %s\n" (Players.show round.players);

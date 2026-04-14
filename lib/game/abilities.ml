@@ -7,7 +7,7 @@ module Ability = struct
         | Any
         | Night
         | Day
-      [@@deriving show { with_path = false }]
+      [@@deriving show { with_path = false }, eq]
 
       exception AnyPhase
 
@@ -52,7 +52,7 @@ module Ability = struct
       | PlayerStates
       (** Automatically triggered when a condition on the players is met. (E.g., the {{!Roles.ScarletWoman}ScarletWoman}.)
       *)
-    [@@deriving show { with_path = false }]
+    [@@deriving show { with_path = false }, eq]
 
     let active ?(phase : Phase.t option = None) : t -> bool = function
       | Passive -> true

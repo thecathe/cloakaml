@@ -18,16 +18,28 @@ val random : ?f:(t -> t) -> t -> elt
 
 (** {3 Player Fields} *)
 
+(** {4 Status} *)
+
 val alive : t -> t
 val dead : t -> t
+val poisoned : t -> t
+val status : Player.Status.t -> t -> t
+
+(** {4 Groups} *)
+
 val allied : elt -> t -> t
 val opposed : elt -> t -> t
+
+exception NoPlayerWithRole of Roles.t
+
+val group : Roles.group -> t -> t
+val incl_self : (elt -> t -> t) -> elt -> t -> t
 
 (** {3 Player Neighbours} *)
 
 (** [neighbours x ys] returns the neighbours of [x] in [ys], i.e., those indexed either side of [x]. {b Note:} requires that [x] be in [ys]. {b Note:} if there is only one valid neighbour, then both {!Neighbours.left} and {!Neighbours.right} will refer to the same {!Player.t}. {b Note:} raises [NoNeighbour] in the event that [x] would be it's own neighbours.
 *)
-val neighbours : elt -> t -> Neighbours.t
+val neighbours : ?f:(t -> t) -> elt -> t -> Neighbours.t
 
 val allied_neighbours : elt -> t -> Neighbours.t
 val opposed_neighbours : elt -> t -> Neighbours.t

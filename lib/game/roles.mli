@@ -105,11 +105,8 @@ val townsfolk : t list
 val outsiders : t list
 val minions : t list
 val demons : t list
-
 val roles_of_kind : kind -> t list
-
-val random_kind : kind -> t 
-
+val random_kind : kind -> t
 
 (** {2 Role alignment}*)
 
@@ -118,6 +115,12 @@ exception CannotDetermineAlignment of t
 val alignment : t -> alignment
 val allied : t -> t -> bool
 val opposed : t -> t -> bool
+
+type group =
+  | Role of t
+  | Kind of kind
+  | Alignment of alignment
+[@@deriving show, eq]
 
 (** {2 Role Map} *)
 
