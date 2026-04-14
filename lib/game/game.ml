@@ -1,10 +1,11 @@
 module Roles = Roles
+module Phase = Phase
+module Abilities = Abilities
 module Player = Player
 module Neighbours = Neighbours
 module Players = Players
 module Round = Round
 module Rounds = Rounds
-module Abilities = Abilities
 
 let players : Players.t =
   Players.create

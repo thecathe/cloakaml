@@ -15,8 +15,8 @@ exception FirstPhase
 
 (** [back x] the last phase before this current one, raising {!FirstPhase} if this is the first phase of the first round.
 *)
-let back (x : t) : Round.Phase.t =
-  if Round.Phase.is_start_phase x.this.phase && Option.is_none x.prev
+let back (x : t) : Phase.t =
+  if Phase.is_start_phase x.this.phase && Option.is_none x.prev
   then raise FirstPhase
-  else Round.Phase.dual x.this.phase.current
+  else Phase.dual x.this.phase.current
 ;;

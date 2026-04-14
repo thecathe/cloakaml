@@ -1,6 +1,10 @@
+
+(** {1 Abilities} *)
+
+
 type trigger =
-  | Each of Round.Phase.t
-  (** Occurs each {!Round.Phase} (i.e., {{!Round.Phase.Day}Day} or {{!Round.Phase.Night}Night}).
+  | Each of Phase.t
+  (** Occurs each {!Phase} (i.e., {{!Phase.Day}Day} or {{!Phase.Night}Night}).
   *)
   | GameSetup
   (** Occurs {i before} the game starts, during {i {{!Game.Setup}Setup}}. (E.g., the {{!Roles.Baron}Baron} or the {{!Roles.Drunk}Drunk}.)
@@ -102,24 +106,54 @@ type t =
   }
 [@@deriving show { with_path = false }]
 
-exception ToDo
+(** {1 Role Abilities} *)
 
-(* https://ocaml.org/manual/5.4/effects.html *)
-type _ Effect.t += NeedRolesToTarget : unit -> Roles.t Effect.t
-type _ Effect.t += AddExtraOutsider : unit -> unit Effect.t
+module Ability = struct 
+  exception ToDo
 
-let get : Roles.t -> ability list =
-  let open Effect in
+  (* https://ocaml.org/manual/5.4/effects.html *)
+  type _ Effect.t += NeedRolesToTarget : unit -> Roles.t Effect.t
+  type _ Effect.t += AddExtraOutsider : unit -> unit Effect.t
+
+  open Effect
   (* let open Effect.Deep in *)
-  function
-  | Empath ->
+
+  (** {2 Townsfolk} *)
+
+  let washerwoman () : ability list =
+    [ { trigger = StartOfGame
+      ; target = Any 2
+      ; yield = Learn (Either (Kind Townsfolk))
+      ; comment =
+          "You start knowing that 1 of 2 players is a particular Townsfolk."
+      }
+    ]
+  ;;
+
+  let librarian () : ability list = raise ToDo
+
+  let investigator () : ability list =
+    [ { trigger = StartOfGame
+      ; target = Any 2
+      ; yield = Learn (Either (Kind Minion))
+      ; comment =
+          "You start knowing that 1 of 2 players is a particular Minion."
+      }
+    ]
+  ;;
+
+  let chef () : ability list = raise ToDo
+
+  let empath () : ability list =
     [ { trigger = Each Night
       ; target = Neighbours
       ; yield = NumOf (Alignment Evil)
       ; comment = "Each Night, learn how many of your two neighbours are Evil."
       }
     ]
-  | FortuneTeller ->
+  ;;
+
+  let fortune_teller () : ability list =
     [ { trigger = Each Night
       ; target = Players 2
       ; yield = Learn (Either (Kind Demon))
@@ -134,7 +168,50 @@ let get : Roles.t -> ability list =
            to you."
       }
     ]
-  | Baron ->
+  ;;
+
+  let undertaker () : ability list =
+    [ { trigger = Each Night
+      ; target = Situational Executed
+      ; yield = Learn (Exact Role)
+      ; comment =
+          "Each Night, you learn which Role died by execution the previous Day."
+      }
+    ]
+  ;;
+
+  let monk () : ability list = raise ToDo
+
+  let ravenkeeper () : ability list =
+    [ { trigger = OnDeath Night
+      ; target = Player
+      ; yield = Learn (Exact Role)
+      ; comment =
+          "If you die at Night, you are woken to choose a player: you learn \
+           their Role."
+      }
+    ]
+  ;;
+
+  let virgin () : ability list = raise ToDo
+  let slayer () : ability list = raise ToDo
+  let soldier () : ability list = raise ToDo
+  let mayor () : ability list = raise ToDo
+
+  (** {2 Outsiders} *)
+
+  let butler () : ability list = raise ToDo
+  let drunk () : ability list = raise ToDo
+  let recluse () : ability list = raise ToDo
+  let saint () : ability list = raise ToDo
+
+  (** {2 Minions} *)
+
+  let poisoner () : ability list = raise ToDo
+  let spy () : ability list = raise ToDo
+  let scarlet_woman () : ability list = raise ToDo
+
+  let baron () : ability list =
     [ { trigger = GameSetup
       ; target = Nobody
       ; yield =
@@ -146,32 +223,45 @@ let get : Roles.t -> ability list =
       ; comment = "There are extra Outsiders in play (+2)."
       }
     ]
-  | Investigator ->
-    [ { trigger = StartOfGame
-      ; target = Any 2
-      ; yield = Learn (Either (Kind Minion))
-      ; comment =
-          "You start knowing that 1 of 2 players is a particular Minion."
-      }
-    ]
-  | Undertaker ->
-    [ { trigger = Each Night
-      ; target = Situational Executed
-      ; yield = Learn (Exact Role)
-      ; comment =
-          "Each Night, you learn which Role died by execution the previous Day."
-      }
-    ]
-  | Ravenkeeper ->
-    [ { trigger = OnDeath Night
-      ; target = Player
-      ; yield = Learn (Exact Role)
-      ; comment =
-          "If you die at Night, you are woken to choose a player: you learn \
-           their Role."
-      }
-    ]
-  | _ -> raise ToDo
-;;
+  ;;
 
-let make (x : Roles.t) : t = { active = get x; inactive = []; disabled = false }
+  (** {2 Demons} *)
+
+  let imp () : ability list = raise ToDo
+
+  (** {2 Get Role Ability} *)
+
+  let get : Roles.t -> ability list = function
+    (* townsfolk *)
+    | Washerwoman -> washerwoman ()
+    | Librarian -> librarian ()
+    | Investigator -> investigator ()
+    | Chef -> chef ()
+    | Empath -> empath ()
+    | FortuneTeller -> fortune_teller ()
+    | Undertaker -> undertaker ()
+    | Monk -> monk ()
+    | Ravenkeeper -> ravenkeeper ()
+    | Virgin -> virgin ()
+    | Slayer -> slayer ()
+    | Soldier -> soldier ()
+    | Mayor -> mayor ()
+    (* outsiders *)
+    | Butler -> butler ()
+    | Drunk -> drunk ()
+    | Recluse -> recluse ()
+    | Saint -> saint ()
+    (* minions *)
+    | Poisoner -> poisoner ()
+    | Spy -> spy ()
+    | ScarletWoman -> scarlet_woman ()
+    | Baron -> baron ()
+    (* demons *)
+    | Imp -> imp ()
+  ;;
+end 
+
+
+let make (x : Roles.t) : t =
+  { active = Ability.get x; inactive = []; disabled = false }
+;;
