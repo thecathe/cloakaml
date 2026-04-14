@@ -13,6 +13,7 @@
   players
   round
   rounds
+  setup
   live_round
   game)
  (wrapped true))
