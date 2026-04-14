@@ -4,12 +4,22 @@ let () = print_endline "Hello, World!"
 
 open Game
 
+let setup_players (n:int) : Players.t = 
+  let players = Setup.players n in
+  Printf.printf "players (%i) %s\n" n (Players.show players);
+  players;;
+
+let setup_round (n:int) : Round.t =  Setup.round Day n
+
+(*********************************************)
+
+
 (** {b test:} neighbours *)
 let () =
   print_endline "\ntest: neighbours";
-  let min = Players.min_elt players in
+  let min = Players.min_elt Debug.players in
   Printf.printf "min %s\n" (Roles.show min.role);
-  let neighbours = Players.neighbours min players in
+  let neighbours = Players.neighbours min Debug.players in
   Printf.printf "allied neighbours %s\n" (Neighbours.show neighbours);
   ()
 ;;
@@ -17,10 +27,10 @@ let () =
 (** {b test:} filter alignment neighbours *)
 let () =
   print_endline "\ntest: filter alignment neighbours";
-  let min = Players.min_elt players in
+  let min = Players.min_elt Debug.players in
   Printf.printf "min %s\n" (Roles.show min.role);
-  let allies = Players.allied_neighbours min players in
-  let opposed = Players.opposed_neighbours min players in
+  let allies = Players.allied_neighbours min Debug.players in
+  let opposed = Players.opposed_neighbours min Debug.players in
   Printf.printf "allied neighbours %s\n" (Neighbours.show allies);
   Printf.printf "opposed neighbours %s\n" (Neighbours.show opposed);
   ()
@@ -52,7 +62,7 @@ let () =
   Printf.printf "allied neighbours %s\n" (Neighbours.show allies);
   Printf.printf "opposed neighbours %s\n" (Neighbours.show opposed);
   ()
-;;
+;; 
 
 (** {b test:} player setup 15 *)
 let () =
@@ -78,14 +88,14 @@ let round_active_abilities (round : Round.t) : unit =
 ;;
 
 (** {b test:} 5 players, first day, who has active abilities *)
-let () =
+let _s () =
   print_endline "\ntest: 5 players, first day, who has active abilities";
   let round = Setup.round Day 5 in
   round_active_abilities round
 ;;
 
 (** {b test:} 5 players, first night, who has active abilities *)
-let _s () =
+let () =
   print_endline "\ntest: 5 players, first night, who has active abilities";
   let round = Setup.round Night 5 in
   round_active_abilities round

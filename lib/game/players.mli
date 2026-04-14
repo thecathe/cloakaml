@@ -10,9 +10,13 @@ val add_role : Roles.t -> t -> t
 
 val create : elt list -> t
 
-val random : t -> elt
-
 (** {2 Filter Functions} *)
+
+val kinds : Roles.kind -> t -> t
+val aligned : Roles.alignment -> t -> t
+val random : ?f:(t -> t) -> t -> elt
+
+(** {3 Player Fields} *)
 
 val alive : t -> t
 val dead : t -> t
@@ -30,7 +34,15 @@ val opposed_neighbours : elt -> t -> Neighbours.t
 val alive_neighbours : elt -> t -> Neighbours.t
 val dead_neighbours : elt -> t -> Neighbours.t
 
-(** {2 Player Abilities} *)
+(** {2 Game Utils} *)
 
 val with_active_abilities : t -> t
 val with_phase_abilities : Phase.t -> t -> t
+
+(** {3 Setup} *)
+
+exception NoOldRole
+
+(** [replace_kind old new map players] replaces the {{!Player.t.role}role} of one {{!Player.t}player} in [players] with {{!type:Roles.kind}kind} [old] is replaced with a new {{!Player.t.role}role} with {{!type:Roles.kind}kind} [new]. We use [map] to ensure that we don't introduce duplicate {{!Roles.t}roles} into the game, {i and} to that we can't re-add a {{!Roles.t}role} that has been removed.
+*)
+val replace_kind : Roles.kind -> Roles.kind -> bool Roles.Map.t -> t -> unit

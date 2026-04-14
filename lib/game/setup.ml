@@ -31,30 +31,28 @@ module Distribution = struct
 
   let sum (x : t) : int = x.townsfolk + x.outsiders + x.minions + x.demons
 
-  type role_status_map = (Roles.t, bool) Hashtbl.t
-
-  let show_role_status_map (x : role_status_map) : string =
+  let show_role_status_map (x : bool Roles.Map.t) : string =
     String.cat
-      (Hashtbl.fold
+      (Roles.Map.fold
          (fun k v acc -> Printf.sprintf "%s%b: %s\n" acc v (Roles.show k))
          x
          "[\n")
       "]"
   ;;
 
-  let fresh_role_status_map () : role_status_map =
-    let tbl : (Roles.t, bool) Hashtbl.t = Hashtbl.create Roles.max in
-    List.iter (fun x -> Hashtbl.add tbl x false) Roles.roles;
+  let fresh_role_status_map () : bool Roles.Map.t =
+    let tbl : bool Roles.Map.t = Roles.Map.create Roles.max in
+    List.iter (fun x -> Roles.Map.add tbl x false) Roles.roles;
     tbl
-  ;;
+  ;; 
 
   type pull_role =
     { role : Roles.kind
-    ; map : role_status_map
+    ; map : bool Roles.Map.t
     }
 
   let available_roles (x : pull_role) : Roles.t list =
-    Hashtbl.fold
+    Roles.Map.fold
       (fun k v acc ->
         if Roles.equal_kind x.role (Roles.kind k) && Bool.not v
         then k :: acc
@@ -76,7 +74,7 @@ module Distribution = struct
   let pull_role (x : pull_role) : Roles.t =
     let xs = available_roles x in
     let y = List.nth xs (Random.int (List.length xs)) in
-    Hashtbl.replace x.map y true;
+    Roles.Map.replace x.map y true;
     y
   ;;
 
@@ -86,9 +84,8 @@ module Distribution = struct
     else Players.add_role (pull_role x) acc |> fill_role x (n - 1)
   ;;
 
-  let fill_roles (x : t) : Players.t =
+  let fill_roles (map : bool Roles.Map.t) (x : t) : Players.t =
     Printf.printf "dist: %s\n" (show x);
-    let map : role_status_map = fresh_role_status_map () in
     Players.empty
     |> fill_role { map; role = Townsfolk } x.townsfolk
     |> fill_role { map; role = Outsider } x.outsiders
@@ -96,11 +93,18 @@ module Distribution = struct
     |> fill_role { map; role = Demon } x.demons
   ;;
 
-  let players (n : int) : Players.t = get n |> fill_roles
+  let players (map : bool Roles.Map.t) (n : int) : Players.t =
+    get n |> fill_roles map
+  ;;
 end
 
-let players : int -> Players.t = Distribution.players
+let players ?(map : bool Roles.Map.t = Distribution.fresh_role_status_map ())
+  : int -> Players.t
+  = 
+  Distribution.players map
+;;
 
 let round (starting : Phase.t) (n : int) : Round.t =
-  players n |> Round.initial ~starting
+  let map : bool Roles.Map.t = Distribution.fresh_role_status_map () in
+  players ~map n |> Round.initial ~starting map
 ;;

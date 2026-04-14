@@ -142,12 +142,16 @@ let phase (phase : Phase.t) : t -> Ability.t list = active ~phase
 module Abilities = struct
   exception ToDo
 
-  (* https://ocaml.org/manual/5.4/effects.html *)
-  type _ Effect.t += NeedRolesToTarget : unit -> int Effect.t
-  type _ Effect.t += AddExtraOutsider : unit -> unit Effect.t
+  (* let raise_todo = raise ToDo *)
+  let raise_todo = []
 
   open Effect
-  (* let open Effect.Deep in *)
+  open Effect.Deep
+
+  (* https://ocaml.org/manual/5.4/effects.html *)
+  type _ Effect.t +=
+    | AddExtraOutsider : unit -> unit Effect.t
+    | NeedRolesToTarget : unit -> int Effect.t
 
   (** {2 Townsfolk} *)
 
@@ -161,7 +165,7 @@ module Abilities = struct
     ]
   ;;
 
-  let librarian () : Ability.t list = raise ToDo
+  let librarian () : Ability.t list = raise_todo
 
   let investigator () : Ability.t list =
     [ { trigger = StartOfGame
@@ -173,7 +177,7 @@ module Abilities = struct
     ]
   ;;
 
-  let chef () : Ability.t list = raise ToDo
+  let chef () : Ability.t list = raise_todo
 
   let empath () : Ability.t list =
     [ { trigger = Each Night
@@ -211,7 +215,7 @@ module Abilities = struct
     ]
   ;;
 
-  let monk () : Ability.t list = raise ToDo
+  let monk () : Ability.t list = raise_todo
 
   let ravenkeeper () : Ability.t list =
     [ { trigger = OnDeath Night
@@ -224,23 +228,23 @@ module Abilities = struct
     ]
   ;;
 
-  let virgin () : Ability.t list = raise ToDo
-  let slayer () : Ability.t list = raise ToDo
-  let soldier () : Ability.t list = raise ToDo
-  let mayor () : Ability.t list = raise ToDo
+  let virgin () : Ability.t list = raise_todo
+  let slayer () : Ability.t list = raise_todo
+  let soldier () : Ability.t list = raise_todo
+  let mayor () : Ability.t list = raise_todo
 
   (** {2 Outsiders} *)
 
-  let butler () : Ability.t list = raise ToDo
-  let drunk () : Ability.t list = raise ToDo
-  let recluse () : Ability.t list = raise ToDo
-  let saint () : Ability.t list = raise ToDo
+  let butler () : Ability.t list = raise_todo
+  let drunk () : Ability.t list = raise_todo
+  let recluse () : Ability.t list = raise_todo
+  let saint () : Ability.t list = raise_todo
 
   (** {2 Minions} *)
 
-  let poisoner () : Ability.t list = raise ToDo
-  let spy () : Ability.t list = raise ToDo
-  let scarlet_woman () : Ability.t list = raise ToDo
+  let poisoner () : Ability.t list = raise_todo
+  let spy () : Ability.t list = raise_todo
+  let scarlet_woman () : Ability.t list = raise_todo
 
   let baron () : Ability.t list =
     [ { trigger = GameSetup
@@ -258,7 +262,7 @@ module Abilities = struct
 
   (** {2 Demons} *)
 
-  let imp () : Ability.t list = raise ToDo
+  let imp () : Ability.t list = raise_todo
 
   (** {2 Get Role Ability} *)
 

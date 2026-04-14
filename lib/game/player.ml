@@ -3,7 +3,7 @@
 
 type t =
   { index : int
-  ; role : Roles.t 
+  ; mutable role : Roles.t 
   ; mutable alive : bool
   }
 [@@deriving show { with_path = false }]

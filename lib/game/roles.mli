@@ -106,6 +106,11 @@ val outsiders : t list
 val minions : t list
 val demons : t list
 
+val roles_of_kind : kind -> t list
+
+val random_kind : kind -> t 
+
+
 (** {2 Role alignment}*)
 
 exception CannotDetermineAlignment of t
@@ -113,3 +118,7 @@ exception CannotDetermineAlignment of t
 val alignment : t -> alignment
 val allied : t -> t -> bool
 val opposed : t -> t -> bool
+
+(** {2 Role Map} *)
+
+module Map : Hashtbl.S with type key = t

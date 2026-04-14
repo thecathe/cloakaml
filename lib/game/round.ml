@@ -17,27 +17,42 @@ end
 (** tracks turn counter and players *)
 type t =
   { num : int
-  ; players : Players.t
   ; phase : Phase.data
+  ; players : Players.t
   ; abilities : AbilityMap.t'
   }
 
 exception ToDo
 
-let initial ?(starting : Phase.t = Phase.Day) (players : Players.t) : t =
+let initial
+      ?(starting : Phase.t = Phase.Day)
+      (map : bool Roles.Map.t)
+      (players : Players.t)
+  : t
+  =
   let abilities = AbilityMap.create (Players.cardinal players) in
+  let open Effect in
+  let open Effect.Deep in
   Players.iter
     (fun x ->
+        Printf.printf "getting ability of player %s\n" (Player.show x);
       try
         let ability = Abilities.make x.role in
         AbilityMap.add abilities x ability
       with
+      (* match Abilities.make x.role with *)
       | effect Abilities.Abilities.NeedRolesToTarget (), k ->
-        Effect.Deep.continue k (Players.random players).index
+        let i =
+          (Players.random ~f:(Players.aligned Roles.Good) players).index
+        in
+        Printf.printf "to target %i\n" i;
+        continue k i
       | effect Abilities.Abilities.AddExtraOutsider (), k ->
-        (* TODO: *)
-        raise ToDo
-      (* Effect.Deep.continue k () *))
+        Printf.printf "replacing 2 townsfolk with outsiders\n";
+        Players.replace_kind Townsfolk Outsider map players;
+        Players.replace_kind Townsfolk Outsider map players;
+        continue k ()
+      (*      | (ability : Abilities.t) -> AbilityMap.add abilities x ability *))
     players;
   { num = 0; phase = Phase.make starting; players; abilities }
 ;;
