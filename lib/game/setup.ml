@@ -100,3 +100,7 @@ module Distribution = struct
 end
 
 let players : int -> Players.t = Distribution.players
+
+let round (starting : Phase.t) (n : int) : Round.t =
+  players n |> Round.initial ~starting
+;;
