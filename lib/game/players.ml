@@ -101,7 +101,10 @@ exception NoOldRole
 
 let assert_can_change (x : Roles.kind) (map : bool Roles.Map.t) (e : exn) : unit
   =
-  if exists_role_kind x map then raise e
+  if exists_role_kind x map
+  then (
+    Printf.printf "no players with role: %s\n" (Roles.show_kind x);
+    raise e)
 ;;
 
 let replace_kind
@@ -109,13 +112,40 @@ let replace_kind
       (b : Roles.kind)
       (map : bool Roles.Map.t)
       (xs : t)
-  : unit
+      (ys : t)
+  : Player.t
   =
   assert_can_change b map NoNewRole;
   try
-    let target : Player.t = random ~f:(kinds a) xs in
+    let target : Player.t = random ~f:(kinds a) (Players.diff xs ys) in
     let new_role = Roles.random_kind b in
-    target.role <- new_role
+    Printf.printf
+      "replacing player %i role: %s -> %s\n"
+      target.index
+      (Roles.show target.role)
+      (Roles.show new_role);
+    target.role <- new_role;
+    target
   with
-  | NoPlayersWithRole -> raise NoOldRole
+  | NoPlayersWithRole ->
+    Printf.printf "no players with role: %s\n" (Roles.show_kind a);
+    raise NoOldRole
+;;
+
+let rec replace_n_kinds
+          ?(acc : t = empty)
+          (n : int)
+          (a : Roles.kind)
+          (b : Roles.kind)
+          (map : bool Roles.Map.t)
+          (xs : t)
+  : t
+  =
+  if n <= 0
+  then (
+    Printf.printf "stop replacing kinds";
+    acc)
+  else (
+    let replaced = replace_kind a b map xs acc in
+    replace_n_kinds ~acc:(add replaced acc) (n - 1) a b map xs)
 ;;

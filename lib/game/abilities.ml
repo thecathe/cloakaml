@@ -150,8 +150,11 @@ module Abilities = struct
 
   (* https://ocaml.org/manual/5.4/effects.html *)
   type _ Effect.t +=
-    | AddExtraOutsider : unit -> unit Effect.t
-    | NeedRolesToTarget : unit -> int Effect.t
+    | AddExtraOutsiders : int -> unit Effect.t
+    | GetTargetPlayer : int Effect.t
+
+  let add_extra_outsiders (n : int) = perform (AddExtraOutsiders n)
+  let get_target_player () = perform GetTargetPlayer
 
   (** {2 Townsfolk} *)
 
@@ -196,7 +199,7 @@ module Abilities = struct
           "Each Night, choose 2 players: you learn if either is a Demon."
       }
     ; { trigger = WhenTargetting
-      ; target = SpecificPlayer (perform (NeedRolesToTarget ()))
+      ; target = SpecificPlayer (get_target_player ())
       ; yield = Just (Kind Demon)
       ; comment =
           "The Red Herring: There is a Good player that registers as a Demon \
@@ -252,8 +255,9 @@ module Abilities = struct
       ; yield =
           Fun
             (fun () ->
-              perform (AddExtraOutsider ());
-              perform (AddExtraOutsider ());
+              add_extra_outsiders 2;
+              (* perform (AddExtraOutsider ()); *)
+              (* perform (AddExtraOutsider ()); *)
               Nothing)
       ; comment = "There are extra Outsiders in play (+2)."
       }

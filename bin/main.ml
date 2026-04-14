@@ -11,7 +11,7 @@ module Utils = struct
     players
   ;;
 
-  let setup_round (n : int) : Round.t = Setup.round Day n
+  let setup_round ?(phase = Phase.Day) (n : int) : Round.t = Setup.round phase n
 
   let get_neighbours
         ?(f : Player.t -> Players.t -> Players.t = fun x -> fun ys -> ys)
@@ -65,7 +65,7 @@ module Tests = struct
   ;;
 
   let player_neighbours_group player players (x : Roles.group) : unit =
-    Printf.sprintf "neighbours (group: %s)" (Roles.show_group x) |> log;
+    Printf.sprintf "neighbours (group: %s)" (Roles.show_group x) |> logl;
     neighbours_filter players ~player (Players.group x)
   ;;
 
@@ -178,16 +178,16 @@ let round_active_abilities (round : Round.t) : unit =
   ()
 ;;
 
-(** {b test:} 5 players, first day, who has active abilities *)
-let _s () =
-  print_endline "\ntest: 5 players, first day, who has active abilities";
-  let round = Setup.round Day 5 in
-  round_active_abilities round
-;;
-
 (** {b test:} 5 players, first night, who has active abilities *)
 let () =
   print_endline "\ntest: 5 players, first night, who has active abilities";
-  let round = Setup.round Night 5 in
+  let round = Utils.setup_round ~phase:Night n in
+  round_active_abilities round
+;;
+
+(** {b test:} 5 players, first day, who has active abilities *)
+let () =
+  print_endline "\ntest: 5 players, first day, who has active abilities";
+  let round = Utils.setup_round ~phase:Day n in
   round_active_abilities round
 ;;

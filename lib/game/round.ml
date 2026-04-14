@@ -2,11 +2,8 @@ module AbilityMap = struct
   module Map : Hashtbl.S with type key = Player.t = Hashtbl.Make (struct
       type t = Player.t
 
-      let hash (x : Player.t) = Roles.to_enum x.role
-
-      let equal (a : Player.t) (b : Player.t) : bool =
-        Int.equal (Roles.to_enum a.role) (Roles.to_enum b.role)
-      ;;
+      let hash (x : Player.t) = Int.hash x.index
+      let equal (a : Player.t) (b : Player.t) : bool = Int.equal a.index b.index
     end)
 
   include Map
@@ -24,36 +21,66 @@ type t =
 
 exception ToDo
 
+let get_random_player (x : Roles.alignment) : Players.t -> Player.t =
+  Players.random ~f:(Players.aligned x)
+;;
+
+let get_ability (x : Player.t) : Abilities.t = Abilities.make x.role
+let map_player_ability x acc : unit = get_ability x |> AbilityMap.replace acc x
+
+let rec map_players_ability acc : Player.t list -> unit = function
+  | [] ->
+    print_endline "exit map_players_ability";
+    ()
+  | h :: tl ->
+    Printf.printf "mapping: %s\n" (Player.show h);
+    map_player_ability h acc;
+    Printf.printf "cont. mapping: %s\n" (Players.show (Players.of_list tl));
+    map_players_ability acc tl
+;;
+
+let rec populate_ability_map
+          (xs : Players.t)
+          ?(acc : AbilityMap.t' = AbilityMap.create (Players.cardinal xs))
+          (rm : bool Roles.Map.t)
+  : AbilityMap.t'
+  =
+  (fun () -> Players.to_list xs |> map_players_ability acc)
+  |> handle_populate_ability_map xs acc rm;
+  acc
+
+and handle_populate_ability_map xs acc rm (f : unit -> unit) : unit =
+  match f () with
+  | () -> ()
+  (* | effect e, _ ->
+    Printf.printf
+      "Unhandled effect: %s\n"
+      (Obj.Extension_constructor.name (Obj.Extension_constructor.of_val e));
+    raise (Effect.Unhandled e) *)
+    (* TODO: effects... *)
+  | effect Abilities.Abilities.GetTargetPlayer, k ->
+    let x = get_random_player Roles.Good xs in
+    Printf.printf "target player: %s\n" (Player.show x);
+    handle_populate_ability_map xs acc rm (fun () ->
+      Effect.Deep.continue k x.index)
+  | effect Abilities.Abilities.AddExtraOutsiders (n : int), k ->
+    let replaced = Players.replace_n_kinds n Townsfolk Outsider rm xs in
+    Printf.printf "replaced: %s\n" (Players.show replaced);
+    let need_updating = AbilityMap.to_seq_keys acc |> Players.of_seq in
+    Printf.printf "need updating: %s\n" (Players.show need_updating);
+    let ys = Players.inter replaced need_updating in
+    handle_populate_ability_map ys acc rm (fun () ->
+      Players.to_list ys |> map_players_ability acc);
+    handle_populate_ability_map xs acc rm (fun () -> Effect.Deep.continue k ())
+;;
+
 let initial
       ?(starting : Phase.t = Phase.Day)
       (map : bool Roles.Map.t)
       (players : Players.t)
   : t
   =
-  let abilities = AbilityMap.create (Players.cardinal players) in
-  let open Effect in
-  let open Effect.Deep in
-  Players.iter
-    (fun x ->
-        Printf.printf "getting ability of player %s\n" (Player.show x);
-      try
-        let ability = Abilities.make x.role in
-        AbilityMap.add abilities x ability
-      with
-      (* match Abilities.make x.role with *)
-      | effect Abilities.Abilities.NeedRolesToTarget (), k ->
-        let i =
-          (Players.random ~f:(Players.aligned Roles.Good) players).index
-        in
-        Printf.printf "to target %i\n" i;
-        continue k i
-      | effect Abilities.Abilities.AddExtraOutsider (), k ->
-        Printf.printf "replacing 2 townsfolk with outsiders\n";
-        Players.replace_kind Townsfolk Outsider map players;
-        Players.replace_kind Townsfolk Outsider map players;
-        continue k ()
-      (*      | (ability : Abilities.t) -> AbilityMap.add abilities x ability *))
-    players;
+  let abilities = populate_ability_map players map in
   { num = 0; phase = Phase.make starting; players; abilities }
 ;;
 

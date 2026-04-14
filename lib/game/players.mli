@@ -55,6 +55,14 @@ val with_phase_abilities : Phase.t -> t -> t
 
 exception NoOldRole
 
-(** [replace_kind old new map players] replaces the {{!Player.t.role}role} of one {{!Player.t}player} in [players] with {{!type:Roles.kind}kind} [old] is replaced with a new {{!Player.t.role}role} with {{!type:Roles.kind}kind} [new]. We use [map] to ensure that we don't introduce duplicate {{!Roles.t}roles} into the game, {i and} to that we can't re-add a {{!Roles.t}role} that has been removed.
+(** [replace_kind old new map players exclude] replaces the {{!Player.t.role}role} of one {{!Player.t}player} in [players] that is not in [exclude] with {{!type:Roles.kind}kind} [old] is replaced with a new {{!Player.t.role}role} with {{!type:Roles.kind}kind} [new]. We use [map] to ensure that we don't introduce duplicate {{!Roles.t}roles} into the game, {i and} to that we can't re-add a {{!Roles.t}role} that has been removed.
 *)
-val replace_kind : Roles.kind -> Roles.kind -> bool Roles.Map.t -> t -> unit
+val replace_kind : Roles.kind -> Roles.kind -> bool Roles.Map.t -> t ->t-> elt
+
+val replace_n_kinds
+  :  ?acc:t -> int
+  -> Roles.kind
+  -> Roles.kind
+  -> bool Roles.Map.t
+  -> t
+  -> t
