@@ -1,5 +1,6 @@
 module Roles = Roles
 module Phase = Phase
+module Ability = Ability
 module Abilities = Abilities
 module Player = Player
 module Neighbours = Neighbours

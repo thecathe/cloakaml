@@ -137,7 +137,6 @@ let allied (a : t) (b : t) : bool =
 
 let opposed (a : t) (b : t) : bool = allied a b |> Bool.not
 
-
 type group =
   | Role of t
   | Kind of kind
@@ -149,8 +148,8 @@ type group =
 (* let group *)
 
 module Map : Hashtbl.S with type key = t = Hashtbl.Make (struct
-    type k = t
-    type t = k
+    type nonrec t = t
+    (* [@@deriving show { with_path = false }] *)
 
     let hash x : int = to_enum x
     let equal a b : bool = Int.equal (to_enum a) (to_enum b)

@@ -33,6 +33,10 @@ type t =
   }
 [@@deriving show { with_path = false }]
 
+let index (x:t) : int = x.index
+let role (x:t) : Roles.t = x.role
+let status (x:t) : Status.t = x.status
+
 let show (x : t) : string =
   Printf.sprintf
     "%s (%i, %s)"
@@ -44,6 +48,10 @@ let show (x : t) : string =
 (** [create index role] ... *)
 let create (index : int) (role : Roles.t) : t =
   { index; role; status = Status.initial }
+;;
+
+let replace_role (x:t) (y:Roles.t) : t = 
+  x.role <- y; x
 ;;
 
 (** {2 Equality & Comparison} *)
@@ -65,9 +73,18 @@ let status (x : Status.t) (y : t) : bool = Status.equal x y.status
 let allied (a : t) (b : t) : bool = Roles.allied a.role b.role
 let opposed (a : t) (b : t) : bool = Roles.opposed a.role b.role
 
-(** {2 Ability} *)
 
-let ability (x : t) : Abilities.t = Abilities.make x.role
+(* let ability_triggers (x : t) : Abilities.Triggers.t =
+  Abilities.Triggers.get x.role
+;; *)
+
+module Map : Hashtbl.S with type key = t = Hashtbl.Make (struct
+    type k = t
+    type t = k
+
+    let hash (x : t) = Int.hash x.index
+    let equal (a : t) (b : t) : bool = Int.equal a.index b.index
+  end)
 
 exception CannotPoisonDeadPerson
 

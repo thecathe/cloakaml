@@ -7,11 +7,12 @@
  (modules
   roles
   phase
-  abilities
   player
   neighbours
   players
   round
+  ability
+  abilities
   rounds
   setup
   live_round

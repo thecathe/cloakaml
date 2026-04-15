@@ -169,12 +169,24 @@ let () = ()
 
 (** {3 s} *)
 
-let round_active_abilities (round : Round.t) : unit =
-  Printf.printf "players %s\n" (Players.show round.players);
-  let xs = Round.players_with_active_abilities round in
+ 
+let players_with_kinds_of_ability (ys:Ability.kind list) (x : Round.t) : Players.t =
+   (* Players.with_active_abilities x.players *)
+   Ability.players_have_any_kinds ys x.players
+   ;;
+
+(* let players_with_phase_abilities (x : t) : Players.t =
+   Players.with_phase_abilities x.phase.current x.players
+   ;; *)
+
+
+(* let round_active_abilities (round : Round.t) : unit = *)
+let round_setup_role_abilities (round : Round.t) : unit =
+  Printf.printf "players %s\n" (Players.show round.players); 
+  let xs = Abilities.get round Setup |> Ability.players in
   Printf.printf "active %s\n" (Players.show xs);
-  let ys = Round.players_with_phase_abilities round in
-  Printf.printf "phase %s\n" (Players.show ys);
+  (* let ys = Round.players_with_phase_abilities round in *)
+  (* Printf.printf "phase %s\n" (Players.show ys); *)
   ()
 ;;
 
@@ -182,12 +194,12 @@ let round_active_abilities (round : Round.t) : unit =
 let () =
   print_endline "\ntest: 5 players, first night, who has active abilities";
   let round = Utils.setup_round ~phase:Night n in
-  round_active_abilities round
+  round_setup_role_abilities round
 ;;
 
 (** {b test:} 5 players, first day, who has active abilities *)
 let () =
   print_endline "\ntest: 5 players, first day, who has active abilities";
   let round = Utils.setup_round ~phase:Day n in
-  round_active_abilities round
+  round_setup_role_abilities round
 ;;
