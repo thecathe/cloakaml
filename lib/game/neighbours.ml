@@ -2,7 +2,14 @@ type t =
   { left : Player.t
   ; right : Player.t
   }
-[@@deriving show { with_path = false }]
+(* [@@deriving show { with_path = false }] *)
+
+let show (x : t) : string =
+  Printf.sprintf
+    "{ left: %s\n; right: %s\n}\n"
+    (Player.show x.left)
+    (Player.show x.right)
+;;
 
 exception NoNeighboursFound
 exception InvalidPlayerIndex

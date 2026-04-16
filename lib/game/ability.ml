@@ -23,97 +23,117 @@ module Trigger = struct
   let is_kind a b : bool = kind b |> equal_kind a
 end
 
-(* module Triggers = struct
-  module Set : Set.S with type elt = Trigger.t = Set.Make (struct
-      type t = Trigger.t
-
-      let compare a b : int =
-        Int.compare (Trigger.to_enum a) (Trigger.to_enum b)
-      ;;
-    end)
-
-  include Set [@@deriving show { with_path = false }] (** @closed *)
-end *)
-
-type f = Round.t -> unit
-type map = Trigger.t * f
-
-module type S = sig
-  val x : Roles.t
-  val get : unit -> map list
-  val triggers : unit -> Trigger.t list
-  val has_kind : kind -> bool
-end
-
 exception ToDo
 
-module BlankRole : S = struct
-  let x : Roles.t = Washerwoman
-  let get () : map list = []
-  let triggers () : Trigger.t list = get () |> List.map fst
+module RoleAbility = struct
+  type f = Round.t -> unit
+  type map = Trigger.t * f
 
-  let has_kind (x : kind) : bool =
-    triggers () |> List.exists (Trigger.is_kind x)
+  module type S = sig
+    val x : Roles.t
+    val get : unit -> map list
+    val triggers : unit -> Trigger.t list
+    val has_kind : kind -> bool
+  end
+
+  type t = (module S)
+
+  let has_kind (x : kind) (module X : S) : bool = X.has_kind x
+  let filter_by_kind (x : kind) : t list -> t list = List.filter (has_kind x)
+  let role (module X : S) : Roles.t = X.x
+
+  module Make (X : sig
+      val x : Roles.t
+      val abilities : map list
+    end) : S = struct
+    (** ... *)
+    let x : Roles.t = X.x
+
+    (** ... *)
+    let get () : map list = X.abilities
+
+    (** ... *)
+    let triggers () : Trigger.t list = get () |> List.map fst
+
+    (** ... *)
+    let has_kind (x : kind) : bool =
+      triggers () |> List.exists (Trigger.is_kind x)
+    ;;
+  end
+
+  let setup_baron : map =
+    let f =
+      fun ({ players; rolemap; _ } : Round.t) ->
+      Players.replace_n_player_role_kinds 2 Townsfolk Outsider rolemap players
+    in
+    Setup, f
   ;;
+
+  exception HasNoStartOfGame
+
+  let startofgame (x : Roles.t) : map =
+    let todo = Printf.printf "TODO: %s, %s" (Roles.show x) __FUNCTION__ in
+    let f =
+      match x with
+      | Washerwoman -> fun x -> todo
+      | Librarian -> fun x -> todo
+      | Investigator -> fun x -> todo
+      | Chef -> fun x -> todo
+      | _ -> raise HasNoStartOfGame
+    in
+    StartOfGame, f
+  ;;
+
+  let get : Roles.t -> map list = function
+    (* *)
+    | Washerwoman -> [ startofgame Washerwoman ]
+    | Librarian -> [ startofgame Librarian ]
+    | Investigator -> [ startofgame Investigator ]
+    | Chef -> [ startofgame Chef ]
+    (* *)
+    | Baron -> [ setup_baron ]
+    (* *)
+    | _ -> []
+  ;;
+
+  let make (x : Roles.t) : t =
+    (module Make (struct
+         let x = x
+         let abilities = get x
+       end) : S)
+  ;;
+
+  let of_player (x : Player.t) : t = make x.role
+
+  exception NoneRoles
+
+  let of_role_enum (x : int) : t =
+    match Roles.of_enum x with None -> raise NoneRoles | Some x -> make x
+  ;;
+
+  let role_has_kind (x : kind) (y : Roles.t) : bool = make y |> has_kind x
 end
 
-module Baron : S = struct
-  let x : Roles.t = Baron
+type role_ability = RoleAbility.t
 
-  let setup () : f =
-    fun x ->
-    Players.replace_n_player_role_kinds 2 Townsfolk Outsider x.rolemap x.players
+module RoleAbilities = struct
+  type t = RoleAbility.t list
+
+  let get ?(of_players : Players.t option = None) () : t =
+    match of_players with
+    | None -> List.init Roles.max RoleAbility.of_role_enum
+    | Some players -> Players.to_list players |> List.map RoleAbility.of_player
   ;;
 
-  let get () : map list = [ Setup, setup () ]
-  let triggers () : Trigger.t list = get () |> List.map fst
-
-  let has_kind (x : kind) : bool =
-    triggers () |> List.exists (Trigger.is_kind x)
+  let have_kind ?(of_players : Players.t option) (x : kind) : Roles.t list =
+    get ~of_players ()
+    |> RoleAbility.filter_by_kind x
+    |> List.map RoleAbility.role
   ;;
 end
-
-type role_ability = (module S)
-type role_abilities = role_ability list
-
-let has_kind (x : kind) (module Y : S) : bool = Y.has_kind x
-
-let filter_by_kind (x : kind) : (module S) list -> (module S) list =
-  List.filter (has_kind x)
-;;
-
-let of_role : Roles.t -> (module S) = function
-  | Baron -> (module Baron : S)
-  | _ -> (module BlankRole : S)
-;;
-
-let of_player (x : Player.t) : (module S) = of_role x.role
-let to_role (module X : S) : Roles.t = X.x
-
-exception NoneRoles
-
-let enum_role_abilities (x : int) : (module S) =
-  match Roles.of_enum x with None -> raise NoneRoles | Some x -> of_role x
-;;
-
-let role_abilities ?(of_players : Players.t option = None) () : role_abilities =
-  match of_players with
-  | None -> List.init Roles.max enum_role_abilities
-  | Some players -> Players.to_list players |> List.map of_player
-;;
-
-let role_ability_has_kind (x : kind) (y : Roles.t) : bool =
-  of_role y |> has_kind x
-;;
-
-let role_abilities_have_kind ?(of_players : Players.t option) (x : kind)
-  : Roles.t list
-  =
-  role_abilities ~of_players () |> filter_by_kind x |> List.map to_role
-;;
 
 let player_has_kind (y : kind) (x : Player.t) : bool =
-  role_ability_has_kind y x.role
+  RoleAbility.role_has_kind y x.role
 ;;
 
 let player_has_any_kinds (ys : kind list) (x : Player.t) : bool =
@@ -146,16 +166,16 @@ module Map = struct
 
   include Map (** @closed *)
 
-  type t' = f t
+  type t' = RoleAbility.f t
 
-  let add_all (map : t') (xs : map list) : t' =
+  let add_all (map : t') (xs : RoleAbility.map list) : t' =
     xs |> List.to_seq |> Map.add_seq map;
     map
   ;;
 
-  let of_role ?(map : t' = create 0) : Roles.t -> t' = function
-    | Baron -> Baron.get () |> add_all map
-    | _ -> map
+  let of_role ?(map : t' = create 0) (x : Roles.t) : t' =
+    let module R : RoleAbility.S = (val RoleAbility.make x) in
+    R.get () |> add_all map
   ;;
 
   let make ?(map : t' = create 0) (x : Player.t) : t' = of_role ~map x.role
@@ -166,7 +186,7 @@ module Map = struct
     |> List.exists (fun (k, _) -> Trigger.is_kind x k)
   ;;
 
-  let kind_opt (x : kind) : key -> f -> f option =
+  let kind_opt (x : kind) : key -> RoleAbility.f -> RoleAbility.f option =
     fun k v -> if Trigger.is_kind x k then Some v else None
   ;;
 
@@ -200,11 +220,6 @@ let of_kind (y : kind) (x : Round.t) : t =
   Player.Map.filter_map_inplace (kind_opt y) map;
   map
 ;;
-
-(* let of_kinds (ys:kind list) (x:Round.t) : Map.t' =
-   map_players x.players |> Map.filter_map_inplace (fun k v ->
-
-   ) *)
 
 let get_setup (x : Round.t) : t = of_kind Setup x
 let players (map : t) = Player.Map.to_seq_keys map |> Players.of_seq

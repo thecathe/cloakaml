@@ -13,29 +13,30 @@ module Status = struct
   let dead : t -> bool = function Dead -> true | _ -> false
 end
 
-(* NOTE: maybe useful for automatically attaching events to happen to players themselves. e.g., poisoned for one day would mean that "NextDay" their status would be reverted? *)
-(* module HookMap = Hashtbl.Make (struct
-  type t = Abilities.Ability.Trigger.t
- 
-  exception ToDoHookMap
+module Knowledge = struct
+  type t =
+    | Just of data
+    | Either of data * data
 
-  (* TODO: hash *)
-  let hash x : int = raise ToDoHookMap
+  and data =
+    | PlayerIsRole of int * Roles.t
+    | PlayerIsAligned of int * Roles.alignment
+    | PlayerIsKind of int * Roles.kind
+  (* ... *)
 
-  let equal a b : bool = Abilities.Ability.Trigger.equal a b
-
-end) *)
+  (* let pp : t -> string = function
+     | Just _ -> "Just ..."
+     | Either _ -> "Either ..."
+     ;; *)
+end
 
 type t =
   { index : int
   ; mutable role : Roles.t
-  ; mutable status : Status.t (* ; hooks : HookMap.t *)
+  ; mutable status : Status.t
+  ; knowledge : Knowledge.t list (* ; hooks : HookMap.t *)
   }
-[@@deriving show { with_path = false }]
-
-let index (x:t) : int = x.index
-let role (x:t) : Roles.t = x.role
-let status (x:t) : Status.t = x.status
+(* [@@deriving show { with_path = false }] *)
 
 let show (x : t) : string =
   Printf.sprintf
@@ -45,13 +46,18 @@ let show (x : t) : string =
     (Status.show x.status)
 ;;
 
+let index (x : t) : int = x.index
+let role (x : t) : Roles.t = x.role
+let status (x : t) : Status.t = x.status
+
 (** [create index role] ... *)
 let create (index : int) (role : Roles.t) : t =
-  { index; role; status = Status.initial }
+  { index; role; status = Status.initial; knowledge = [] }
 ;;
 
-let replace_role (x:t) (y:Roles.t) : t = 
-  x.role <- y; x
+let replace_role (x : t) (y : Roles.t) : t =
+  x.role <- y;
+  x
 ;;
 
 (** {2 Equality & Comparison} *)
@@ -73,10 +79,9 @@ let status (x : Status.t) (y : t) : bool = Status.equal x y.status
 let allied (a : t) (b : t) : bool = Roles.allied a.role b.role
 let opposed (a : t) (b : t) : bool = Roles.opposed a.role b.role
 
-
 (* let ability_triggers (x : t) : Abilities.Triggers.t =
-  Abilities.Triggers.get x.role
-;; *)
+   Abilities.Triggers.get x.role
+   ;; *)
 
 module Map : Hashtbl.S with type key = t = Hashtbl.Make (struct
     type k = t
