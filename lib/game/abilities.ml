@@ -17,14 +17,14 @@ let map_player (map : Ability.t) (x : Player.t) : unit =
   ()
 ;;
 
-let map_players (round : Round.t) ?(map = fresh ~round ()) (x : Ability.kind)
+let map_players (round : Round.t) ?(map = fresh ~round ()) (x : Ability.Kind.t)
   : Ability.t
   =
   Ability.players_have_kind x round.players |> Players.iter (map_player map);
   map
 ;;
 
-let get (round : Round.t) ?(map = fresh ~round ()) (x : Ability.kind)
+let get (round : Round.t) ?(map = fresh ~round ()) (x : Ability.Kind.t)
   : Ability.t
   =
   map_players round ~map x

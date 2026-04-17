@@ -169,7 +169,7 @@ let () = ()
 
 (** {3 s} *)
 
-let players_with_kinds_of_ability (ys : Ability.kind list) (x : Round.t)
+let players_with_kinds_of_ability (ys : Ability.Kind.t list) (x : Round.t)
   : Players.t
   =
   (* Players.with_active_abilities x.players *)
@@ -181,14 +181,16 @@ let players_with_kinds_of_ability (ys : Ability.kind list) (x : Round.t)
    ;; *)
 
 (* let round_active_abilities (round : Round.t) : unit = *)
-let round_role_abilities (round : Round.t) (kind : Ability.kind) : unit =
+let round_role_abilities (round : Round.t) (kind : Ability.Kind.t) : unit =
   let xs = Abilities.get round kind |> Ability.players in
-  Printf.printf "active %s %s\n" (Ability.show_kind kind) (Players.show xs)
+  Printf.printf "active %s %s\n" (Ability.Kind.show kind) (Players.show xs)
 ;;
 
 let test_role_abilities (round : Round.t) : unit =
   round_role_abilities round Setup;
-  round_role_abilities round StartOfGame
+  round_role_abilities round StartOfGame;
+  round_role_abilities round PhaseDependant;
+  round_role_abilities round AlwaysActive
 ;;
 
 let setup_round (phase : Phase.t) (n : int) : Round.t =
