@@ -66,7 +66,7 @@ type t =
   (** You do not know you are the drunk, i.e., you think you are a {!Townsfolk} character, but you are not.
   *)
   | Recluse
-  (** Tou might register as {!Evil} and as a {!Minion} or {!Demon}, even if {b dead}.
+  (** You might register as {!Evil} and as a {!Minion} or {!Demon}, even if {b dead}.
   *)
   | Saint (** If you {b die} by {i execution}, your team {b loses}. *)
   (* minions *)
