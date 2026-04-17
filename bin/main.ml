@@ -138,7 +138,7 @@ end
 (** {1 Tests} *)
 
 (** [n] is the number of players to use in the tests. *)
-let n : int = 5
+let n : int = 10
 
 (** {2 Player Setup} *)
 
@@ -190,7 +190,10 @@ let test_role_abilities (round : Round.t) : unit =
   round_role_abilities round Setup;
   round_role_abilities round StartOfGame;
   round_role_abilities round PhaseDependant;
-  round_role_abilities round AlwaysActive
+  round_role_abilities round Passive;
+  round_role_abilities round OnEvent;
+  round_role_abilities round OneTimeUse;
+  round_role_abilities round Conditional
 ;;
 
 let setup_round (phase : Phase.t) (n : int) : Round.t =

@@ -1,11 +1,16 @@
 module Trigger = struct
   type t =
     | Setup
-    | Passive
+    | PerceivedAs
     | StartOfGame
     | EachNight
     | EachDay
-  (* | Conditional *)
+    | OnDeath
+    | OnNomination
+    | Action
+    | AlwaysActive
+    | EndDay
+    | DemonDies
   [@@deriving show { with_path = false }, eq, enum]
 end
 
@@ -14,7 +19,10 @@ module Kind = struct
     | Setup
     | StartOfGame
     | PhaseDependant
-    | AlwaysActive
+    | Passive
+    | OnEvent
+    | OneTimeUse
+    | Conditional
   [@@deriving show { with_path = false }, eq]
 
   (* exception TriggerActiveOnPhase of Phase.t
@@ -26,8 +34,11 @@ module Kind = struct
   let of_trigger : Trigger.t -> t = function
     | Setup -> Setup
     | StartOfGame -> StartOfGame
-    | Passive -> AlwaysActive
+    | PerceivedAs | AlwaysActive -> Passive
     | EachNight | EachDay -> PhaseDependant
+    | OnDeath | OnNomination -> OnEvent
+    | Action -> OneTimeUse
+    | EndDay | DemonDies -> Conditional
   ;;
 
   let trigger_is (a : t) (b : Trigger.t) : bool = of_trigger b |> equal a
@@ -100,56 +111,185 @@ module RoleAbility = struct
       (** *)
       let of_role (x : Roles.t) : f =
         try List.find (fun (y, z) -> Roles.equal x y) X.roles |> snd with
-        | Not_found -> raise (RoleAbilityNotFound (x, Kind.of_trigger trigger))
+        | Not_found ->
+          Printf.printf
+            "role: %s\ntrigger: %s\nkind: %s\n"
+            (Roles.show x)
+            (Trigger.show trigger)
+            (Kind.show (Kind.of_trigger trigger));
+          raise (RoleAbilityNotFound (x, Kind.of_trigger trigger))
       ;;
 
       (** *)
       let get (x : Roles.t) : map = trigger, of_role x
     end
 
-    module Setup : S = Make (struct
-        let trigger : Trigger.t = Setup
+    let make (trigger : Trigger.t) (xs : (Roles.t * f) list) : (module S) =
+      (module Make (struct
+           let trigger = trigger
+           let roles = xs
+         end))
+    ;;
 
-        let baron : Round.t -> unit =
-          fun ({ players; rolemap; _ } : Round.t) ->
-          Players.replace_n_player_role_kinds
-            2
-            Townsfolk
-            Outsider
-            rolemap
-            players
-        ;;
+    let setup () : (module S) =
+      make
+        Setup
+        (let baron : Round.t -> unit =
+           fun ({ players; rolemap; _ } : Round.t) ->
+           Players.replace_n_player_role_kinds
+             2
+             Townsfolk
+             Outsider
+             rolemap
+             players
+         in
+         [ Baron, baron ])
+    ;;
 
-        let roles : (Roles.t * f) list = [ Baron, baron ]
-      end)
+    let start_of_game () : (module S) =
+      make
+        StartOfGame
+        (let washerwoman = fun x -> todo __FUNCTION__ in
+         let librarian = fun x -> todo __FUNCTION__ in
+         let investigator = fun x -> todo __FUNCTION__ in
+         let chef = fun x -> todo __FUNCTION__ in
+         [ Washerwoman, washerwoman
+         ; Librarian, librarian
+         ; Investigator, investigator
+         ; Chef, chef
+         ])
+    ;;
 
-    module StartOfGame : S = Make (struct
-        let trigger : Trigger.t = StartOfGame
+    let perceived_as () : (module S) =
+      make
+        PerceivedAs
+        (let recluse = fun x -> todo __FUNCTION__ in
+         let spy = fun x -> todo __FUNCTION__ in
+         [ Recluse, recluse; Spy, spy ])
+    ;;
 
-        (** {1 Start of Game Role Abilities} *)
+    let each_day () : (module S) = make EachDay []
 
-        let washerwoman = fun x -> todo __FUNCTION__
-        let librarian = fun x -> todo __FUNCTION__
-        let investigator = fun x -> todo __FUNCTION__
-        let chef = fun x -> todo __FUNCTION__
+    let each_night () : (module S) =
+      make
+        EachNight
+        (let empath = fun x -> todo __FUNCTION__ in
+         let fortune_teller = fun x -> todo __FUNCTION__ in
+         let undertaker = fun x -> todo __FUNCTION__ in
+         let monk = fun x -> todo __FUNCTION__ in
+         let butler = fun x -> todo __FUNCTION__ in
+         let poisoner = fun x -> todo __FUNCTION__ in
+         let spy = fun x -> todo __FUNCTION__ in
+         let imp = fun x -> todo __FUNCTION__ in
+         [ Empath, empath
+         ; FortuneTeller, fortune_teller
+         ; Undertaker, undertaker
+         ; Monk, monk
+         ; Butler, butler
+         ; Poisoner, poisoner
+         ; Spy, spy
+         ; Imp, imp
+         ])
+    ;;
 
-        let roles : (Roles.t * f) list =
-          [ Washerwoman, washerwoman
-          ; Librarian, librarian
-          ; Investigator, investigator
-          ; Chef, chef
-          ]
-        ;;
-      end)
+    let action () : (module S) =
+      make
+        Action
+        (let slayer = fun x -> todo __FUNCTION__ in
+         [ Slayer, slayer ])
+    ;;
 
+    let on_death () : (module S) =
+      make
+        OnDeath
+        (let ravenkeeper = fun x -> todo __FUNCTION__ in
+         let saint = fun x -> todo __FUNCTION__ in
+         let imp = fun x -> todo __FUNCTION__ in
+         [ Ravenkeeper, ravenkeeper; Saint, saint; Imp, imp ])
+    ;;
+
+    let on_nomination () : (module S) =
+      make
+        OnNomination
+        (let virgin = fun x -> todo __FUNCTION__ in
+         [ Virgin, virgin ])
+    ;;
+
+    let always_active () : (module S) =
+      make
+        AlwaysActive
+        (let solider = fun x -> todo __FUNCTION__ in
+         [ Soldier, solider ])
+    ;;
+
+    let end_day () : (module S) =
+      make
+        EndDay
+        (let mayor = fun x -> todo __FUNCTION__ in
+         [ Mayor, mayor ])
+    ;;
+
+    let demon_dies () : (module S) =
+      make
+        DemonDies
+        (let scarlet_woman = fun x -> todo __FUNCTION__ in
+         [ ScarletWoman, scarlet_woman ])
+    ;;
+
+    (** Shadowed *)
+    let of_trigger : Trigger.t -> (module S) = function
+      | Setup -> setup ()
+      | PerceivedAs -> perceived_as ()
+      | StartOfGame -> start_of_game ()
+      | EachNight -> each_night ()
+      | EachDay -> each_day ()
+      | OnDeath -> on_death ()
+      | OnNomination -> on_nomination ()
+      | Action -> action ()
+      | AlwaysActive -> always_active ()
+      | EndDay -> end_day ()
+      | DemonDies -> demon_dies ()
+    ;;
+
+    exception ProgrammerMessedUpTriggerModule of (Trigger.t * (module S))
+
+    (** shadowing with sanity check (avoid programmer error) *)
+    let of_trigger (x : Trigger.t) : (module S) =
+      let module X : S = (val of_trigger x) in
+      if Trigger.equal x X.trigger
+      then (module X : S)
+      else raise (ProgrammerMessedUpTriggerModule (x, (module X)))
+    ;;
+
+    exception
+      ProgrammerForgotRoleInTriggerModule of (Roles.t * Trigger.t * Kind.t)
+
+    (** shadowed *)
+    let get (x : Roles.t) (y : Trigger.t) : map list =
+      try
+        let module X : S = (val of_trigger y) in
+        [ X.get x ]
+      with
+      | RoleAbilityNotFound ((x, z) : Roles.t * Kind.t) ->
+        raise (ProgrammerForgotRoleInTriggerModule (x, y, z))
+    ;;
+
+    (** shadowing *)
     let get (x : Roles.t) : map list =
+      let get = get x in
       match x with
-      (* *)
-      | Washerwoman | Librarian | Investigator | Chef -> [ StartOfGame.get x ]
-      (* *)
-      | Baron -> [ Setup.get x ]
-      (* *)
-      | _ -> []
+      | Washerwoman | Librarian | Investigator | Chef -> get StartOfGame
+      | Empath | FortuneTeller | Undertaker | Monk | Butler | Poisoner ->
+        get EachNight
+      | Ravenkeeper | Saint | Imp -> get OnDeath
+      | Virgin -> get OnNomination
+      | Slayer -> get Action
+      | Soldier -> get AlwaysActive
+      | Mayor -> get EndDay
+      | ScarletWoman -> get DemonDies
+      | Drunk | Recluse -> get PerceivedAs
+      | Spy -> List.append (get PerceivedAs) (get PerceivedAs)
+      | Baron -> get Setup
     ;;
   end
 
