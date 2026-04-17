@@ -169,37 +169,43 @@ let () = ()
 
 (** {3 s} *)
 
- 
-let players_with_kinds_of_ability (ys:Ability.kind list) (x : Round.t) : Players.t =
-   (* Players.with_active_abilities x.players *)
-   Ability.players_have_any_kinds ys x.players
-   ;;
+let players_with_kinds_of_ability (ys : Ability.kind list) (x : Round.t)
+  : Players.t
+  =
+  (* Players.with_active_abilities x.players *)
+  Ability.players_have_any_kinds ys x.players
+;;
 
 (* let players_with_phase_abilities (x : t) : Players.t =
    Players.with_phase_abilities x.phase.current x.players
    ;; *)
 
-
 (* let round_active_abilities (round : Round.t) : unit = *)
-let round_setup_role_abilities (round : Round.t) : unit =
-  Printf.printf "players %s\n" (Players.show round.players); 
-  let xs = Abilities.get round Setup |> Ability.players in
-  Printf.printf "active %s\n" (Players.show xs);
-  (* let ys = Round.players_with_phase_abilities round in *)
-  (* Printf.printf "phase %s\n" (Players.show ys); *)
-  ()
+let round_role_abilities (round : Round.t) (kind : Ability.kind) : unit =
+  let xs = Abilities.get round kind |> Ability.players in
+  Printf.printf "active %s %s\n" (Ability.show_kind kind) (Players.show xs)
+;;
+
+let test_role_abilities (round : Round.t) : unit =
+  round_role_abilities round Setup;
+  round_role_abilities round StartOfGame
+;;
+
+let setup_round (phase : Phase.t) (n : int) : Round.t =
+  let round = Utils.setup_round ~phase:Night n in
+  Printf.printf "players %s\n" (Players.show round.players);
+  round
+;;
+
+let test_round_role_abilities (phase : Phase.t) (n : int) : unit =
+  Printf.sprintf "\ntest: %i players, first %s, abilities" n (Phase.show phase)
+  |> logl;
+  let round = setup_round phase n in
+  test_role_abilities round
 ;;
 
 (** {b test:} 5 players, first night, who has active abilities *)
-let () =
-  print_endline "\ntest: 5 players, first night, who has active abilities";
-  let round = Utils.setup_round ~phase:Night n in
-  round_setup_role_abilities round
-;;
+let () = test_round_role_abilities Night n
 
 (** {b test:} 5 players, first day, who has active abilities *)
-let () =
-  print_endline "\ntest: 5 players, first day, who has active abilities";
-  let round = Utils.setup_round ~phase:Day n in
-  round_setup_role_abilities round
-;;
+let () = test_round_role_abilities Day n

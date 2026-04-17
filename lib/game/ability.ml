@@ -25,6 +25,8 @@ end
 
 exception ToDo
 
+let todo (s : string) : unit = Printf.printf "TODO: %s\n" s
+
 module RoleAbility = struct
   type f = Round.t -> unit
   type map = Trigger.t * f
@@ -69,37 +71,82 @@ module RoleAbility = struct
     Setup, f
   ;;
 
-  exception HasNoStartOfGame
+  exception RoleAbilityNotFound of (Roles.t * kind)
 
-  let startofgame (x : Roles.t) : map =
-    let todo = Printf.printf "TODO: %s, %s" (Roles.show x) __FUNCTION__ in
-    let f =
+  module Kinds = struct
+    module type S = sig
+      val trigger : Trigger.t
+      val of_role : Roles.t -> f
+      val get : Roles.t -> map
+    end
+
+    module Make (X : sig
+        val trigger : Trigger.t
+        val roles : (Roles.t * f) list
+      end) : S = struct
+      (** *)
+      let trigger : Trigger.t = X.trigger
+
+      (** *)
+      let of_role (x : Roles.t) : f =
+        try List.find (fun (y, z) -> Roles.equal x y) X.roles |> snd with
+        | Not_found -> raise (RoleAbilityNotFound (x, Trigger.kind trigger))
+      ;;
+
+      (** *)
+      let get (x : Roles.t) : map = trigger, of_role x
+    end
+
+    module Setup : S = Make (struct
+        let trigger : Trigger.t = Setup
+
+        let baron : Round.t -> unit =
+          fun ({ players; rolemap; _ } : Round.t) ->
+          Players.replace_n_player_role_kinds
+            2
+            Townsfolk
+            Outsider
+            rolemap
+            players
+        ;;
+
+        let roles : (Roles.t * f) list = [ Baron, baron ]
+      end)
+
+    module StartOfGame : S = Make (struct
+        let trigger : Trigger.t = StartOfGame
+
+        (** {1 Start of Game Role Abilities} *)
+
+        let washerwoman = fun x -> todo __FUNCTION__
+        let librarian = fun x -> todo __FUNCTION__
+        let investigator = fun x -> todo __FUNCTION__
+        let chef = fun x -> todo __FUNCTION__
+
+        let roles : (Roles.t * f) list =
+          [ Washerwoman, washerwoman
+          ; Librarian, librarian
+          ; Investigator, investigator
+          ; Chef, chef
+          ]
+        ;;
+      end)
+
+    let get (x : Roles.t) : map list =
       match x with
-      | Washerwoman -> fun x -> todo
-      | Librarian -> fun x -> todo
-      | Investigator -> fun x -> todo
-      | Chef -> fun x -> todo
-      | _ -> raise HasNoStartOfGame
-    in
-    StartOfGame, f
-  ;;
-
-  let get : Roles.t -> map list = function
-    (* *)
-    | Washerwoman -> [ startofgame Washerwoman ]
-    | Librarian -> [ startofgame Librarian ]
-    | Investigator -> [ startofgame Investigator ]
-    | Chef -> [ startofgame Chef ]
-    (* *)
-    | Baron -> [ setup_baron ]
-    (* *)
-    | _ -> []
-  ;;
+      (* *)
+      | Washerwoman | Librarian | Investigator | Chef -> [ StartOfGame.get x ]
+      (* *)
+      | Baron -> [ Setup.get x ]
+      (* *)
+      | _ -> []
+    ;;
+  end
 
   let make (x : Roles.t) : t =
     (module Make (struct
          let x = x
-         let abilities = get x
+         let abilities = Kinds.get x
        end) : S)
   ;;
 
