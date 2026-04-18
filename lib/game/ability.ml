@@ -84,17 +84,9 @@ module RoleAbility = struct
     ;;
   end
 
-  let setup_baron : map =
-    let f =
-      fun ({ players; rolemap; _ } : Round.t) ->
-      Players.replace_n_player_role_kinds 2 Townsfolk Outsider rolemap players
-    in
-    Setup, f
-  ;;
-
   exception RoleAbilityNotFound of (Roles.t * Kind.t)
 
-  module Kinds = struct
+  module OfRole = struct
     module type S = sig
       val trigger : Trigger.t
       val of_role : Roles.t -> f
@@ -296,10 +288,11 @@ module RoleAbility = struct
   let make (x : Roles.t) : t =
     (module Make (struct
          let x = x
-         let abilities = Kinds.get x
+         let abilities = OfRole.get x
        end) : S)
   ;;
 
+  let get = make
   let of_player (x : Player.t) : t = make x.role
 
   exception NoneRoles
@@ -310,8 +303,6 @@ module RoleAbility = struct
 
   let role_has_kind (x : Kind.t) (y : Roles.t) : bool = make y |> has_kind x
 end
-
-type role_ability = RoleAbility.t
 
 module RoleAbilities = struct
   type t = RoleAbility.t list
