@@ -1,0 +1,10 @@
+(library
+ (name utils)
+ (public_name cloakaml.utils)
+ (preprocess
+  (pps ppx_deriving.std))
+ (modules
+  utils)
+ (wrapped true))
+
+(include_subdirs no)

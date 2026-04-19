@@ -42,16 +42,18 @@ let find_opt ?(rooted : bool = true) (x : Player.t) (ys : Player.t list)
   =
   try Some (find x ys) with
   | NoNeighboursFound -> None
-  | RootPlayerNotFound x ->
+  | RootPlayerNotFound (x : Player.t) ->
     if rooted then raise (RootPlayerNotFound x) else None
 ;;
 
-let num_aligned (a : Roles.alignment) (x : Player.t) (ys : Player.t list) : int =
+let num_aligned (a : Roles.Alignment.t) (x : Player.t) (ys : Player.t list)
+  : int
+  =
   match find_opt x ys with
   | None -> 0
   | Some { left; right } ->
     let f (z : Player.t) : int =
-      if Roles.alignment z.role |> Roles.equal_alignment a then 1 else 0
+      if Roles.Role.alignment z.role |> Roles.Alignment.equal a then 1 else 0
     in
     f left + f right
 ;;

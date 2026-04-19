@@ -1,3 +1,5 @@
+module Round = Round
+
 (** linked-list into previous rounds *)
 type t =
   { this : Round.t

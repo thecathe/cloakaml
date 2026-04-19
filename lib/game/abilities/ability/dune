@@ -1,0 +1,27 @@
+(library
+ (name types)
+ (public_name cloakaml.game.abilities.ability.types)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries cloakaml.game.rounds.round cloakaml.game.abilities.ability.trigger)
+ ; (modules_without_implementation types)
+ (modules types)
+ (wrapped true))
+
+(library
+ (name ability)
+ (public_name cloakaml.game.abilities.ability)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.game.player
+  cloakaml.game.players
+  cloakaml.game.phase
+  cloakaml.game.rounds.round
+  cloakaml.game.abilities.ability.trigger
+  cloakaml.game.abilities.ability.types
+  cloakaml.game.abilities.ability.of_role)
+ (modules sig ability)
+ (wrapped true))
+
+(include_subdirs no)

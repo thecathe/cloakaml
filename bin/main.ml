@@ -18,11 +18,11 @@ module Utils = struct
         (xs : Players.t)
         ?(player = Players.random xs)
         ()
-    : Neighbours.t
+    : Players.Neighbours.t
     =
     Printf.sprintf "neighbours (of %s)" (Player.show player) |> log;
     let neighbours = Players.neighbours ~f:(f player) player xs in
-    Printf.sprintf "neighbours: %s" (Neighbours.show neighbours) |> log;
+    Printf.sprintf "neighbours: %s" (Players.Neighbours.show neighbours) |> log;
     neighbours
   ;;
 end
@@ -40,7 +40,7 @@ module Tests = struct
       let _ = get_neighbours xs ~player () in
       ()
     with
-    | Neighbours.NoNeighboursFound ->
+    | Players.Neighbours.NoNeighboursFound ->
       Printf.sprintf "Err: no neighbours found: %s" (Players.show xs) |> log
   ;;
 
@@ -60,27 +60,27 @@ module Tests = struct
       in
       ()
     with
-    | Neighbours.NoNeighboursFound ->
+    | Players.Neighbours.NoNeighboursFound ->
       Printf.sprintf "Err: no neighbours found: %s" (Players.show xs) |> log
   ;;
 
-  let player_neighbours_group player players (x : Roles.group) : unit =
-    Printf.sprintf "neighbours (group: %s)" (Roles.show_group x) |> logl;
+  let player_neighbours_group player players (x : Roles.Group.t) : unit =
+    Printf.sprintf "neighbours (group: %s)" (Roles.Group.show x) |> logl;
     neighbours_filter players ~player (Players.group x)
   ;;
 
   let player_neighbours_group_kind player players : unit =
     logl "neighbours: kinds";
-    player_neighbours_group player players (Roles.Kind Townsfolk);
-    player_neighbours_group player players (Roles.Kind Outsider);
-    player_neighbours_group player players (Roles.Kind Minion);
-    player_neighbours_group player players (Roles.Kind Demon)
+    player_neighbours_group player players (Kind Townsfolk);
+    player_neighbours_group player players (Kind Outsider);
+    player_neighbours_group player players (Kind Minion);
+    player_neighbours_group player players (Kind Demon)
   ;;
 
   let player_neighbours_group_alignment player players : unit =
     logl "neighbours: alignment";
-    player_neighbours_group player players (Roles.Alignment Good);
-    player_neighbours_group player players (Roles.Alignment Evil)
+    player_neighbours_group player players (Alignment Good);
+    player_neighbours_group player players (Alignment Evil)
   ;;
 
   let player_neighbours_groups (n : int) ?(players = setup_players n) () : unit =
@@ -169,11 +169,13 @@ let () = ()
 
 (** {3 s} *)
 
-let players_with_kinds_of_ability (ys : Ability.Kind.t list) (x : Round.t)
+let players_with_kinds_of_ability
+      (ys : Ability.Trigger.Kind.t list)
+      (x : Round.t)
   : Players.t
   =
   (* Players.with_active_abilities x.players *)
-  Ability.players_have_any_kinds ys x.players
+  Abilities.Query.Players.have_any_kinds ys x.players
 ;;
 
 (* let players_with_phase_abilities (x : t) : Players.t =
@@ -181,9 +183,11 @@ let players_with_kinds_of_ability (ys : Ability.Kind.t list) (x : Round.t)
    ;; *)
 
 (* let round_active_abilities (round : Round.t) : unit = *)
-let round_role_abilities (round : Round.t) (kind : Ability.Kind.t) : unit =
-  let xs = Abilities.get round kind |> Ability.players in
-  Printf.printf "active %s %s\n" (Ability.Kind.show kind) (Players.show xs)
+let round_role_abilities (round : Round.t) (kind : Ability.Trigger.Kind.t)
+  : unit
+  =
+  let xs = Live.Abilities.get round kind |> Abilities.players in
+  Printf.printf "active %s %s\n" (Trigger.Kind.show kind) (Players.show xs)
 ;;
 
 let test_role_abilities (round : Round.t) : unit =

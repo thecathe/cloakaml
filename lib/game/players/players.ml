@@ -1,16 +1,20 @@
+module Map = Map
+
 (** {1 Set of Players} *)
 
-module Players : Set.S with type elt = Player.t = Set.Make (Player)
-include Players [@@deriving show { with_path = false }]
+include Set.Make (Player) [@@deriving show { with_path = false }] (** @closed *)
 
 let show (xs : t) : string =
-   String.cat
-   (fold (fun x acc -> Printf.sprintf "%s\n  %s" acc (Player.show x)) xs "[") "\n]"
-   ;;
+  String.cat
+    (fold (fun x acc -> Printf.sprintf "%s\n  %s" acc (Player.show x)) xs "[")
+    "\n]"
+;;
 
-(** [add_role x ys] takes a {!Roles.t} [x] and makes a fresh {!Player.t} with [index] equal to {!cardinal}.
+(** [add_role x ys] takes a {!Roles.Role.t} [x] and makes a fresh {!Player.t} with [index] equal to {!cardinal}.
 *)
-let add_role (x : Roles.t) (ys : t) : t = add (Player.create (cardinal ys) x) ys
+let add_role (x : Roles.Role.t) (ys : t) : t =
+  add (Player.create (cardinal ys) x) ys
+;;
 
 let create (xs : Player.t list) : t = of_list xs
 
@@ -18,17 +22,17 @@ let create (xs : Player.t list) : t = of_list xs
 
 exception NoPlayersWithRole
 
-let kinds (kind : Roles.kind) (xs : t) : t =
+let kinds (kind : Roles.Kind.t) (xs : t) : t =
   to_list xs
   |> List.filter (fun (z : Player.t) ->
-    Roles.equal_kind kind (Roles.kind z.role))
+    Roles.Kind.equal kind (Roles.Role.kind z.role))
   |> of_list
 ;;
 
-let aligned (alignment : Roles.alignment) (xs : t) : t =
+let aligned (alignment : Roles.Alignment.t) (xs : t) : t =
   to_list xs
   |> List.filter (fun (z : Player.t) ->
-    Roles.equal_alignment alignment (Roles.alignment z.role))
+    Roles.Alignment.equal alignment (Roles.Role.alignment z.role))
   |> of_list
 ;;
 
@@ -55,15 +59,15 @@ let status (x : Player.Status.t) : t -> t = filter (Player.status x)
 let allied (x : Player.t) : t -> t = filter (Player.allied x)
 let opposed (x : Player.t) : t -> t = filter (Player.opposed x)
 
-exception NoPlayerWithRole of Roles.t
+exception NoPlayerWithRole of Roles.Role.t
 
-let group : Roles.group -> t -> t = function
-  | Roles.Role x ->
+let group : Roles.Group.t -> t -> t = function
+  | Role x ->
     fun ys ->
-      (try filter (fun y -> Roles.equal x y.role) ys with
+      (try filter (fun y -> Roles.Role.equal x y.role) ys with
        | Not_found -> raise (NoPlayerWithRole x))
-  | Roles.Kind x -> kinds x
-  | Roles.Alignment x -> aligned x
+  | Kind x -> kinds x
+  | Alignment x -> aligned x
 ;;
 
 (** helper function for applying filters that require target to be in resulting set.
@@ -73,6 +77,8 @@ let incl_self (f : Player.t -> t -> t) (x : Player.t) : t -> t =
 ;;
 
 (** {3 Player Neighbours} *)
+
+module Neighbours = Neighbours
 
 (** [neighbours x ys] returns the neighbours of [x] in [ys], i.e., those indexed either side of [x]. {b Note:} requires that [x] be in [ys]. {b Note:} if there is only one valid neighbour, then both {!Neighbours.left} and {!Neighbours.right} will refer to the same {!Player.t}. {b Note:} raises [NoNeighbour] in the event that [x] would be it's own neighbours.
 *)
@@ -104,11 +110,11 @@ let dead_neighbours : Player.t -> t -> Neighbours.t = neighbours ~f:dead
 
 (* *)
 
-let exists_role_kind (x : Roles.kind) (map : bool Roles.Map.t) : bool =
+let exists_role_kind (x : Roles.Kind.t) (map : bool Roles.Map.t) : bool =
   Roles.Map.to_seq map
   |> List.of_seq
-  |> List.filter (fun ((k, v) : Roles.t * bool) ->
-    Roles.equal_kind x (Roles.kind k) && Bool.not v)
+  |> List.filter (fun ((k, v) : Roles.Role.t * bool) ->
+    Roles.Kind.equal x (Roles.Role.kind k) && Bool.not v)
   |> List.is_empty
   |> Bool.not
 ;;
@@ -118,11 +124,12 @@ let exists_role_kind (x : Roles.kind) (map : bool Roles.Map.t) : bool =
 exception NoNewRole
 exception NoOldRole
 
-let assert_can_change (x : Roles.kind) (map : bool Roles.Map.t) (e : exn) : unit
+let assert_can_change (x : Roles.Kind.t) (map : bool Roles.Map.t) (e : exn)
+  : unit
   =
   if exists_role_kind x map
   then (
-    Printf.printf "no players with role: %s\n" (Roles.show_kind x);
+    Printf.printf "no players with role: %s\n" (Roles.Kind.show x);
     raise e)
 ;;
 
@@ -130,15 +137,15 @@ let log_replace_kind (target : Player.t) new_role : unit =
   Printf.printf
     "replacing player %i role: %s -> %s\n"
     target.index
-    (Roles.show target.role)
-    (Roles.show new_role)
+    (Roles.Role.show target.role)
+    (Roles.Role.show new_role)
 ;;
 
-(** [replace_player_role_kind old new map players exclude] replaces the {{!Player.t.role}role} of one {{!Player.t}player} in [players] that is not in [exclude] with {{!type:Roles.kind}kind} [old] is replaced with a new {{!Player.t.role}role} with {{!type:Roles.kind}kind} [new]. We use [map] to ensure that we don't introduce duplicate {{!Roles.t}roles} into the game, {i and} to that we can't re-add a {{!Roles.t}role} that has been removed.
+(** [replace_player_role_kind old new map players exclude] replaces the {{!Player.t.role}role} of one {{!Player.t}player} in [players] that is not in [exclude] with {{!type:Roles.Kind.t}kind} [old] is replaced with a new {{!Player.t.role}role} with {{!type:Roles.Kind.t}kind} [new]. We use [map] to ensure that we don't introduce duplicate {{!Roles.Role.t}roles} into the game, {i and} to that we can't re-add a {{!Roles.Role.t}role} that has been removed.
 *)
 let replace_player_role_kind
-      (a : Roles.kind)
-      (b : Roles.kind)
+      (a : Roles.Kind.t)
+      (b : Roles.Kind.t)
       (rolemap : bool Roles.Map.t)
       (xs : t)
       (ys : t)
@@ -146,19 +153,19 @@ let replace_player_role_kind
   =
   assert_can_change b rolemap NoNewRole;
   try
-    let target : Player.t = random ~f:(kinds a) (Players.diff xs ys) in
+    let target : Player.t = random ~f:(kinds a) (diff xs ys) in
     Roles.random_kind b |> Player.replace_role target
   with
   | NoPlayersWithRole ->
-    Printf.printf "no players with role: %s\n" (Roles.show_kind a);
+    Printf.printf "no players with role: %s\n" (Roles.Kind.show a);
     raise NoOldRole
 ;;
 
 let rec replace_n_player_role_kinds
           ?(acc : t = empty)
           (n : int)
-          (a : Roles.kind)
-          (b : Roles.kind)
+          (a : Roles.Kind.t)
+          (b : Roles.Kind.t)
           (rolemap : bool Roles.Map.t)
           (xs : t)
   : unit

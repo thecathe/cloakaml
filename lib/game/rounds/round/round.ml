@@ -13,7 +13,7 @@ type t =
 
 exception ToDo
 
-let get_random_player (x : Roles.alignment) : Players.t -> Player.t =
+let get_random_player (x : Roles.Alignment.t) : Players.t -> Player.t =
   Players.random ~f:(Players.aligned x)
 ;;
 
@@ -34,7 +34,7 @@ let get_random_player (x : Roles.alignment) : Players.t -> Player.t =
    let rec populate_ability_map
    (xs : Players.t)
    ?(acc : Abilities.t Player.Map.t = Player.Map.create (Players.cardinal xs))
-   (rm : bool Roles.Map.t)
+   (rm : bool Role.Map.t)
    : Abilities.t Player.Map.t
    =
    (fun () -> Players.to_list xs |> map_players_ability acc)
@@ -51,7 +51,7 @@ let get_random_player (x : Roles.alignment) : Players.t -> Player.t =
    raise (Effect.Unhandled e) *)
    (* TODO: effects... *)
    | effect Abilities.Abilities.GetTargetPlayer, k ->
-   let x = get_random_player Roles.Good xs in
+   let x = get_random_player Role.Good xs in
    Printf.printf "target player: %s\n" (Player.show x);
    handle_populate_ability_map xs acc rm (fun () ->
    Effect.Deep.continue k x.index)
