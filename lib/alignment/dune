@@ -1,7 +1,0 @@
-(library
- (name alignment)
- (public_name cloakaml.alignment)
- (modules alignment)
- (wrapped true))
-
-(include_subdirs no)
