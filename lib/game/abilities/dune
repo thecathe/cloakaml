@@ -1,13 +1,11 @@
-
 (library
  (name abilities)
  (public_name cloakaml.game.abilities)
  (preprocess
   (pps ppx_deriving.std))
  (libraries
-  cloakaml.game.player
   cloakaml.game.players
-  cloakaml.game.phase
+  cloakaml.game.rounds.phase
   cloakaml.game.rounds.round
   cloakaml.game.abilities.ability)
  (modules query ability_map abilities)

@@ -4,7 +4,6 @@ module Knowledge = Knowledge
 
 (** {1 Player Type} *)
 
-
 type t =
   { index : int
   ; mutable role : Roles.Role.t

@@ -1,6 +1,5 @@
 include Types
 include Sig
-
 module Trigger = Trigger
 
 let has_kind (x : Trigger.Kind.t) (module X : S) : bool = X.has_kind x

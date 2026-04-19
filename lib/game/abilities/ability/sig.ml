@@ -1,5 +1,3 @@
-
-
 module type S = sig
   val x : Roles.Role.t
   val get : unit -> Types.map list

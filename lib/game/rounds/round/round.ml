@@ -6,10 +6,10 @@ type t =
   ; rolemap : bool Roles.Map.t (* ; abilities : Abilities.t Player.Map.t *)
   }
 
-  let num (x:t) : int = x.num
-  let phase (x:t) : Phase.data = x.phase
-  let players (x:t) : Players.t = x.players
-  let rolemap (x:t) : bool Roles.Map.t = x.rolemap
+let num (x : t) : int = x.num
+let phase (x : t) : Phase.data = x.phase
+let players (x : t) : Players.t = x.players
+let rolemap (x : t) : bool Roles.Map.t = x.rolemap
 
 exception ToDo
 
@@ -88,5 +88,3 @@ let is_today (n : int) (x : t) : bool = Int.equal n x.num && is_phase x Day
 
 (** [is_tomorrow n x] returns [is_today (n + 1) x]. *)
 let is_tomorrow (n : int) (x : t) : bool = is_today (n + 1) x
-
-

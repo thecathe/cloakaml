@@ -1,3 +1,4 @@
+module Player = Player
 module Map = Map
 
 (** {1 Set of Players} *)

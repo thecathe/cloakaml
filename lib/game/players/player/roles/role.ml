@@ -1,13 +1,17 @@
 type t =
   (* townsfolk *)
   | Washerwoman
-  (** You start knowing that 1 of 2 players is a particular {{!Kind.Townsfolk}Townsfolk}. *)
+  (** You start knowing that 1 of 2 players is a particular {{!Kind.Townsfolk}Townsfolk}.
+  *)
   | Librarian
   (** You start knowing that 1 of 2 players is a particular {{!Kind.Outsider}Outsider} (or that zero are in play).
   *)
   | Investigator
-  (** You start knowing that 1 of 2 players is a particular {{!Kind.Minion}Minion}. *)
-  | Chef (** You start knowing how many pairs of {{!Alignment.Evil}Evil} players there are. *)
+  (** You start knowing that 1 of 2 players is a particular {{!Kind.Minion}Minion}.
+  *)
+  | Chef
+  (** You start knowing how many pairs of {{!Alignment.Evil}Evil} players there are.
+  *)
   | Empath
   (** Each {{!Phase.Night}Night}, learn how many of your two {{!Players.Neighbours.t}Neighbours} are {{!Alignment.Evil}Evil}.
   *)

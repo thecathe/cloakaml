@@ -39,15 +39,15 @@ module Distribution = struct
          "[\n")
       "]"
   ;;
- 
+
   let fresh_role_status_map () : bool Roles.Map.t =
     let tbl : bool Roles.Map.t = Roles.Map.create Roles.Role.max in
     List.iter (fun x -> Roles.Map.add tbl x false) Roles.collect;
-    tbl 
+    tbl
   ;;
 
   type pull_role =
-    { role : Roles.Kind.t 
+    { role : Roles.Kind.t
     ; map : bool Roles.Map.t
     }
 
@@ -98,8 +98,7 @@ module Distribution = struct
   ;;
 end
 
-let players
-      ?(map : bool Roles.Map.t = Distribution.fresh_role_status_map ())
+let players ?(map : bool Roles.Map.t = Distribution.fresh_role_status_map ())
   : int -> Players.t
   =
   Distribution.players map

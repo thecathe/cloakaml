@@ -1,7 +1,10 @@
 (library
  (name roles)
  (public_name cloakaml.roles)
- (libraries cloakaml.player cloakaml.roles.investigative cloakaml.roles.omniscient)
+ (libraries
+  cloakaml.player
+  cloakaml.roles.investigative
+  cloakaml.roles.omniscient)
  (modules moderator townsfolk scourge roles)
  (wrapped true))
 

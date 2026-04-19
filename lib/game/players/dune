@@ -3,7 +3,7 @@
  (public_name cloakaml.game.players)
  (preprocess
   (pps ppx_deriving.std))
- (libraries cloakaml.game.player)
+ (libraries cloakaml.game.players.player)
  (modules neighbours map players)
  (wrapped true))
 

@@ -1,16 +1,16 @@
-(* module Roles = Roles *)
-module Phase = Phase
-(* module Ability = Ability *)
-module Player = Player
+(** [module Players] is ... *)
 module Players = Players
+
+(** [module Rounds] is ... *)
 module Rounds = Rounds
+
+(** [module Abilities] is ... *)
 module Abilities = Abilities
+
+(** [module Live] is ... *)
 module Live = Live
-(* module Player = Player *)
-(* module Neighbours = Neighbours *)
-(* module Players = Players *)
-(* module Round = Round *)
-(* module Rounds = Rounds *)
+
+(** [module Setup] is ... *)
 module Setup = Setup
 
 type t = { round : Rounds.t }
@@ -29,10 +29,10 @@ module Debug = struct
 
   (* let round : Round.t = Setup.round Day 5
 
-  (** create fresh round-env wrapper around active round *)
-  module RoundEnv = Live_round.Make (struct
-      type data = Round.t
+     (** create fresh round-env wrapper around active round *)
+     module RoundEnv = Live_round.Make (struct
+     type data = Round.t
 
-      let initial = round
-    end) *)
+     let initial = round
+     end) *)
 end

@@ -1,9 +1,0 @@
-(library
- (name phase)
- (public_name cloakaml.game.phase)
- (preprocess
-  (pps ppx_deriving.std))
- (modules phase)
- (wrapped true))
-
-(include_subdirs no)

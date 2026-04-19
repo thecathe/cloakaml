@@ -5,9 +5,8 @@
   (pps ppx_deriving.std))
  (libraries
   cloakaml.utils
-  cloakaml.game.player
   cloakaml.game.players
-  cloakaml.game.phase
+  cloakaml.game.rounds.phase
   cloakaml.game.rounds.round
   cloakaml.game.abilities.ability.trigger
   cloakaml.game.abilities.ability.types)

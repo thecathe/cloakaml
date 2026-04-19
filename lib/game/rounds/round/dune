@@ -3,7 +3,7 @@
  (public_name cloakaml.game.rounds.round)
  (preprocess
   (pps ppx_deriving.std))
- (libraries cloakaml.game.phase cloakaml.game.player cloakaml.game.players)
+ (libraries cloakaml.game.rounds.phase cloakaml.game.players)
  (modules round)
  (wrapped true))
 
