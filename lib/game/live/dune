@@ -4,7 +4,7 @@
  (preprocess
   (pps ppx_deriving.std))
  (libraries cloakaml.game.players cloakaml.game.abilities)
- (modules live_abilities live_round live)
+ (modules setup live_abilities live_round live)
  (wrapped true))
 
 (include_subdirs no)

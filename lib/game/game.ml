@@ -10,9 +10,6 @@ module Abilities = Abilities
 (** [module Live] is ... *)
 module Live = Live
 
-(** [module Setup] is ... *)
-module Setup = Setup
-
 type t = { round : Rounds.t }
 
 module Debug = struct

@@ -8,19 +8,7 @@
   cloakaml.game.rounds
   cloakaml.game.abilities
   cloakaml.game.live)
- (modules
-  ; roles
-  ; phase
-  ; player
-  ; neighbours
-  ; players
-  ; round
-  ; ability
-  ; abilities
-  ; rounds
-  setup
-  ; live_round
-  game)
+ (modules game)
  (wrapped true))
 
 (include_subdirs no)
