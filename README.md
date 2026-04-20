@@ -1,6 +1,6 @@
 # cloakaml
 
-For details first [build](#building) the project, then open [./doc/index.html] locally.
+For details first [build](#building) the project, then open [./doc/index.html](./doc/index.html) locally.
 
 ## current state
 
