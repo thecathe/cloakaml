@@ -1,5 +1,25 @@
 # cloakaml
 
+For details first [build](#building) the project, then open [doc/index.html](./doc/index.html) locally.
+
+## current state
+
+[Running](#running) the project will just output a random starting configuration for game (currently [Blood on the Clocktower](https://wiki.bloodontheclocktower.com/Main_Page)), using the [standard distribution](https://i.redd.it/cunojgi5omnd1.jpeg) (5-15 players). Current focus is on implementing the remaining abilities, and exploring what will be necessary to run it "live" (i.e., after setting up, running the phases and rounds of the game, modelling the state of the game as it plays).
+
+### inspiration
+
+- town of salem
+- mafia (party game)
+- blood on the clocktower (case study implementation)
+- coup
+
+#### future (inspirational) work
+
+- papers please
+- amongus
+- spaceteam
+- potion maker
+
 ## building
 
 ### prerequisites 
@@ -36,20 +56,6 @@ first build. then run:
 ```
 dune exec -- _build/default/bin/main.exe
 ```
-
-## inspiration
-
-- town of salem
-- mafia (party game)
-- blood on the clocktower (case study implementation)
-- coup
-
-### future (inspirational) work
-
-- papers please
-- amongus
-- spaceteam
-- potion maker
 
 ## todo
 
