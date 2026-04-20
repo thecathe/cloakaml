@@ -1,3 +1,5 @@
+(** @canonical Game.Abilities.Query *)
+
 open Ability
 
 module P = struct

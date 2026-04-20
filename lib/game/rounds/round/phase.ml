@@ -1,3 +1,5 @@
+(** @canonical Game.Rounds.Round.Phase *)
+
 type t =
   | Day
   | Night

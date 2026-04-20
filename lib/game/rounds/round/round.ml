@@ -1,3 +1,5 @@
+(** @canonical Game.Rounds.Round *)
+
 (** tracks turn counter and players *)
 type t =
   { num : int
@@ -13,7 +15,7 @@ let rolemap (x : t) : bool Roles.Map.t = x.rolemap
 
 exception ToDo
 
-let get_random_player (x : Roles.Alignment.t) : Players.t -> Player.t =
+let get_random_player (x : Roles.Role.Alignment.t) : Players.t -> Player.t =
   Players.random ~f:(Players.aligned x)
 ;;
 

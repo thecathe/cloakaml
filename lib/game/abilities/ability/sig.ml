@@ -1,3 +1,5 @@
+(** @canonical Game.Abilities.Ability.Sig *)
+
 module type S = sig
   val x : Roles.Role.t
   val get : unit -> Types.map list

@@ -1,3 +1,5 @@
+(** @canonical Game.Abilities.Ability.Trigger.Kind *)
+
 type t =
   | Setup
   | StartOfGame

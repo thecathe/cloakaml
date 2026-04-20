@@ -1,3 +1,5 @@
+(** @canonical Game.Live.Abilities *)
+
 open Abilities
 
 let player_map (map : t) (x : Player.t) : t = map_player map x

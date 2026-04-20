@@ -1,0 +1,9 @@
+(library
+ (name role)
+ (public_name cloakaml.game.players.player.roles.role)
+ (preprocess
+  (pps ppx_deriving.std))
+ (modules kind alignment role)
+ (wrapped true))
+
+(include_subdirs no)

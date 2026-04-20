@@ -1,5 +1,5 @@
-module Kind = Kind
-module Alignment = Alignment
+(** @canonical Game.Players.Player.Roles *)
+
 module Role = Role
 module Group = Group
 module Map = Map
@@ -18,9 +18,9 @@ let outsiders : Role.t list = List.filter Role.is_outsider collect
 let minions : Role.t list = List.filter Role.is_minion collect
 let demons : Role.t list = List.filter Role.is_demon collect
 
-exception KindNotImplemented of Kind.t
+exception KindNotImplemented of Role.Kind.t
 
-let of_kind : Kind.t -> Role.t list = function
+let of_kind : Role.Kind.t -> Role.t list = function
   | Townsfolk -> townsfolk
   | Outsider -> outsiders
   | Minion -> minions
@@ -28,7 +28,7 @@ let of_kind : Kind.t -> Role.t list = function
   | x -> raise (KindNotImplemented x)
 ;;
 
-let random_kind (x : Kind.t) : Role.t =
+let random_kind (x : Role.Kind.t) : Role.t =
   Random.self_init ();
   let xs = of_kind x in
   List.nth xs (Random.int (List.length xs))
@@ -41,4 +41,4 @@ include Set.Make (Role) (** @closed *)
 (** wrapper for {!collect} *)
 let get () : t = collect |> of_list
 
-let of_kind (x : Kind.t) : t = of_kind x |> of_list
+let of_kind (x : Role.Kind.t) : t = of_kind x |> of_list

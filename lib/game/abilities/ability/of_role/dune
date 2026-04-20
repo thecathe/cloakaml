@@ -6,7 +6,7 @@
  (libraries
   cloakaml.utils
   cloakaml.game.players
-  cloakaml.game.rounds.phase
+  cloakaml.game.rounds.round.phase
   cloakaml.game.rounds.round
   cloakaml.game.abilities.ability.trigger
   cloakaml.game.abilities.ability.types)

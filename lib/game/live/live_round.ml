@@ -1,3 +1,5 @@
+(** @canonical Game.Live.Round *)
+
 module type S = sig
   type data
 

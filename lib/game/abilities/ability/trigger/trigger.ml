@@ -1,3 +1,5 @@
+(** @canonical Game.Abilities.Ability.Trigger *)
+
 type t =
   | Setup
   | PerceivedAs
@@ -14,6 +16,8 @@ type t =
 
 let hash x = Int.hash (to_enum x)
 let compare (a : t) (b : t) : int = Int.compare (to_enum a) (to_enum b)
+
+(** {1 Kind} *)
 
 module Kind = Kind
 

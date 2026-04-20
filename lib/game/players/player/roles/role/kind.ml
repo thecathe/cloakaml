@@ -1,3 +1,5 @@
+(** @canonical Game.Players.Player.Roles.Role.Kind *)
+
 type t =
   | Townsfolk
   (** a {{!Alignment.Good}Good} character with a {i beneficial} ability. *)

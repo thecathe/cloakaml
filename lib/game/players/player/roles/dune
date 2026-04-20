@@ -3,7 +3,8 @@
  (public_name cloakaml.game.players.player.roles)
  (preprocess
   (pps ppx_deriving.std))
- (modules kind alignment role group map roles)
+ (libraries cloakaml.game.players.player.roles.role)
+ (modules group map roles)
  (wrapped true))
 
 (include_subdirs no)

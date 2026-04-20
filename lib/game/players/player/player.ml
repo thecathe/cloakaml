@@ -1,3 +1,5 @@
+(** @canonical Game.Players.Player *)
+
 module Roles = Roles
 module Status = Status
 module Knowledge = Knowledge

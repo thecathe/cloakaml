@@ -1,3 +1,5 @@
+(** @canonical Game.Players.Player.Status *)
+
 type t =
   | Alive
   | Dead

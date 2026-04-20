@@ -1,3 +1,5 @@
+(** @canonical Game.Players.Neighbours *)
+
 type t =
   { left : Player.t
   ; right : Player.t
@@ -46,14 +48,16 @@ let find_opt ?(rooted : bool = true) (x : Player.t) (ys : Player.t list)
     if rooted then raise (RootPlayerNotFound x) else None
 ;;
 
-let num_aligned (a : Roles.Alignment.t) (x : Player.t) (ys : Player.t list)
+let num_aligned (a : Roles.Role.Alignment.t) (x : Player.t) (ys : Player.t list)
   : int
   =
   match find_opt x ys with
   | None -> 0
   | Some { left; right } ->
     let f (z : Player.t) : int =
-      if Roles.Role.alignment z.role |> Roles.Alignment.equal a then 1 else 0
+      if Roles.Role.alignment z.role |> Roles.Role.Alignment.equal a
+      then 1
+      else 0
     in
     f left + f right
 ;;

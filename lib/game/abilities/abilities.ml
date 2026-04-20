@@ -1,3 +1,5 @@
+(** @canonical Game.Abilities *)
+
 module Ability = Ability
 module Query = Query
 module AbilityMap = Ability_map

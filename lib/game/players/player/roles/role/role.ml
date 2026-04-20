@@ -1,3 +1,8 @@
+(** @canonical Game.Players.Player.Roles.Role *)
+
+(** {1 Role} *)
+
+(** ... *)
 type t =
   (* townsfolk *)
   | Washerwoman
@@ -67,12 +72,17 @@ type t =
 
 exception EnumOutOfBounds
 
+(** {2 Funs: Hash, Compare, Equal} *)
+
 let hash (x : t) : int = Int.hash (to_enum x)
 let compare (a : t) (b : t) : int = Int.compare (to_enum a) (to_enum b)
+let equal = equal
 
 (** {1 Kind} *)
 
 module Kind = Kind
+
+(** {2 Convert: Kind of Role} *)
 
 let kind : t -> Kind.t = function
   (* townsfolk *)
@@ -103,6 +113,8 @@ let kind : t -> Kind.t = function
   | Imp -> Demon
 ;;
 
+(** {2 Funs: Roles is Kind} *)
+
 let is_townfolk (x : t) : bool =
   match kind x with Townsfolk -> true | _ -> false
 ;;
@@ -117,6 +129,8 @@ let is_demon (x : t) : bool = match kind x with Demon -> true | _ -> false
 (** {1 Alignment} *)
 
 module Alignment = Alignment
+
+(** {2 Funs} *)
 
 let is_good (x : t) : bool = is_townfolk x || is_outsider x
 let is_evil (x : t) : bool = is_minion x || is_demon x

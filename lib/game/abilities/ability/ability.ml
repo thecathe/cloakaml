@@ -1,5 +1,12 @@
-include Types
-include Sig
+(** @canonical Game.Abilities.Ability *)
+
+(** Types *)
+include Types (** @closed *)
+
+(** Sig *)
+include Sig 
+
+(** Trigger *)
 module Trigger = Trigger
 
 let has_kind (x : Trigger.Kind.t) (module X : S) : bool = X.has_kind x

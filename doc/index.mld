@@ -12,6 +12,13 @@ See {!Game}
 
 See {!Utils}
 
+{2 {i Dev Speed dial}}
+
+{ul
+  {- {{!Game.Players.Player.Roles.Role.t}Role.t}}
+  {- {{!Game.Players.Player.t}Player.t}}
+  {- {{!Game.Live}Live}}}
+
 {1 Background}
 
 I began working on this project after watching {{: https://watch.dropout.tv/parlor-room/season:1/videos/blood-on-the-clocktower}Parlor Room on {i Dropout.tv}} play {i Blood on the Clocktower}. The main thing that caught my attention is that unlike computerized incarnations such as {i Town of Salem} or chance-based {i Coup}, a game of {i Blood on the Clocktower} is ran by a {b GM} (Game Master, aka {i Storyteller}) who orchestrates the entire game. Not only do they handle the starting configuration, they are present throughout, making decisions on what would make the game most interesting and enjoyable for everyone involved. This is the kind of {i human touch} that other iterations clearly lack, in exchange for their simplicity (e.g., being a card-game) or replayability (e.g., having online-matchmaking).

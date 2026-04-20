@@ -1,0 +1,10 @@
+(library
+ (name setup)
+ (public_name cloakaml.game.setup)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries cloakaml.game.players cloakaml.game.abilities cloakaml.game.rounds)
+ (modules distribution setup)
+ (wrapped true))
+
+(include_subdirs no)

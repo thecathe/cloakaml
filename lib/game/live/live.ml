@@ -1,7 +1,6 @@
-(** {1 I.e., When game is running} *)
+(** @canonical Game.Live *)
 
-(** ... *)
-module Setup = Setup
+(** {1 I.e., When game is running} *)
 
 (** For abilities in a given round *)
 module Abilities = Live_abilities

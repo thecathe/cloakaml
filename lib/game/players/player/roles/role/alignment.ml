@@ -1,3 +1,5 @@
+(** @canonical Game.Players.Player.Roles.Role.Alignment *)
+
 type t =
   | Good
   | Evil

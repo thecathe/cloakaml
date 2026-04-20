@@ -1,3 +1,5 @@
+(** @canonical Game.Abilities.AbilityMap *)
+
 open Ability
 
 include Hashtbl.Make (Trigger) (** @closed *)

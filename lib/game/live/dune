@@ -3,8 +3,8 @@
  (public_name cloakaml.game.live)
  (preprocess
   (pps ppx_deriving.std))
- (libraries cloakaml.game.players cloakaml.game.abilities)
- (modules setup live_abilities live_round live)
+ (libraries cloakaml.game.players cloakaml.game.abilities cloakaml.game.setup)
+ (modules live_abilities live_round live)
  (wrapped true))
 
 (include_subdirs no)

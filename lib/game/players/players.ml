@@ -1,4 +1,9 @@
+(** @canonical Game.Players *)
+
+(** ... *)
 module Player = Player
+
+(** ... *)
 module Map = Map
 
 (** {1 Set of Players} *)
@@ -23,17 +28,17 @@ let create (xs : Player.t list) : t = of_list xs
 
 exception NoPlayersWithRole
 
-let kinds (kind : Roles.Kind.t) (xs : t) : t =
+let kinds (kind : Roles.Role.Kind.t) (xs : t) : t =
   to_list xs
   |> List.filter (fun (z : Player.t) ->
-    Roles.Kind.equal kind (Roles.Role.kind z.role))
+    Roles.Role.Kind.equal kind (Roles.Role.kind z.role))
   |> of_list
 ;;
 
-let aligned (alignment : Roles.Alignment.t) (xs : t) : t =
+let aligned (alignment : Roles.Role.Alignment.t) (xs : t) : t =
   to_list xs
   |> List.filter (fun (z : Player.t) ->
-    Roles.Alignment.equal alignment (Roles.Role.alignment z.role))
+    Roles.Role.Alignment.equal alignment (Roles.Role.alignment z.role))
   |> of_list
 ;;
 
@@ -111,11 +116,11 @@ let dead_neighbours : Player.t -> t -> Neighbours.t = neighbours ~f:dead
 
 (* *)
 
-let exists_role_kind (x : Roles.Kind.t) (map : bool Roles.Map.t) : bool =
+let exists_role_kind (x : Roles.Role.Kind.t) (map : bool Roles.Map.t) : bool =
   Roles.Map.to_seq map
   |> List.of_seq
   |> List.filter (fun ((k, v) : Roles.Role.t * bool) ->
-    Roles.Kind.equal x (Roles.Role.kind k) && Bool.not v)
+    Roles.Role.Kind.equal x (Roles.Role.kind k) && Bool.not v)
   |> List.is_empty
   |> Bool.not
 ;;
@@ -125,12 +130,12 @@ let exists_role_kind (x : Roles.Kind.t) (map : bool Roles.Map.t) : bool =
 exception NoNewRole
 exception NoOldRole
 
-let assert_can_change (x : Roles.Kind.t) (map : bool Roles.Map.t) (e : exn)
+let assert_can_change (x : Roles.Role.Kind.t) (map : bool Roles.Map.t) (e : exn)
   : unit
   =
   if exists_role_kind x map
   then (
-    Printf.printf "no players with role: %s\n" (Roles.Kind.show x);
+    Printf.printf "no players with role: %s\n" (Roles.Role.Kind.show x);
     raise e)
 ;;
 
@@ -142,11 +147,11 @@ let log_replace_kind (target : Player.t) new_role : unit =
     (Roles.Role.show new_role)
 ;;
 
-(** [replace_player_role_kind old new map players exclude] replaces the {{!Player.t.role}role} of one {{!Player.t}player} in [players] that is not in [exclude] with {{!type:Roles.Kind.t}kind} [old] is replaced with a new {{!Player.t.role}role} with {{!type:Roles.Kind.t}kind} [new]. We use [map] to ensure that we don't introduce duplicate {{!Roles.Role.t}roles} into the game, {i and} to that we can't re-add a {{!Roles.Role.t}role} that has been removed.
+(** [replace_player_role_kind old new map players exclude] replaces the {{!Player.t.role}role} of one {{!Player.t}player} in [players] that is not in [exclude] with {{!type:Roles.Role.Kind.t}kind} [old] is replaced with a new {{!Player.t.role}role} with {{!type:Roles.Role.Kind.t}kind} [new]. We use [map] to ensure that we don't introduce duplicate {{!Roles.Role.t}roles} into the game, {i and} to that we can't re-add a {{!Roles.Role.t}role} that has been removed.
 *)
 let replace_player_role_kind
-      (a : Roles.Kind.t)
-      (b : Roles.Kind.t)
+      (a : Roles.Role.Kind.t)
+      (b : Roles.Role.Kind.t)
       (rolemap : bool Roles.Map.t)
       (xs : t)
       (ys : t)
@@ -158,15 +163,15 @@ let replace_player_role_kind
     Roles.random_kind b |> Player.replace_role target
   with
   | NoPlayersWithRole ->
-    Printf.printf "no players with role: %s\n" (Roles.Kind.show a);
+    Printf.printf "no players with role: %s\n" (Roles.Role.Kind.show a);
     raise NoOldRole
 ;;
 
 let rec replace_n_player_role_kinds
           ?(acc : t = empty)
           (n : int)
-          (a : Roles.Kind.t)
-          (b : Roles.Kind.t)
+          (a : Roles.Role.Kind.t)
+          (b : Roles.Role.Kind.t)
           (rolemap : bool Roles.Map.t)
           (xs : t)
   : unit

@@ -1,3 +1,5 @@
+(** @canonical Game.Abilities.Ability.Of_role.Sig *)
+
 module type S = sig
   val trigger : Trigger.t
   val of_role : Roles.Role.t -> Types.f

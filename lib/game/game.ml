@@ -1,5 +1,7 @@
-(** @canonical Game.Players *)
+(** @canonical Cloakaml.Game *)
+
 module Players = Players
+
 (** [module Players] is ... *)
 
 (** [module Rounds] is ... *)
@@ -8,8 +10,13 @@ module Rounds = Rounds
 (** [module Abilities] is ... *)
 module Abilities = Abilities
 
+(** [module Setup] is ... *)
+module Setup = Setup
+
 (** [module Live] is ... *)
 module Live = Live
+
+(** {1 todo} *)
 
 type t = { round : Rounds.t }
 

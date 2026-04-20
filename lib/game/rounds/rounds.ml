@@ -1,3 +1,5 @@
+(** @canonical Game.Rounds *)
+
 module Round = Round
 
 (** linked-list into previous rounds *)
