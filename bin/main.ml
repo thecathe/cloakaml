@@ -6,13 +6,13 @@ open Game
 
 module Utils = struct
   let setup_players (n : int) : Players.t =
-    let players = Live.Setup.players n in
+    let players = Setup.players n in
     Printf.printf "players (%i) %s\n" n (Players.show players);
     players
   ;;
 
   let setup_round ?(phase = Phase.Day) (n : int) : Round.t =
-    Live.Setup.round phase n
+    Setup.round phase n
   ;;
 
   let get_neighbours
