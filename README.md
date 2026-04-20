@@ -24,7 +24,7 @@ For details first [build](#building) the project, then open [./doc/index.html](.
 
 ## building
 
-### prerequisites 
+### prerequisites
 
 - clone repo
 - opam *or* nix (if using nix, enter directory and run `nix-shell`)

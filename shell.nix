@@ -14,11 +14,11 @@
 #     mkShell,
 #     zshconfig,
 #   }:
-let zshconfig = import /home/cathe/dots/.config/home-manager/zsh { inherit pkgs; }; 
+let zshconfig = import /home/cathe/dots/.config/home-manager/zsh { inherit pkgs; };
 #     zshconfig = zshconfig_g.overrideDerivation (oldAttrs: {
 #     programs.zsh.oh-my-zsh.theme = "custom";
 # });
-    
+
 
 in
   pkgs.mkShell {
