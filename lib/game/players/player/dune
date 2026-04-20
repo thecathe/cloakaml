@@ -4,7 +4,7 @@
  (preprocess
   (pps ppx_deriving.std))
  (libraries
-  cloakaml.game.rounds.round.phase
+  cloakaml.game.rounds.phase
   (re_export cloakaml.game.players.player.roles))
  (modules status knowledge player)
  (wrapped true))

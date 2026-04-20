@@ -1,10 +1,27 @@
 (library
+ (name phase)
+ (public_name cloakaml.game.rounds.phase)
+ (preprocess
+  (pps ppx_deriving.std))
+ (modules phase)
+ (wrapped true))
+
+(library
+ (name round)
+ (public_name cloakaml.game.rounds.round)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries cloakaml.game.rounds.phase cloakaml.game.players)
+ (modules round)
+ (wrapped true))
+
+(library
  (name rounds)
  (public_name cloakaml.game.rounds)
  (preprocess
   (pps ppx_deriving.std))
  (libraries
-  cloakaml.game.rounds.round.phase
+  cloakaml.game.rounds.phase
   cloakaml.game.players
   cloakaml.game.rounds.round)
  (modules rounds)

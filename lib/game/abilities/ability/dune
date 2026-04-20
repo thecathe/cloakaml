@@ -3,9 +3,7 @@
  (public_name cloakaml.game.abilities.ability.types)
  (preprocess
   (pps ppx_deriving.std))
- (libraries
-  cloakaml.game.rounds.round
-  cloakaml.game.abilities.ability.trigger)
+ (libraries cloakaml.game.rounds cloakaml.game.abilities.ability.trigger)
  (modules types)
  (wrapped true))
 
@@ -16,8 +14,7 @@
   (pps ppx_deriving.std))
  (libraries
   cloakaml.game.players
-  cloakaml.game.rounds.round.phase
-  cloakaml.game.rounds.round
+  cloakaml.game.rounds
   cloakaml.game.abilities.ability.trigger
   cloakaml.game.abilities.ability.types
   cloakaml.game.abilities.ability.of_role)

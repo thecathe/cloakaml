@@ -11,8 +11,8 @@ module Utils = struct
     players
   ;;
 
-  let setup_round ?(phase = Phase.Day) (n : int) : Round.t =
-    Setup.round phase n
+  let setup_rounds ?(phase = Phase.Day) (n : int) : Rounds.t =
+    Setup.rounds phase n
   ;;
 
   let get_neighbours
@@ -173,11 +173,11 @@ let () = ()
 
 let players_with_kinds_of_ability
       (ys : Ability.Trigger.Kind.t list)
-      (x : Round.t)
+      (x : Rounds.t)
   : Players.t
   =
   (* Players.with_active_abilities x.players *)
-  Abilities.Query.Players.have_any_kinds ys x.players
+  Abilities.Query.Players.have_any_kinds ys (Rounds.players x)
 ;;
 
 (* let players_with_phase_abilities (x : t) : Players.t =
@@ -185,14 +185,14 @@ let players_with_kinds_of_ability
    ;; *)
 
 (* let round_active_abilities (round : Round.t) : unit = *)
-let round_role_abilities (round : Round.t) (kind : Ability.Trigger.Kind.t)
+let round_role_abilities (round : Rounds.t) (kind : Ability.Trigger.Kind.t)
   : unit
   =
-  let xs = Live.Abilities.get round kind |> Abilities.players in
+  let xs = Live.Abilities.get (Rounds.this round) kind |> Abilities.players in
   Printf.printf "active %s %s\n" (Trigger.Kind.show kind) (Players.show xs)
 ;;
 
-let test_role_abilities (round : Round.t) : unit =
+let test_role_abilities (round : Rounds.t) : unit =
   round_role_abilities round Setup;
   round_role_abilities round StartOfGame;
   round_role_abilities round PhaseDependant;
@@ -202,17 +202,17 @@ let test_role_abilities (round : Round.t) : unit =
   round_role_abilities round Conditional
 ;;
 
-let setup_round (phase : Phase.t) (n : int) : Round.t =
-  let round = Utils.setup_round ~phase:Night n in
-  Printf.printf "players %s\n" (Players.show round.players);
+let setup_rounds (phase : Phase.t) (n : int) : Rounds.t =
+  let round : Rounds.t = Utils.setup_rounds ~phase:Night n in
+  Printf.printf "players %s\n" (Players.show (Rounds.players round));
   round
 ;;
 
 let test_round_role_abilities (phase : Phase.t) (n : int) : unit =
   Printf.sprintf "\ntest: %i players, first %s, abilities" n (Phase.show phase)
   |> logl;
-  let round = setup_round phase n in
-  test_role_abilities round
+  let rounds = setup_rounds phase n |> Rounds.step in
+  test_role_abilities rounds
 ;;
 
 (** {b test:} 5 players, first night, who has active abilities *)

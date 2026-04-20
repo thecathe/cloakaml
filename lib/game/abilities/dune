@@ -5,7 +5,7 @@
   (pps ppx_deriving.std))
  (libraries
   cloakaml.game.players
-  cloakaml.game.rounds.round.phase
+  cloakaml.game.rounds.phase
   cloakaml.game.rounds.round
   cloakaml.game.abilities.ability)
  (modules query ability_map abilities)

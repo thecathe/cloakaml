@@ -8,7 +8,9 @@ let players ?(map : bool Roles.Map.t = Distribution.fresh_role_status_map ())
   Distribution.players map
 ;;
 
-let round (starting : Phase.t) (n : int) : Round.t =
+(** [rounds starting n] is the {{!Rounds.t.Initial}initial} round, with [starting] phase and [n] players.
+*)
+let rounds (x : Phase.t) (n : int) : Rounds.t =
   let map : bool Roles.Map.t = Distribution.fresh_role_status_map () in
-  players ~map n |> Round.initial ~starting map
+  players ~map n |> Rounds.make x map
 ;;

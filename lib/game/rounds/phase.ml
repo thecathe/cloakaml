@@ -1,13 +1,21 @@
-(** @canonical Game.Rounds.Round.Phase *)
+(** @canonical Game.Rounds.Phase *)
 
 type t =
   | Day
   | Night
-[@@deriving show { with_path = false }, eq]
+[@@deriving show { with_path = false }, enum, eq]
 
 let dual : t -> t = function Day -> Night | Night -> Day
 
-type data =
+let rec of_int ?(starting : t = Day) : int -> t = function
+  | 0 -> starting
+  | x -> of_int ~starting (x - 1) |> dual
+;;
+
+(* let next = dual
+   let prev = dual *)
+
+(* type data =
   { starting : t
   ; mutable current : t
   }
@@ -27,4 +35,4 @@ let step (x : data) : data =
     x.current <- dual x.current;
     x)
   else raise StartNewRound
-;;
+;; *)

@@ -1,4 +1,4 @@
 (** @canonical Game.Abilities.Ability.Types *)
 
-type f = Round.t -> unit
+type f = Rounds.current -> unit
 type map = Trigger.t * f

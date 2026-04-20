@@ -40,9 +40,14 @@ let make (trigger : Trigger.t) (xs : (Roles.Role.t * f) list) : (module S) =
 let setup () : (module S) =
   make
     Setup
-    (let baron : Round.t -> unit =
-       fun ({ players; rolemap; _ } : Round.t) ->
-       Players.replace_n_player_role_kinds 2 Townsfolk Outsider rolemap players
+    (let baron : Rounds.current -> unit =
+       fun (x : Rounds.current) ->
+       Players.replace_n_player_role_kinds
+         2
+         Townsfolk
+         Outsider
+         (Rounds.rolemap x.prev)
+         (Round.players x.this)
      in
      [ Baron, baron ])
 ;;
