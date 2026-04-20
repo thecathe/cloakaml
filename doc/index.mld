@@ -1,0 +1,33 @@
+{0 Cloakaml Documentation}
+
+This is the documentation for [cloakaml]!
+
+{1 Modules}
+
+{2 [module] {!Game}}
+
+See {!Game}
+
+{2 [module] {!Utils}}
+
+See {!Utils}
+
+{1 Background}
+
+I began working on this project after watching {{: https://watch.dropout.tv/parlor-room/season:1/videos/blood-on-the-clocktower}Parlor Room on {i Dropout.tv}} play {i Blood on the Clocktower}. The main thing that caught my attention is that unlike computerized incarnations such as {i Town of Salem} or chance-based {i Coup}, a game of {i Blood on the Clocktower} is ran by a {b GM} (Game Master, aka {i Storyteller}) who orchestrates the entire game. Not only do they handle the starting configuration, they are present throughout, making decisions on what would make the game most interesting and enjoyable for everyone involved. This is the kind of {i human touch} that other iterations clearly lack, in exchange for their simplicity (e.g., being a card-game) or replayability (e.g., having online-matchmaking).
+
+Essentially, I was drawn towards modelling the different structures of game-configurations possible from the setup of these kinds of social deduction games, and found the prospect of using this to create a platform that could facillitate engaging and playing {i with} these games from a meta-perspective very exciting. Ideally, I can create a {b model} that can {i describe} these kinds of games, and {b system} that can handle being the context in which they can be {i run}. If done correctly, this could become a sandbox for creating new games, and exploring new ways to interact with existing ones. E.g., the {i Storyteller} of {i Blood on the Clocktower} would correspond to a portion of the matchmaking, setup and NPC-AI in games like {i Town of Salem}, and by being linked in this way, it could provide better tools for making more interesting and fun games when a {i Storyteller} is not available, without it being up to RNG.
+
+{2 Inspiration}
+
+Below are the games that I am {i consciously} studying whilst developing this. Primaily, I am sampling their {i structrues} as a kind of {i usecase} in order to help me understand what problems I need to solve. {i {b Note:} by no means is this project attempting to replace, eclipse or compete with any of these in any way whatsoever. I am simply following the dopamine/inspiration as it comes, and using this as an exercise in problem solving, and will run with it as far as I am able to.} It has been really fun to do this in [OCaml].
+
+{3 Social Deduction Games}
+
+{ul 
+  {- {{: https://en.wikipedia.org/wiki/Mafia_(party_game)}Mafia party-game}}
+  {- {{: https://en.wikipedia.org/wiki/Town_of_Salem}Town of Salem}}
+  {- {{: https://en.wikipedia.org/wiki/Coup_(card_game)}Coup (card game)}}
+  {- {{: https://en.wikipedia.org/wiki/Among_Us}Among Us}}
+  {- {{: https://wiki.bloodontheclocktower.com/Main_Page}Blood on the clocktower}}}
+

@@ -1,4 +1,4 @@
-(** {1 Live -- I.e., When game is running} *)
+(** {1 I.e., When game is running} *)
 
 (** ... *)
 module Setup = Setup

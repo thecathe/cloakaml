@@ -1,5 +1,6 @@
-(** [module Players] is ... *)
+(** @canonical Game.Players *)
 module Players = Players
+(** [module Players] is ... *)
 
 (** [module Rounds] is ... *)
 module Rounds = Rounds
