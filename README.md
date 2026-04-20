@@ -1,5 +1,44 @@
 # cloakaml
 
+## building
+
+### prerequisites 
+- install opam
+- clone repo
+
+### *optional: create opam switch*
+
+```
+opam switch create cloakaml ocaml
+```
+
+then update shell with `eval $(opam env)`
+
+### step 1. install deps
+
+#### *install deps*
+
+enter cloned repo directory. run:
+
+```
+opam install . --deps-only -y
+```
+
+### step 2. build project
+
+```
+dune build @doc
+```
+
+## running
+
+first build. then run:
+
+```
+dune exec -- _build/default/bin/main.exe
+```
+
+
 ## inspiration
 
 - town of salem
