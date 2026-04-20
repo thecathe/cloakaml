@@ -1,5 +1,7 @@
 # cloakaml
 
+> "cloak and dagger" games
+
 For details first [build](#building) the project, then open [./doc/index.html](./doc/index.html) locally.
 
 ## current state

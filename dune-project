@@ -5,15 +5,15 @@
 (generate_opam_files true)
 
 (source
- (github username/reponame))
+ (github thecathe/cloakaml))
 
-(authors "Author Name <author@example.com>")
+(authors "Jonah Pears <author@example.com>")
 
-(maintainers "Maintainer Name <maintainer@example.com>")
+(maintainers "Jonah Pears <maintainer@example.com>")
 
-(license LICENSE)
+(license BSD-3-Clause)
 
-(documentation https://url/to/documentation)
+; (documentation https://url/to/documentation)
 
 (package
  (name cloakaml)
