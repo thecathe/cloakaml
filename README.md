@@ -3,8 +3,8 @@
 ## building
 
 ### prerequisites 
-- install opam
 - clone repo
+- opam *or* nix (if using nix, enter directory and run `nix-shell`)
 
 ### *optional: create opam switch*
 
@@ -37,7 +37,6 @@ first build. then run:
 ```
 dune exec -- _build/default/bin/main.exe
 ```
-
 
 ## inspiration
 
