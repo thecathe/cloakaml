@@ -1,6 +1,6 @@
 (** @canonical Game.Abilities.Ability.Of_role *)
 
-include Sig 
+include Sig
 open Types
 
 exception RoleAbilityNotFound of (Roles.Role.t * Trigger.Kind.t)

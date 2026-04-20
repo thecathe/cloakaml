@@ -1,10 +1,11 @@
 (** @canonical Game.Abilities.Ability *)
 
 (** Types *)
-include Types (** @closed *)
+include Types
+(** @closed *)
 
 (** Sig *)
-include Sig 
+include Sig
 
 (** Trigger *)
 module Trigger = Trigger
