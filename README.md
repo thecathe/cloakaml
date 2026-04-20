@@ -3,6 +3,7 @@
 ## building
 
 ### prerequisites 
+
 - clone repo
 - opam *or* nix (if using nix, enter directory and run `nix-shell`)
 
