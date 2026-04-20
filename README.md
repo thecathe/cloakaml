@@ -17,8 +17,6 @@ then update shell with `eval $(opam env)`
 
 ### step 1. install deps
 
-#### *install deps*
-
 enter cloned repo directory. run:
 
 ```
