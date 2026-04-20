@@ -1,8 +1,0 @@
-(library
- (name investigative)
- (public_name cloakaml.roles.investigative)
- (libraries cloakaml.alignment cloakaml.player)
- (modules investigative)
- (wrapped true))
-
-(include_subdirs no)

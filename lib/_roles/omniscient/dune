@@ -1,7 +1,0 @@
-(library
- (name omniscient)
- (public_name cloakaml.roles.omniscient)
- (modules omniscient)
- (wrapped true))
-
-(include_subdirs no)
