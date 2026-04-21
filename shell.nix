@@ -30,6 +30,7 @@ in
       zsh
       opam
       erlang
+      rebar3
     ];
     shellHook = ''
       eval $(opam env)
