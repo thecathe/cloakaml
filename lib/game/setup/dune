@@ -4,9 +4,9 @@
  (preprocess
   (pps ppx_deriving.std))
  (libraries
-  cloakaml.game.players
-  cloakaml.game.abilities
-  cloakaml.game.rounds)
+  cloakaml.game.meta.players
+  cloakaml.game.meta.abilities
+  cloakaml.game.meta.rounds)
  (modules distribution setup)
  (wrapped true))
 

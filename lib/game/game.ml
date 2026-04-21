@@ -1,14 +1,7 @@
 (** @canonical Cloakaml.Game *)
 
-module Players = Players
-
-(** [module Players] is ... *)
-
-(** [module Rounds] is ... *)
-module Rounds = Rounds
-
-(** [module Abilities] is ... *)
-module Abilities = Abilities
+(** [module Meta] ... *)
+module Meta = Meta
 
 (** [module Setup] is ... *)
 module Setup = Setup

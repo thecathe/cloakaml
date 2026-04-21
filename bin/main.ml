@@ -185,10 +185,12 @@ let players_with_kinds_of_ability
    ;; *)
 
 (* let round_active_abilities (round : Round.t) : unit = *)
-let round_role_abilities (round : Rounds.t) (kind : Ability.Trigger.Kind.t)
+let round_role_abilities (round : Meta.Rounds.t) (kind : Ability.Trigger.Kind.t)
   : unit
   =
-  let xs = Live.Abilities.get (Rounds.this round) kind |> Abilities.players in
+  let initial : Meta.Rounds.initial = Rounds.initial round in
+  let d : Live.Data.t = Live.Data.initial initial in
+  let xs = Live.Abilities.kind d kind |> Abilities.players in
   Printf.printf "active %s %s\n" (Trigger.Kind.show kind) (Players.show xs)
 ;;
 

@@ -1,0 +1,15 @@
+(library
+ (name of_role)
+ (public_name cloakaml.game.meta.abilities.ability.of_role)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.utils
+  cloakaml.game.meta.players
+  cloakaml.game.meta.rounds
+  cloakaml.game.meta.abilities.ability.trigger
+  cloakaml.game.meta.abilities.ability.types)
+ (modules sig of_role)
+ (wrapped true))
+
+(include_subdirs no)

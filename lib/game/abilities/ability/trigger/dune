@@ -1,9 +1,0 @@
-(library
- (name trigger)
- (public_name cloakaml.game.abilities.ability.trigger)
- (preprocess
-  (pps ppx_deriving.std))
- (modules kind trigger)
- (wrapped true))
-
-(include_subdirs no)
