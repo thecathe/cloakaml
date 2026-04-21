@@ -190,7 +190,7 @@ let round_role_abilities (round : Meta.Rounds.t) (kind : Ability.Trigger.Kind.t)
   =
   let initial : Meta.Rounds.initial = Rounds.initial round in
   (* TODO: ? *)
-  let d : Live.Data.t = Live.Data.initial initial in
+  let d : Live.Data.t = Live.Data.create initial in
   let xs = Live.Abilities.kind d kind |> Abilities.players in
   Printf.printf "active %s %s\n" (Trigger.Kind.show kind) (Players.show xs)
 ;;

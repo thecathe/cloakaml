@@ -6,7 +6,7 @@ type t =
   ; abilities : Meta.Abilities.t
   }
 
-let initial (initial : Meta.Rounds.initial) : t =
+let create (initial : Meta.Rounds.initial) : t =
   { initial
   ; current = Meta.Rounds.Round.make initial.players
   ; abilities = Meta.Abilities.map_players initial.players
