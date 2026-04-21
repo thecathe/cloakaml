@@ -29,6 +29,7 @@ in
     buildInputs = with pkgs; [
       zsh
       opam
+      erlang
     ];
     shellHook = ''
       eval $(opam env)
