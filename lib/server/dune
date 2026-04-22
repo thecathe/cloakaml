@@ -1,0 +1,18 @@
+(library
+ (name server)
+ (public_name cloakaml.server)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries unix)
+ (modules server)
+ (wrapped true))
+
+(rule
+ (target eserver.beam)
+ (deps eserver.erl)
+ (action
+  (chdir
+   %{workspace_root}/lib/server
+   (run erlc %{deps}))))
+
+(include_subdirs no)

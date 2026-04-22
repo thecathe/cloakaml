@@ -1,3 +1,6 @@
 _build
 .direnv
 .vscode
+
+*.beam
+erl_crash.dump

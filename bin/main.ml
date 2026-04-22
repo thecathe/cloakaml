@@ -227,3 +227,7 @@ let () = test_round_role_abilities Day n
 (** {1 Erlang Processes} *)
 
 (* open Unix *)
+let () =
+logl "Server:";
+Server.run ();
+()
