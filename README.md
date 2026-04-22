@@ -10,7 +10,7 @@ For details first [build](#building) the project, then open [./doc/index.html](.
 
 ### OCaml & Erlang
 
-There is a very rough initial sketch of how I could connect to Erlang from the OCaml side of things. My idea at the moment is that the OCaml side will *build* the games and handle the implementation of their mechanics, and the games themselves will *run* on an Erlang server.
+There is a very rough initial sketch (in `lib/game/server`) of how I could connect to Erlang from the OCaml side of things. My idea at the moment is that the OCaml side will *build* the games and handle the implementation of their mechanics, and the games themselves will *run* on an Erlang server.
 
 ## inspiration
 
