@@ -14,7 +14,7 @@ loop() ->
             loop()
     end.
 
-handle("{\"action\":\"ping\"}") ->
+handle("{\"action\":\"ping\"}\n") ->
     "{\"result\":\"pong\"}";
 
 handle(Other) ->

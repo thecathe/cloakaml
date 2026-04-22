@@ -8,14 +8,18 @@ For details first [build](#building) the project, then open [./doc/index.html](.
 
 [Running](#running) the project will just output a random starting configuration for game (currently [Blood on the Clocktower](https://wiki.bloodontheclocktower.com/Main_Page)), using the [standard distribution](https://i.redd.it/cunojgi5omnd1.jpeg) (5-15 players). Current focus is on implementing the remaining abilities, and exploring what will be necessary to run it "live" (i.e., after setting up, running the phases and rounds of the game, modelling the state of the game as it plays).
 
-### inspiration
+### OCaml & Erlang
+
+There is a very rough initial sketch of how I could connect to Erlang from the OCaml side of things. My idea at the moment is that the OCaml side will *build* the games and handle the implementation of their mechanics, and the games themselves will *run* on an Erlang server.
+
+## inspiration
 
 - town of salem
 - mafia (party game)
 - blood on the clocktower (case study implementation)
 - coup
 
-#### future (inspirational) work
+### future (inspirational) work
 
 - papers please
 - amongus
@@ -31,7 +35,7 @@ For details first [build](#building) the project, then open [./doc/index.html](.
 
 ### *optional: create opam switch*
 
-```
+```bash
 opam switch create cloakaml ocaml
 ```
 
@@ -41,13 +45,13 @@ then update shell with `eval $(opam env)`
 
 enter cloned repo directory. run:
 
-```
+```bash
 opam install . --deps-only -y
 ```
 
 ### step 2. build project
 
-```
+```bash
 dune build @doc
 ```
 
@@ -55,7 +59,7 @@ dune build @doc
 
 first build. then run:
 
-```
+```bash
 dune exec -- _build/default/bin/main.exe
 ```
 

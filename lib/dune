@@ -1,6 +1,6 @@
 (library
  (name cloakaml)
- (libraries cloakaml.utils cloakaml.server cloakaml.game)
+ (libraries cloakaml.utils cloakaml.game)
  (wrapped true))
 
 (include_subdirs no)

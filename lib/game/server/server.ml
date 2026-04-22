@@ -7,12 +7,9 @@ module Erlang = struct
     }
 
   let start () : t =
-    (* let cwd = Printf.sprintf "%s/lib/server" (Sys.getcwd ()) in *)
-    (* Printf.printf "(Server) cwd: %s\n" cwd; *)
     let ic, oc =
-      "erl -noshell -pa _build/default/lib/server -s eserver start -s init stop"
-      |> open_process
-      (* "rebar3 -s ./server.erl start -s init stop" *)
+      open_process
+        "erl -noshell -pa _build/default/lib/game/server -s eserver start"
     in
     { ic; oc }
   ;;
@@ -30,12 +27,21 @@ module Erlang = struct
     send t msg;
     receive t
   ;;
+
+  exception UnexpectedStart of string
+
+  (** shadowed to handle opening message *)
+  let start () : t =
+    let erl = start () in
+    match receive erl with "start" -> erl | x -> raise (UnexpectedStart x)
+  ;;
 end
 
 let run () =
   print_endline "(Server) Hello, World!";
   let erl = Erlang.start () in
+  print_endline "(Server) Started.";
   let response = Erlang.request erl {|{"action":"ping"}|} in
-  Printf.printf "Got: %s\n%!" response;
+  Printf.printf "(Server) Got: %s\n%!" response;
   ()
 ;;

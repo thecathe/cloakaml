@@ -1,6 +1,6 @@
 (library
  (name server)
- (public_name cloakaml.server)
+ (public_name cloakaml.game.server)
  (preprocess
   (pps ppx_deriving.std))
  (libraries unix)
@@ -12,7 +12,7 @@
  (deps eserver.erl)
  (action
   (chdir
-   %{workspace_root}/lib/server
+   %{workspace_root}/lib/game/server
    (run erlc %{deps}))))
 
 (include_subdirs no)

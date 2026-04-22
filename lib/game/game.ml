@@ -9,6 +9,9 @@ module Setup = Setup
 (** [module Live] is ... *)
 module Live = Live
 
+(** [module Server] is ... *)
+module Server = Server
+
 (** {1 todo} *)
 
 type t = { round : Rounds.t }
