@@ -1,5 +1,8 @@
 (** @canonical Cloakaml.Game *)
 
+(** [module Mode] ... *)
+module Mode = Mode
+
 (** [module Build] ... *)
 module Build = Build
 
