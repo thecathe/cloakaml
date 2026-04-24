@@ -3,7 +3,7 @@
  (public_name cloakaml.game.live)
  (preprocess
   (pps ppx_deriving.std))
- (libraries cloakaml.game.meta
+ (libraries cloakaml.game.build
   cloakaml.game.setup)
  (modules data round abilities live)
  (wrapped true))

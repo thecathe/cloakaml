@@ -15,8 +15,8 @@ See {!Utils}
 {2 {i Dev Speed dial}}
 
 {ul
-  {- {{!Game.Meta.Players.Player.Roles.Role.t}Role.t}}
-  {- {{!Game.Meta.Players.Player.t}Player.t}}
+  {- {{!Game.Build.Players.Player.Roles.Role.t}Role.t}}
+  {- {{!Game.Build.Players.Player.t}Player.t}}
   {- {{!Game.Live}Live}}}
 
 {1 Background}

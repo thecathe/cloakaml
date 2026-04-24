@@ -1,7 +1,7 @@
 (** @canonical Cloakaml.Game *)
 
-(** [module Meta] ... *)
-module Meta = Meta
+(** [module Build] ... *)
+module Build = Build
 
 (** [module Setup] is ... *)
 module Setup = Setup

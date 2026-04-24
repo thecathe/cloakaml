@@ -1,0 +1,10 @@
+(library
+ (name players)
+ (public_name cloakaml.game.build.players)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries cloakaml.game.build.players.player)
+ (modules neighbours map players)
+ (wrapped true))
+
+(include_subdirs no)

@@ -1,0 +1,13 @@
+(library
+ (name build)
+ (public_name cloakaml.game.build)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.game.build.players
+  cloakaml.game.build.rounds
+  cloakaml.game.build.abilities)
+ (modules build)
+ (wrapped true))
+
+(include_subdirs no)

@@ -1,0 +1,15 @@
+(library
+ (name abilities)
+ (public_name cloakaml.game.build.abilities)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.utils
+  cloakaml.game.build.players
+  cloakaml.game.build.rounds.phase
+  cloakaml.game.build.rounds.round
+  cloakaml.game.build.abilities.ability)
+ (modules query ability_map abilities)
+ (wrapped true))
+
+(include_subdirs no)

@@ -1,19 +1,19 @@
 (** @canonical Game.Live.Data *)
 
 type t =
-  { initial : Meta.Rounds.initial
-  ; current : Meta.Rounds.Round.t
-  ; abilities : Meta.Abilities.t
+  { initial : Build.Rounds.initial
+  ; current : Build.Rounds.Round.t
+  ; abilities : Build.Abilities.t
   }
 
-let create (initial : Meta.Rounds.initial) : t =
+let create (initial : Build.Rounds.initial) : t =
   { initial
-  ; current = Meta.Rounds.Round.make initial.players
-  ; abilities = Meta.Abilities.map_players initial.players
+  ; current = Build.Rounds.Round.make initial.players
+  ; abilities = Build.Abilities.map_players initial.players
   }
 ;;
 
-let initial (x : t) : Meta.Rounds.initial = x.initial
-let current (x : t) : Meta.Rounds.Round.t = x.current
-let players (x : t) : Meta.Players.t = (current x).players
-let abilties (x : t) : Meta.Abilities.t = x.abilities
+let initial (x : t) : Build.Rounds.initial = x.initial
+let current (x : t) : Build.Rounds.Round.t = x.current
+let players (x : t) : Build.Players.t = (current x).players
+let abilties (x : t) : Build.Abilities.t = x.abilities
