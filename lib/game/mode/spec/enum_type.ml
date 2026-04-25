@@ -2,6 +2,8 @@
 
 (** {1 unused} *)
 
+exception EnumKindTodo
+
 module type S = sig
   type t [@@deriving show { with_path = false }, eq, enum]
 

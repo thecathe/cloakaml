@@ -1,4 +1,4 @@
-(** @canonical Modes.BloodOnTheClockTower.Role *)
+(** @canonical Modes.BloodOnTheClockTower.Roles.Role *)
 
   type t =
     (* townsfolk *)
@@ -65,4 +65,4 @@
     | Imp
     (** Each {{!Phase.Night}Night}, choose a player: they {b die}. If you kill yourself this way, a {{!Kind.Minion}Minion} becomes the {!Imp}.
     *)
-  [@@deriving show { with_path = false }, enum, eq]
+  [@@deriving show { with_path = false }, eq, enum]

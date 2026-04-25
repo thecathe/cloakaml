@@ -1,4 +1,4 @@
-(** @canonical Modes.BloodOnTheClockTower.Alignment *)
+(** @canonical Modes.BloodOnTheClockTower.TheRoles.Alignment *)
 
   type t =
     | Good

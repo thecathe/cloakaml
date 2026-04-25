@@ -1,0 +1,10 @@
+(library
+ (name the_roles)
+ (public_name cloakaml.modes.blood_on_the_clocktower.the_roles)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries cloakaml.game.mode)
+ (modules alignment kind role the_roles)
+ (wrapped true))
+
+(include_subdirs no)

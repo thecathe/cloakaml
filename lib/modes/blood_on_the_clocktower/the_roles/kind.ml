@@ -1,4 +1,4 @@
-(** @canonical Modes.BloodOnTheClockTower.Kind *)
+(** @canonical Modes.BloodOnTheClockTower.Roles.Kind *)
 
 type t =
   | Townsfolk

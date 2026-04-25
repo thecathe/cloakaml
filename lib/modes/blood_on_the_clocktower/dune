@@ -3,8 +3,9 @@
  (public_name cloakaml.modes.blood_on_the_clocktower)
  (preprocess
   (pps ppx_deriving.std))
- (libraries cloakaml.game.mode)
- (modules alignment kind role blood_on_the_clocktower)
+ (libraries cloakaml.game.mode cloakaml.modes.blood_on_the_clocktower.the_roles
+ cloakaml.modes.blood_on_the_clocktower.the_triggers)
+ (modules blood_on_the_clocktower)
  (wrapped true))
 
 (include_subdirs no)

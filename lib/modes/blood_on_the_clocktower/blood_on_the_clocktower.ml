@@ -1,44 +1,11 @@
 (** @canonical Modes.BloodOnTheClockTower *)
 
-module Make () =
-  Mode.Spec.Roles.Make (Alignment) (Kind) (Role)
-    (struct
-      type role = Role.t
-      type kind = Kind.t
-      type alignment = Alignment.t
+module TheRoles = The_roles
+module TheTriggers = The_triggers
 
-      let alignment_of_kind : kind -> alignment = function
-        | Townsfolk | Outsider -> Good
-        | Minion | Demon -> Evil
-        | _ -> Neutral
-      ;;
+module Make () = struct
+  module Roles = TheRoles.Make ()
 
-      let kind_of_role : role -> kind = function
-        (* townsfolk *)
-        | Washerwoman -> Townsfolk
-        | Librarian -> Townsfolk
-        | Investigator -> Townsfolk
-        | Chef -> Townsfolk
-        | Empath -> Townsfolk
-        | FortuneTeller -> Townsfolk
-        | Undertaker -> Townsfolk
-        | Monk -> Townsfolk
-        | Ravenkeeper -> Townsfolk
-        | Virgin -> Townsfolk
-        | Slayer -> Townsfolk
-        | Soldier -> Townsfolk
-        | Mayor -> Townsfolk
-        (* outsiders *)
-        | Butler -> Outsider
-        | Drunk -> Outsider
-        | Recluse -> Outsider
-        | Saint -> Outsider
-        (* minions *)
-        | Poisoner -> Minion
-        | Spy -> Minion
-        | ScarletWoman -> Minion
-        | Baron -> Minion
-        (* demons *)
-        | Imp -> Demon
-      ;;
-    end)
+  (** TODO: shouldn't take params, use {!Roles} directly (dune library) *)
+  module Triggers = TheTriggers.Make (Roles)
+end

@@ -15,15 +15,15 @@ module type S = sig
   type triggers
   type trigger
   type trigger_kind
-  (* type data *)
+  type data
 
   (* type t = trigger * data f *)
   (* type nonrec t = (data, trigger) t *)
-  (* val triggers : triggers
+  val triggers : triggers
 
   exception TriggerNotFound of trigger
 
-  val trigger : trigger -> data f *)
+  val trigger : trigger -> data f
 end
 
 module type InputS = sig
@@ -69,8 +69,7 @@ module Make
    and type triggers = X.triggers
    and type trigger = X.trigger
    and type trigger_kind = X.trigger_kind
-   (* and type data = X.data  *)
-   = struct
+   and type data = X.data = struct
   type role = X.role
   type role_kind = X.role_kind
   type role_alignment = X.role_alignment
@@ -80,16 +79,16 @@ module Make
 
   (** {2 Ability Type} *)
 
-  (* type data = X.data *)
+  type data = X.data
 
   (* type t = trigger * data f *)
   (* type nonrec t = (data, trigger) t *)
 
-  (* let triggers : triggers = X.triggers
+  let triggers : triggers = X.triggers
 
   exception TriggerNotFound of trigger
 
   let trigger (x : trigger) : data f =
     match X.of_trigger x with None -> raise (TriggerNotFound x) | Some y -> y
-  ;; *)
+  ;;
 end

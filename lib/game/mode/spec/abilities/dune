@@ -6,6 +6,7 @@
  (libraries
   cloakaml.game.mode.spec.enum_type
   cloakaml.game.mode.spec.enum_map
+  cloakaml.game.mode.spec.data
   cloakaml.game.mode.spec.roles
   cloakaml.game.mode.spec.abilities.triggers)
  (modules ability abilities)
