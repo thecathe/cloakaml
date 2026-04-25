@@ -11,15 +11,28 @@ module Role = Role
 (** {1 Functor} *)
 
 module type S = sig
-  module A : Alignment.S
-  module K : Kind.S with type alignment = A.t
-  module R : Role.S with type kind = K.t and type alignment = A.t
+  module Alignment : Alignment.S
+  module Kind : Kind.S with type alignment = Alignment.t
+  module Role : Role.S with type kind = Kind.t and type alignment = Alignment.t
+
+  type roles = Role.t list
+
+  val collect : unit -> roles
+  val random : ?roles:roles -> unit -> Role.t
+  val of_kind : ?roles:roles -> Kind.t -> roles
+
+  module Set : sig
+    include Set.S with type elt = Role.t
+
+    val get : unit -> t
+    val of_kind : ?roles:roles -> Kind.t -> t
+  end
 end
 
 module Make
-    (A : Enum_type.S)
-    (K : Enum_type.S)
-    (R : Enum_type.S)
+    (A : Enum_type.InputS)
+    (K : Enum_type.InputS)
+    (R : Enum_type.InputS)
     (X : sig
            type role
            type kind
@@ -31,11 +44,11 @@ module Make
          with type role = R.t
           and type kind = K.t
           and type alignment = A.t) : S = struct
-  module A = Alignment.Make (A)
+  module Alignment = Alignment.Make (A)
 
-  module K =
+  module Kind =
     Kind.Make
-      (A)
+      (Alignment)
       (struct
         include K
 
@@ -44,8 +57,8 @@ module Make
         let alignment : t -> alignment = X.alignment_of_kind
       end)
 
-  module R =
-    Role.Make (A) (K)
+  module Role =
+    Role.Make (Alignment) (Kind)
       (struct
         include R
 
@@ -54,4 +67,37 @@ module Make
 
         let kind : t -> kind = X.kind_of_role
       end)
+
+  (** {2 Roles} *)
+
+  type roles = Role.t list
+
+  let collect () : roles =
+    List.init (Role.max + 1) (fun n ->
+      match Role.of_enum n with
+      | Some x -> x
+      | None -> raise (Role.EnumOutOfBounds n))
+  ;;
+
+  let random ?(roles : roles = collect ()) () : Role.t =
+    Random.self_init ();
+    List.nth roles (Random.int (List.length roles))
+  ;;
+
+  (** {3 Roles of Kind} *)
+
+  let of_kind ?(roles : roles = collect ()) (x : Kind.t) : roles =
+    List.filter (Role.is_kind x) roles
+  ;;
+
+  (** {3 Set of Roles} *)
+  module Set = struct
+    include Set.Make (Role)
+
+    let get () : t = collect () |> of_list
+
+    let of_kind ?(roles : roles = collect ()) (x : Kind.t) : t =
+      of_kind ~roles x |> of_list
+    ;;
+  end
 end
