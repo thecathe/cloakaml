@@ -1,7 +1,7 @@
 (** @canonical Game.Mode.Spec.EnumMap *)
 
 module type S = sig
-include Enum_type.S
+  include Enum_type.S
 
   val hash : t -> int
   val compare : t -> t -> int
@@ -14,7 +14,7 @@ module type InputS = sig
 end
 
 module Make (X : InputS) : S with type t = X.t = struct
-  include X
+  include Enum_type.Make (X)
 
   let hash (x : t) : int = Int.hash (to_enum x)
   let compare (a : t) (b : t) : int = Int.compare (to_enum a) (to_enum b)
