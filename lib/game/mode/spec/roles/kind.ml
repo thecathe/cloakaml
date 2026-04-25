@@ -6,7 +6,7 @@ module type S = sig
   type alignment
 
   val alignment : t -> alignment
-  val is_alignment : t -> alignment -> bool
+  val is_alignment : alignment -> t -> bool
 end
 
 module type InputS = sig
@@ -24,5 +24,5 @@ module Make (A : Alignment.S) (X : InputS with type alignment = A.t) :
   type alignment = A.t
 
   let alignment = X.alignment
-  let is_alignment (x : t) (b : alignment) : bool = alignment x |> A.equal b
+  let is_alignment (a : alignment) (x : t) : bool = alignment x |> A.equal a
 end

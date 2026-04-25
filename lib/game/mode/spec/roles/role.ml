@@ -7,9 +7,9 @@ module type S = sig
   type alignment
 
   val kind : t -> kind
-  val is_kind : t -> kind -> bool
+  val is_kind : kind -> t -> bool
   val alignment : t -> alignment
-  val is_alignment : t -> alignment -> bool
+  val is_alignment : alignment -> t -> bool
 end
 
 module type InputS = sig
@@ -32,7 +32,7 @@ module Make
   type alignment = A.t
 
   let kind : t -> kind = X.kind
-  let is_kind (x : t) (b : kind) : bool = kind x |> K.equal b
+  let is_kind (a : kind) (x : t) : bool = kind x |> K.equal a
   let alignment (x : t) : alignment = kind x |> K.alignment
-  let is_alignment (x : t) (b : alignment) : bool = alignment x |> A.equal b
+  let is_alignment (a : alignment) (x : t) : bool = alignment x |> A.equal a
 end
