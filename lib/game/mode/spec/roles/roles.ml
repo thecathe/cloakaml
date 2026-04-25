@@ -72,12 +72,7 @@ module Make
 
   type roles = Role.t list
 
-  let collect () : roles =
-    List.init (Role.max + 1) (fun n ->
-      match Role.of_enum n with
-      | Some x -> x
-      | None -> raise (Role.EnumOutOfBounds n))
-  ;;
+  let collect = Role.collect
 
   let random ?(roles : roles = collect ()) () : Role.t =
     Random.self_init ();
