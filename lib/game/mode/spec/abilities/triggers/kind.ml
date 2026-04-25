@@ -1,4 +1,4 @@
-(** @canonical Game.Mode.Spec.Roles.Alignment *)
+(** @canonical Game.Build.Abilities.Triggers.Kind *)
 
 module type S = sig
   include Enum_map.S

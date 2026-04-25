@@ -1,4 +1,4 @@
-(** @canonical Game.Mode.Spec.Role.Kind *)
+(** @canonical Game.Mode.Spec.Roles.Kind *)
 
 module type S = sig
   include Enum_map.S
