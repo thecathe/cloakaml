@@ -3,9 +3,9 @@
  (public_name cloakaml.modes.blood_on_the_clocktower.the_triggers)
  (preprocess
   (pps ppx_deriving.std))
- (libraries cloakaml.game.mode
-  ; cloakaml.modes.blood_on_the_clocktower.the_roles
-  )
+ (libraries
+  cloakaml.game.mode
+  cloakaml.modes.blood_on_the_clocktower.the_roles)
  (modules kind trigger the_triggers)
  (wrapped true))
 

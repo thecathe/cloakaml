@@ -1,4 +1,4 @@
-(** @canonical Game.Mode.Spec.EnumMap *)
+(** @canonical Cloakaml.Game.Mode.Spec.EnumMap *)
 
 module type S = sig
   include Enum_type.S

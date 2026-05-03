@@ -1,4 +1,4 @@
-(** @canonical Game.Mode.Spec.Group *)
+(** @canonical Cloakaml.Game.Mode.Spec.Group *)
 
 module type S = sig
   type role

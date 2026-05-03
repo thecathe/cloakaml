@@ -1,4 +1,4 @@
-(** @canonical Game.Mode.Spec.Data *)
+(** @canonical Cloakaml.Game.Mode.Spec.Data *)
 
 module type S = sig
   type t

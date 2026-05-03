@@ -1,4 +1,4 @@
-(** @canonical Game.Mode *)
+(** @canonical Cloakaml.Game.Mode *)
 
 (** {1 Spec} *)
 

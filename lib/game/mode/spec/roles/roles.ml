@@ -1,4 +1,4 @@
-(** @canonical Game.Mode.Spec.Roles *)
+(** @canonical Cloakaml.Game.Mode.Spec.Roles *)
 
 (** {1 Role} *)
 
@@ -43,7 +43,15 @@ module Make
          end
          with type role = R.t
           and type kind = K.t
-          and type alignment = A.t) : S = struct
+          and type alignment = A.t) : S
+        with
+         module Alignment = Alignment.Make (A)
+        (* and module Kind = Kind.Make (K) *)
+        (* and module Role = Role. *)
+        and type Alignment.t = A.t
+        and type Kind.t = K.t
+        and type Role.t = R.t
+          = struct
   module Alignment = Alignment.Make (A)
 
   module Kind =

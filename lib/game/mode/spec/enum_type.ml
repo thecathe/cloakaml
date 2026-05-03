@@ -1,4 +1,4 @@
-(** @canonical Game.Mode.Spec.EnumType *)
+(** @canonical Cloakaml.Game.Mode.Spec.EnumType *)
 
 (** {1 unused} *)
 
