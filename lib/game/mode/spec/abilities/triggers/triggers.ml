@@ -1,4 +1,4 @@
-(** @canonical Game.Build.Abilities.Triggers *)
+(** @canonical Game.Mode.Spec.Abilities.Triggers *)
 
 module Kind = Kind
 module Trigger = Trigger
