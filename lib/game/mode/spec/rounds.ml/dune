@@ -1,0 +1,12 @@
+(library
+ (name rounds)
+ (public_name cloakaml.game.mode.spec.rounds)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.game.mode.spec.enum_type
+  cloakaml.game.mode.spec.enum_map)
+ (modules phase round rounds)
+ (wrapped true))
+
+(include_subdirs no)
