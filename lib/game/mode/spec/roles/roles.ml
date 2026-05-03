@@ -14,7 +14,7 @@ module type S = sig
   module Alignment : Alignment.S
   module Kind : Kind.S with type alignment = Alignment.t
   module Role : Role.S with type kind = Kind.t and type alignment = Alignment.t
-  module Group : Group.S with type role = Role.t and type kind = Kind.t and type alignment = Alignment.t
+  (* module Group : Group.S with type role = Role.t and type kind = Kind.t and type alignment = Alignment.t *)
 
   type roles = Role.t list
 
@@ -77,7 +77,7 @@ module Make
         let kind : t -> kind = X.kind_of_role
       end)
 
-  module Group = Group.Make (Alignment) (Kind) (Role)
+  (* module Group = Group.Make (Alignment) (Kind) (Role) *)
 
   (** {2 Roles} *)
 

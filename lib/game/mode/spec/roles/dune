@@ -6,7 +6,7 @@
  (libraries
   cloakaml.game.mode.spec.enum_type
   cloakaml.game.mode.spec.enum_map)
- (modules alignment kind role group roles)
+ (modules alignment kind role roles)
  (wrapped true))
 
 (include_subdirs no)
