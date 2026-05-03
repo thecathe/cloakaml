@@ -1,4 +1,4 @@
-(** @canonical Cloakaml.Game.Mode.Spec.Group *)
+(** @canonical Cloakaml.Game.Mode.Spec.Roles.Group *)
 
 module type S = sig
   type role
@@ -13,9 +13,9 @@ module type S = sig
 end
 
 module Make
-    (A : Roles.Alignment.S)
-    (K : Roles.Kind.S with type alignment = A.t)
-    (R : Roles.Role.S with type kind = K.t and type alignment = A.t) :
+    (A : Alignment.S)
+    (K : Kind.S with type alignment = A.t)
+    (R : Role.S with type kind = K.t and type alignment = A.t) :
   S with type role = R.t and type kind = K.t and type alignment = A.t = struct
   type role = R.t
   type kind = K.t

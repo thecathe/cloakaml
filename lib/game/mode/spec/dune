@@ -39,7 +39,7 @@
   cloakaml.game.mode.spec.data
   cloakaml.game.mode.spec.roles
   cloakaml.game.mode.spec.abilities)
- (modules group spec)
+ (modules spec)
  (wrapped true))
 
 (include_subdirs no)
