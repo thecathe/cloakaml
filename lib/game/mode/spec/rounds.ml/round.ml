@@ -16,6 +16,7 @@ module type S = sig
   val phase : t -> phase
   val players : t -> players
   val show : t -> string
+  val is_phase : phase -> t -> bool
   val random_player : ?f:(players -> players) -> t -> player
 end
 
@@ -64,6 +65,7 @@ module Make
   let phase (x : t) : phase = x.phase
   let players (x : t) : players = x.players
   let show (x : t) : string = ""
+  let is_phase (a : phase) (x : t) : bool = P.equal a x.phase
 
   let random_player ?(f : (Ps.t -> Ps.t) option) (x : t) : player =
     match f with
