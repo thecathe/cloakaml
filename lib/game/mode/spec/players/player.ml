@@ -14,17 +14,18 @@ module type S = sig
 
   module Roles : Roles.S
 
-  type role = Roles.Role.t
-  type role_kind = Roles.Kind.t
-  type role_alignment = Roles.Alignment.t
+  type role = Roles.role
+  type role_kind = Roles.role_kind
+  type role_alignment = Roles.role_alignment
 
-  module Group :
-    Group.S
-    with type role = Roles.Role.t
-     and type role_kind = Roles.Kind.t
-     and type role_alignment = Roles.Alignment.t
+  (* module Group :
+     Group.S
+     with type role = Roles.role
+     and type role_kind = Roles.role_kind
+     and type role_alignment = Roles.role_alignment
 
-  type group = Group.t
+     type group = Group.t *)
+  type group = Roles.group
   type status
   type knowledge
   type nonrec t = (index, role, status, knowledge) t
@@ -52,16 +53,7 @@ module type InputS = sig
      type role_alignment *)
 end
 
-module Make
-    (I : Index.S)
-    (R : Roles.S)
-    (S : Status.S)
-    (K : Knowledge.S)
-    (G :
-       Group.S
-       with type role = R.Role.t
-        and type role_kind = R.Kind.t
-        and type role_alignment = R.Alignment.t) :
+module Make (I : Index.S) (R : Roles.S) (S : Status.S) (K : Knowledge.S) :
   S
   with module Index = I (* and type index = I.t *)
    and module Roles = R
@@ -85,10 +77,16 @@ module Make
                       (* and type Roles.Alignment.t = R.Alignment.t *)
    and type status = S.t
    and type knowledge = K.t
-   and module Group = G
+(* and module Group = G *)
 (* and type group = G.t *)
 (* and type Group.role_kind = R.Kind.t *)
 (* and type Group.role_alignment = R.Alignment.t *) =
+(* (G :
+   Group.S
+   with type role = R.Role.t
+   and type role_kind = R.Role.kind
+   and type role_alignment = R.Role.alignment) *)
+
 (* (X :
    InputS
    with type role = Role.t
@@ -100,16 +98,16 @@ struct
   type index = Index.t
 
   module Roles = R
-  module Group = G
+  (* module Group = G *)
 
-  type group = Group.t
+  type group = R.group
   (* module Role = Roles.Role
      module Kind = Roles.Kind
      module Alignment = Roles.Alignment *)
 
-  type role = Roles.Role.t
-  type role_kind = Roles.Kind.t
-  type role_alignment = Roles.Alignment.t
+  type role = Roles.role
+  type role_kind = Roles.role_kind
+  type role_alignment = Roles.role_alignment
   type status = S.t
   type knowledge = K.t
   type nonrec t = (index, role, status, knowledge) t
@@ -138,7 +136,10 @@ struct
   let has_role (a : role) (x : t) : bool = Roles.Role.equal a x.role
   let has_status (a : status) (x : t) : bool = S.equal a x.status
   let has_knowledge (a : knowledge) (x : t) : bool = K.equal a x.knowledge
-  let has_group (a : group) (x : t) : bool = Group.is_role_of_group a x.role
+
+  let has_group (a : group) (x : t) : bool =
+    Roles.Group.is_role_of_group a x.role
+  ;;
 
   let replace_role (x : t) (a : role) : unit =
     x.role <- a;

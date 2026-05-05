@@ -1,4 +1,4 @@
-(** @canonical Cloakaml.Game.Mode.Spec.Roles.Alignment *)
+(** @canonical Cloakaml.Game.Mode.Spec.Roles.Role.Alignment *)
 
 module type S = sig
   include Enum_map.S

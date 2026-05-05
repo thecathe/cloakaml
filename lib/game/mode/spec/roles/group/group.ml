@@ -1,8 +1,8 @@
 (** @canonical Cloakaml.Game.Mode.Spec.Group *)
 
-module type S = sig
-  module Kind = Kind
+module Kind = Kind
 
+module type S = sig
   type kind = Kind.t
   type role
   type role_kind
@@ -18,21 +18,19 @@ module type S = sig
   val is_role_of_group : t -> role -> bool
 end
 
-module Make (R : Roles.S) :
+module Make (R : Role.S) :
   S
-  with type role = R.Role.t
-   and type role_kind = R.Kind.t
-   and type role_alignment = R.Alignment.t = struct
-  module Kind = Kind
-
+  with type role = R.t
+   and type role_kind = R.kind
+   and type role_alignment = R.alignment = struct
   type kind = Kind.t
-  type role = R.Role.t
-  type role_kind = R.Kind.t
-  type role_alignment = R.Alignment.t
+  type role = R.t
+  type role_kind = R.kind
+  type role_alignment = R.alignment
 
-  let equal_role = R.Role.equal
-  let equal_role_kind = R.Kind.equal
-  let equal_role_alignment = R.Alignment.equal
+  let equal_role = R.equal
+  let equal_role_kind = R.equal_kind
+  let equal_role_alignment = R.equal_alignment
 
   type t =
     | Role of role
@@ -48,9 +46,9 @@ module Make (R : Roles.S) :
 
   let is_role_of_group (a : t) (x : role) : bool =
     match a with
-    | Role b -> R.Role.equal b x
-    | Kind b -> R.Kind.equal b (R.Role.kind x)
-    | Alignment b -> R.Alignment.equal b (R.Role.alignment x)
+    | Role b -> equal_role b x
+    | Kind b -> equal_role_kind b (R.kind x)
+    | Alignment b -> equal_role_alignment b (R.alignment x)
   ;;
 
   (* let role (a:Kind.t)  : (role -> t -> bool) =
@@ -59,3 +57,4 @@ module Make (R : Roles.S) :
      | Kind ->  fun x -> fun y -> K.equal b (R.kind x)
      | Alignment -> R.alignment *)
 end
+

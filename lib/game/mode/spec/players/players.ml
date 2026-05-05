@@ -13,10 +13,10 @@ module type S = sig
   type player = Player.t
   type player_status = Player.status
   type player_knowledge = Player.knowledge
-  type role = Player.Roles.Role.t
-  type role_kind = Player.Roles.Kind.t
-  type role_alignment = Player.Roles.Alignment.t
-  type group = Player.Group.t
+  type role = Player.role
+  type role_kind = Player.role_kind
+  type role_alignment = Player.role_alignment
+  type group = Player.group
 
   module Map : Hashtbl.S with type key = player
 

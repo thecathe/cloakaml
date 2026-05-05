@@ -13,7 +13,7 @@ module type S = sig
 end
 
 module Make (X : sig
-    module Role : Spec.Roles.Role.S
+    module Role : Spec.Role.S
   end) : S = struct
   (* open X
 

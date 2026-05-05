@@ -42,23 +42,21 @@ module type InputS = sig
 end
 
 module Make
-    (RA : Roles.Alignment.S)
-    (RK : Roles.Kind.S with type alignment = RA.t)
-    (RR : Roles.Role.S with type kind = RK.t and type alignment = RA.t)
+    (R : Role.S)
     (TK : Triggers.Kind.S)
     (TT : Triggers.Trigger.S with type kind = TK.t)
     (TS :
        Triggers.S
-       with type role = RR.t
-        and type role_kind = RK.t
-        and type role_alignment = RA.t
+       with type role = R.t
+        and type role_kind = R.kind
+        and type role_alignment = R.alignment
         and type trigger = TT.t
         and type trigger_kind = TK.t)
     (X :
        InputS
-       with type role = RR.t
-        and type role_kind = RK.t
-        and type role_alignment = RA.t
+       with type role = R.t
+        and type role_kind = R.kind
+        and type role_alignment = R.alignment
         and type triggers = TS.t
         and type trigger = TT.t
         and type trigger_kind = TK.t) :

@@ -48,15 +48,15 @@ module Make
     (* (T : Trigger.InputS with type kind = K.t) *)
      (X :
        InputS
-       with type role = R.Role.t
-        and type role_kind = R.Kind.t
-        and type role_alignment = R.Alignment.t
+       with type role = R.role
+        and type role_kind = R.role_kind
+        and type role_alignment = R.role_alignment
         and type trigger = T.t
         and type trigger_kind = K.t) :
   S
-  with type role = R.Role.t
-   and type role_kind = R.Kind.t
-   and type role_alignment = R.Alignment.t
+  with type role = R.role
+   and type role_kind = R.role_kind
+   and type role_alignment = R.role_alignment
    and type trigger = T.t
    and type trigger_kind = K.t =
 (* (Kind : Kind.S) *)
@@ -89,9 +89,9 @@ struct
         let kind = X.kind_of_trigger
       end)
 
-  type role = R.Role.t
-  type role_kind = R.Kind.t
-  type role_alignment = R.Alignment.t
+  type role = R.role
+  type role_kind = R.role_kind
+  type role_alignment = R.role_alignment
   type trigger = Trigger.t
   type trigger_kind = Kind.t
   type t = trigger list

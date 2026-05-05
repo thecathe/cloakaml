@@ -7,7 +7,7 @@
   cloakaml.game.mode.spec.enum_type
   cloakaml.game.mode.spec.enum_map
   cloakaml.game.mode.spec.roles
-  cloakaml.game.mode.spec.group)
+  cloakaml.game.mode.spec.role.group)
  (modules index status knowledge player players)
  (wrapped true))
 

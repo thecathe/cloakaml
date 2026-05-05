@@ -1,0 +1,12 @@
+(library
+ (name role)
+ (public_name cloakaml.game.mode.spec.role)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.game.mode.spec.enum_type
+  cloakaml.game.mode.spec.enum_map)
+ (modules alignment kind role)
+ (wrapped true))
+
+(include_subdirs no)
