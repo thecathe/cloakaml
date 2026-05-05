@@ -38,6 +38,8 @@
   cloakaml.game.mode.spec.enum_map
   cloakaml.game.mode.spec.data
   cloakaml.game.mode.spec.roles
+  cloakaml.game.mode.spec.players
+  cloakaml.game.mode.spec.rounds
   cloakaml.game.mode.spec.abilities)
  (modules spec)
  (wrapped true))

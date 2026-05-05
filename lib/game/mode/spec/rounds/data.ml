@@ -43,19 +43,7 @@ end
 
 module Make
     (P : Phase.S)
-    (R : Roles.S)
-    (Pl :
-       Players.Player.S
-       with type role = R.Role.t
-        and type role_kind = R.Kind.t
-        and type role_alignment = R.Alignment.t)
-    (Ps :
-       Players.S
-       with type role = R.Role.t
-        and type role_kind = R.Kind.t
-        and type role_alignment = R.Alignment.t
-       with type player = Pl.t
-        and type elt = Pl.t)
+    (Ps : Players.S)
     (X :
        InputS
        (* with type phase = P.t
@@ -64,18 +52,19 @@ module Make
   S
   with type phase = P.t
    and type players = Ps.t
-   and type rolemap = bool R.Role.Map.t = struct
+   and type rolemap = bool Ps.Player.Roles.Role.Map.t = struct
   type phase = P.t
   type players = Ps.t
-  type rolemap = bool R.Role.Map.t
+  type rolemap = bool Ps.Player.Roles.Role.Map.t
   type nonrec t = (phase, players) t
   type nonrec initial = (phase, players, rolemap) initial
 
   let init_rolemap (players : players) : rolemap =
     let xs : Ps.elt list = Ps.to_list players in
-    List.init (Ps.cardinal players) (fun n -> List.nth xs n |> Pl.role, false)
+    List.init (Ps.cardinal players) (fun n ->
+      List.nth xs n |> Ps.Player.role, false)
     |> List.to_seq
-    |> R.Role.Map.of_seq
+    |> Ps.Player.Roles.Role.Map.of_seq
   ;;
 
   let initial

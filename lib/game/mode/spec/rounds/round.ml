@@ -37,28 +37,17 @@ end
 
 module Make
     (P : Phase.S)
-    (R : Roles.S)
-    (G :
-       Group.S
-       with type role = R.Role.t
-        and type role_kind = R.Kind.t
-        and type role_alignment = R.Alignment.t)
-    (Ps :
-       Players.S
-       with type role = R.Role.t
-        and type role_kind = R.Kind.t
-        and type role_alignment = R.Alignment.t
-        and type group = G.t)
+    (Ps : Players.S)
     (D :
        Data.S
        with type phase = P.t
         and type players = Ps.t
-        and type rolemap = bool R.Role.Map.t)
+        and type rolemap = bool Ps.Player.Roles.Role.Map.t)
     (X : InputS (* with type phase = P.t and type players = Ps.t *)) :
   S
   with type phase = P.t
    and type data = D.t
-   and type group = G.t
+   and type group = Ps.Player.group
    and type player = Ps.elt
    and type players = Ps.t
    and type t = D.t t = struct
@@ -66,7 +55,7 @@ module Make
 
   type phase = P.t
   type data = D.t
-  type group = G.t
+  type group = Ps.Player.group
   type player = Ps.elt
   type players = Ps.t
   type nonrec t = data t
@@ -82,7 +71,7 @@ module Make
   ;;
 
   let data (x : t) : data = x.this
-  let next (x : t) : t = { this = data x |> D.next ; prev = Some x }
+  let next (x : t) : t = { this = data x |> D.next; prev = Some x }
 
   exception NoPrevRound
 

@@ -18,22 +18,21 @@ module type S = sig
   val is_role_of_group : t -> role -> bool
 end
 
-module Make
-    (A : Roles.Alignment.S)
-    (K : Roles.Kind.S with type alignment = A.t)
-    (R : Roles.Role.S with type kind = K.t and type alignment = A.t) :
-  S with type role = R.t and type role_kind = K.t and type role_alignment = A.t =
-struct
+module Make (R : Roles.S) :
+  S
+  with type role = R.Role.t
+   and type role_kind = R.Kind.t
+   and type role_alignment = R.Alignment.t = struct
   module Kind = Kind
 
   type kind = Kind.t
-  type role = R.t
-  type role_kind = K.t
-  type role_alignment = A.t
+  type role = R.Role.t
+  type role_kind = R.Kind.t
+  type role_alignment = R.Alignment.t
 
-  let equal_role = R.equal
-  let equal_role_kind = K.equal
-  let equal_role_alignment = A.equal
+  let equal_role = R.Role.equal
+  let equal_role_kind = R.Kind.equal
+  let equal_role_alignment = R.Alignment.equal
 
   type t =
     | Role of role
@@ -49,9 +48,9 @@ struct
 
   let is_role_of_group (a : t) (x : role) : bool =
     match a with
-    | Role b -> R.equal b x
-    | Kind b -> K.equal b (R.kind x)
-    | Alignment b -> A.equal b (R.alignment x)
+    | Role b -> R.Role.equal b x
+    | Kind b -> R.Kind.equal b (R.Role.kind x)
+    | Alignment b -> R.Alignment.equal b (R.Role.alignment x)
   ;;
 
   (* let role (a:Kind.t)  : (role -> t -> bool) =
