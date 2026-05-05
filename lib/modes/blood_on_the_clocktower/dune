@@ -3,8 +3,12 @@
  (public_name cloakaml.modes.blood_on_the_clocktower)
  (preprocess
   (pps ppx_deriving.std))
- (libraries cloakaml.game.mode cloakaml.modes.blood_on_the_clocktower.the_roles
- cloakaml.modes.blood_on_the_clocktower.the_triggers)
+ (libraries
+  cloakaml.game.mode
+  cloakaml.modes.blood_on_the_clocktower.the_rounds
+  cloakaml.modes.blood_on_the_clocktower.the_roles
+  cloakaml.modes.blood_on_the_clocktower.the_triggers
+  cloakaml.modes.blood_on_the_clocktower.the_abilities)
  (modules blood_on_the_clocktower)
  (wrapped true))
 
