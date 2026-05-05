@@ -1,5 +1,10 @@
 (** @canonical Cloakaml.Game.Mode.Spec.Players *)
 
+module Index = Index
+module Knowledge = Knowledge
+module Status = Status
+module Player = Player
+
 module type S = sig
   (* include Enum_map.S *)
 
@@ -59,7 +64,8 @@ module Make
    and type group = G.t
    and type player = P.t
    and type player_status = P.status
-   and type player_knowledge = P.knowledge = struct
+   and type player_knowledge = P.knowledge
+   and type elt = P.t = struct
   (* include Enum_map.Make (Xand
      ) *)
 
