@@ -8,7 +8,7 @@
   cloakaml.game.mode.spec.enum_map
   cloakaml.game.mode.spec.roles
   cloakaml.game.mode.spec.players)
- (modules phase round rounds)
+ (modules phase round data rounds)
  (wrapped true))
 
 (include_subdirs no)
