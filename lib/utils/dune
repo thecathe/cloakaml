@@ -3,7 +3,7 @@
  (public_name cloakaml.utils)
  (preprocess
   (pps ppx_deriving.std))
- (modules utils)
+ (modules todo cata selector utils)
  (wrapped true))
 
 (include_subdirs no)
