@@ -26,6 +26,7 @@ module type S = sig
     -> initial
 
   val create : ?phase:phase -> players -> t
+  val next : t -> t
   val starting_phase : initial -> phase
   val rolemap : initial -> rolemap
   val phase : t -> phase
@@ -91,6 +92,7 @@ module Make
     { phase; players }
   ;;
 
+  let next (x : t) : t = { x with phase = P.step ~starting:x.phase 1 }
   let starting_phase (x : initial) : phase = x.starting_phase
   let rolemap (x : initial) : rolemap = x.rolemap
   let phase (x : t) : phase = x.phase

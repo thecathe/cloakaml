@@ -82,7 +82,7 @@ module Make
   ;;
 
   let data (x : t) : data = x.this
-  let next (x : t) : t = { this = data x; prev = Some x }
+  let next (x : t) : t = { this = data x |> D.next ; prev = Some x }
 
   exception NoPrevRound
 
