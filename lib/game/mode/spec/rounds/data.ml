@@ -5,8 +5,9 @@ type ('phase, 'players) t =
   ; players : 'players
   }
 
-type ('phase, 'rolemap) initial =
+type ('phase, 'players, 'rolemap) initial =
   { starting_phase : 'phase
+  ; players : 'players
   ; rolemap : 'rolemap
   }
 
@@ -15,7 +16,7 @@ module type S = sig
   type players
   type rolemap
   type nonrec t = (phase, players) t
-  type nonrec initial = (phase, rolemap) initial
+  type nonrec initial = (phase, players, rolemap) initial
 
   val initial
     :  ?starting_phase:phase
@@ -67,7 +68,7 @@ module Make
   type players = Ps.t
   type rolemap = bool R.Role.Map.t
   type nonrec t = (phase, players) t
-  type nonrec initial = (phase, rolemap) initial
+  type nonrec initial = (phase, players, rolemap) initial
 
   let init_rolemap (players : players) : rolemap =
     let xs : Ps.elt list = Ps.to_list players in
@@ -83,7 +84,7 @@ module Make
         ()
     : initial
     =
-    { starting_phase; rolemap }
+    { starting_phase; players; rolemap }
   ;;
 
   let create ?(phase : phase = P.initial) (players : players) : t =

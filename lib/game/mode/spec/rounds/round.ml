@@ -14,6 +14,9 @@ module type S = sig
   type nonrec t = data t
 
   val create : ?prev:t -> ?phase:phase -> players -> t
+  val data : t -> data
+  val next : t -> t
+  val prev : t -> t
   val index : t -> int
   val phase : t -> phase
   val players : t -> players
@@ -80,6 +83,13 @@ module Make
 
   let data (x : t) : data = x.this
   let next (x : t) : t = { this = data x; prev = Some x }
+
+  exception NoPrevRound
+
+  let prev : t -> t = function
+    | { prev = None; _ } -> raise NoPrevRound
+    | { prev = Some x; _ } -> x
+  ;;
 
   let rec index : t -> int = function
     | { prev = None; _ } -> 1
