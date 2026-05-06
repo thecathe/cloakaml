@@ -1,4 +1,7 @@
-(** @canonical Cloakaml.Game.Mode.Spec.Players.Player *)
+(** @canonical Cloakaml.Game.Mode.Spec.Player *)
+
+module Knowledge = Knowledge
+module Status = Status
 
 type ('index, 'role, 'status, 'knowledge) t =
   { index : 'index
@@ -17,14 +20,6 @@ module type S = sig
   type role = Roles.role
   type role_kind = Roles.role_kind
   type role_alignment = Roles.role_alignment
-
-  (* module Group :
-     Group.S
-     with type role = Roles.role
-     and type role_kind = Roles.role_kind
-     and type role_alignment = Roles.role_alignment
-
-     type group = Group.t *)
   type group = Roles.group
   type status
   type knowledge
@@ -47,67 +42,22 @@ module type S = sig
   val replace_role : t -> role -> unit
 end
 
-module type InputS = sig
-  (* type role
-     type role_kind
-     type role_alignment *)
-end
-
 module Make (I : Index.S) (R : Roles.S) (S : Status.S) (K : Knowledge.S) :
   S
-  with module Index = I (* and type index = I.t *)
+  with module Index = I
    and module Roles = R
-                      (* and type role = R.Role.t *)
-                      (* and type role = G.role *)
-                      (* and type Group.role = R.Role.t *)
-                      (* and type Group.role = G.role *)
-                      (* and type role_kind = R.Kind.t *)
-                      (* and type role_kind = G.role_kind *)
-                      (* and type Group.role_kind = R.Kind.t *)
-                      (* and type Group.role_kind = G.role_kind *)
-                      (* and type role_alignment = R.Alignment.t *)
-                      (* and type role_alignment = G.role_alignment *)
-                      (* and type Group.role_alignment = R.Alignment.t *)
-                      (* and type Group.role_alignment = G.role_alignment *)
-                      (* and module Roles.Role = R.Role *)
-                      (* and type Roles.Role.t = R.Role.t *)
-                      (* and module Roles.Kind = R.Kind *)
-                      (* and type Roles.Kind.t = R.Kind.t *)
-                      (* and module Roles.Alignment = R.Alignment *)
-                      (* and type Roles.Alignment.t = R.Alignment.t *)
    and type status = S.t
-   and type knowledge = K.t
-(* and module Group = G *)
-(* and type group = G.t *)
-(* and type Group.role_kind = R.Kind.t *)
-(* and type Group.role_alignment = R.Alignment.t *) =
-(* (G :
-   Group.S
-   with type role = R.Role.t
-   and type role_kind = R.Role.kind
-   and type role_alignment = R.Role.alignment) *)
-
-(* (X :
-   InputS
-   with type role = Role.t
-   and type role_kind = Kind.t
-   and type role_alignment = Alignment.t) *)
-struct
+   and type knowledge = K.t = struct
   module Index = I
 
   type index = Index.t
 
   module Roles = R
-  (* module Group = G *)
-
-  type group = R.group
-  (* module Role = Roles.Role
-     module Kind = Roles.Kind
-     module Alignment = Roles.Alignment *)
 
   type role = Roles.role
   type role_kind = Roles.role_kind
   type role_alignment = Roles.role_alignment
+  type group = R.group
   type status = S.t
   type knowledge = K.t
   type nonrec t = (index, role, status, knowledge) t

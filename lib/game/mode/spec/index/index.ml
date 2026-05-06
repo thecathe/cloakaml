@@ -1,4 +1,4 @@
-(** @canonical Cloakaml.Game.Mode.Spec.Players.Index *)
+(** @canonical Cloakaml.Game.Mode.Spec.Index *)
 
 module type S = sig
   type t

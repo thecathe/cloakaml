@@ -1,13 +1,6 @@
 (** @canonical Cloakaml.Game.Mode.Spec.Players *)
 
-module Index = Index
-module Knowledge = Knowledge
-module Status = Status
-module Player = Player
-
 module type S = sig
-  (* include Enum_map.S *)
-
   module Player : Player.S
 
   type player = Player.t
@@ -37,27 +30,8 @@ module type S = sig
   val aligned : role_alignment -> t -> t
 end
 
-module type InputS = sig
-  (* include Enum_map.InputS *)
-end
-
-module Make
-    (P :
-       Player.S
-       (* with type role = P.Roles.Role.t
-          and type role_kind = P.Roles.Kind.t
-          and type role_alignment = P.Roles.Alignment.t
-          and type Group.role = P.Roles.Role.t
-          and type Group.role_kind = P.Roles.Kind.t
-          and type Group.role_alignment = P.Roles.Alignment.t *)
-       (* and type status = S.t *)
-       (* and type knowledge = K.t *)) :
-  S with module Player = P and type elt = P.t =
-(* (X : InputS) *)
+module Make (P : Player.S) : S with module Player = P and type elt = P.t =
 struct
-  (* include Enum_map.Make (Xand
-     ) *)
-
   module Player = P
 
   type role = P.role

@@ -1,4 +1,4 @@
-(** @canonical Cloakaml.Game.Mode.Spec.Players.Status *)
+(** @canonical Cloakaml.Game.Mode.Spec.Player.Status *)
 
 module type S = sig
   include Enum_map.S

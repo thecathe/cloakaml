@@ -74,25 +74,23 @@ module Group = Roles.Group
 
 (** {1 Players} *)
 
-module Index = Mode.Spec.Players.Index.Default
+module Index = Mode.Spec.Index.Default
 
 (** TODO: status *)
-module Status = Mode.Spec.Players.Status.Make (struct
+module Status = Mode.Spec.Player.Status.Make (struct
     type t = Status [@@deriving show { with_path = false }, eq, enum]
 
     let initial : t = Status
   end)
 
 (** TODO: knowledge *)
-module Knowledge = Mode.Spec.Players.Knowledge.Make (struct
+module Knowledge = Mode.Spec.Player.Knowledge.Make (struct
     type t = Knowledge [@@deriving show { with_path = false }, eq, enum]
 
     let initial : t = Knowledge
   end)
 
-module Player =
-  Mode.Spec.Players.Player.Make (Index) (Roles) (Status) (Knowledge)
-
+module Player = Mode.Spec.Player.Make (Index) (Roles) (Status) (Knowledge)
 module ThePlayers = Mode.Spec.Players.Make (Player)
 
 (** {1 Rounds} *)

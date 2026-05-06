@@ -1,9 +1,10 @@
-(** @canonical Cloakaml.Game.Mode.Spec.Roles.Role *)
+(** @canonical Cloakaml.Game.Mode.Spec.Role *)
+
+module Alignment = Alignment
+module Kind = Kind
 
 module type S = sig
   include Enum_map.S
-
-  (* module Alignment : Alignment.S *)
   module Kind : Kind.S
 
   type kind = Kind.t
@@ -25,16 +26,8 @@ module type InputS = sig
   val kind : t -> kind
 end
 
-module Make
-    (* (A : Alignment.S) *)
-     (K : Kind.S)
-    (X : InputS with type kind = K.t) :
-  S with type t = X.t and module Kind = K and type kind = K.t
-(* and type alignment = K.alignment *)
-(* and module Kind = K *)
-(* and type kind = K.t *)
-(* and module Alignment = A *)
-(* and type alignment = A.t *) = struct
+module Make (K : Kind.S) (X : InputS with type kind = K.t) :
+  S with type t = X.t and module Kind = K and type kind = K.t = struct
   include Enum_map.Make (X)
   module Kind = K
 
@@ -51,6 +44,3 @@ module Make
     alignment x |> equal_alignment a
   ;;
 end
-
-module Alignment = Alignment
-module Kind = Kind

@@ -1,4 +1,4 @@
-(** @canonical Cloakaml.Game.Mode.Spec.Group *)
+(** @canonical Cloakaml.Game.Mode.Spec.Role.Group *)
 
 module Kind = Kind
 

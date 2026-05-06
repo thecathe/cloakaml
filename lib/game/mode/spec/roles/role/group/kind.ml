@@ -1,4 +1,4 @@
-(** @canonical Cloakaml.Game.Mode.Spec.Group.Kind *)
+(** @canonical Cloakaml.Game.Mode.Spec.Role.Group.Kind *)
 
 type t =
   | Role
