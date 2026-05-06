@@ -1,5 +1,7 @@
 (** @canonical Game.Mode.Spec.Round *)
 
+module Data = Data
+
 type 'data t =
   { this : 'data
   ; prev : 'data t option

@@ -1,10 +1,48 @@
+; (library
+;  (name alignment)
+;  (public_name cloakaml.modes.blood_on_the_clocktower.the_roles.alignment)
+;  (preprocess
+;   (pps ppx_deriving.std))
+;  (libraries cloakaml.game.mode)
+;  (modules alignment)
+;  (wrapped true))
+
+; (library
+;  (name kind)
+;  (public_name cloakaml.modes.blood_on_the_clocktower.the_roles.kind)
+;  (preprocess
+;   (pps ppx_deriving.std))
+;  (libraries cloakaml.game.mode
+;  ; cloakaml.modes.blood_on_the_clocktower.the_roles.alignment
+;  )
+;  (modules kind)
+;  (wrapped true))
+
+; (library
+;  (name role)
+;  (public_name cloakaml.modes.blood_on_the_clocktower.the_roles.role)
+;  (preprocess
+;   (pps ppx_deriving.std))
+;  (libraries cloakaml.game.mode
+;  ; cloakaml.modes.blood_on_the_clocktower.the_roles.alignment
+;  ; cloakaml.modes.blood_on_the_clocktower.the_roles.kind
+;  )
+;  (modules role)
+;  (wrapped true))
+
 (library
  (name the_roles)
  (public_name cloakaml.modes.blood_on_the_clocktower.the_roles)
  (preprocess
   (pps ppx_deriving.std))
- (libraries cloakaml.game.mode)
- (modules alignment kind role the_roles)
+ (libraries cloakaml.game.mode
+ ; cloakaml.modes.blood_on_the_clocktower.the_roles.alignment
+ ; cloakaml.modes.blood_on_the_clocktower.the_roles.kind
+ ; cloakaml.modes.blood_on_the_clocktower.the_roles.role
+ )
+ (modules
+ alignment kind role
+ the_roles)
  (wrapped true))
 
 (include_subdirs no)

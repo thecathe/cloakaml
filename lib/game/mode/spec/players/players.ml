@@ -11,6 +11,8 @@ module type S = sig
   type role_alignment = Player.role_alignment
   type group = Player.group
 
+  module Selector : Selector.S with type player = Player.t and type t = player Utils.Selector.t
+
   module Map : Hashtbl.S with type key = player
 
   include Set.S with type elt = player [@@deriving show { with_path = false }]
@@ -41,6 +43,9 @@ struct
   type player = P.t
   type player_status = P.status
   type player_knowledge = P.knowledge
+
+  module Selector = Selector.Make (Player)
+
 
   (** {1 Map of Players} *)
 

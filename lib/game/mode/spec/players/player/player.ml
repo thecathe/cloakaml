@@ -1,6 +1,5 @@
 (** @canonical Cloakaml.Game.Mode.Spec.Player *)
 
-module Knowledge = Knowledge
 module Status = Status
 
 type ('index, 'role, 'status, 'knowledge) t =
@@ -16,6 +15,9 @@ module type S = sig
   type index = Index.t
 
   module Roles : Roles.S
+
+  module Knowledge :
+    Knowledge.S with type index = index and type group = Roles.group
 
   type role = Roles.role
   type role_kind = Roles.role_kind
@@ -42,28 +44,25 @@ module type S = sig
   val replace_role : t -> role -> unit
 end
 
-module Make (I : Index.S) (R : Roles.S) (S : Status.S) (K : Knowledge.S) :
-  S
-  with module Index = I
-   and module Roles = R
-   and type status = S.t
-   and type knowledge = K.t = struct
+module Make (I : Index.S) (R : Roles.S) (S : Status.S) :
+  S with module Index = I and module Roles = R and type status = S.t = struct
   module Index = I
 
   type index = Index.t
 
   module Roles = R
+  module Knowledge = Knowledge.Make (I) (R)
 
   type role = Roles.role
   type role_kind = Roles.role_kind
   type role_alignment = Roles.role_alignment
   type group = R.group
   type status = S.t
-  type knowledge = K.t
+  type knowledge = Knowledge.t
   type nonrec t = (index, role, status, knowledge) t
 
   let create (index : index) (role : role) : t =
-    { index; role; status = S.initial; knowledge = K.initial }
+    { index; role; status = S.initial; knowledge = Knowledge.initial }
   ;;
 
   let index (x : t) : index = x.index
@@ -85,7 +84,10 @@ module Make (I : Index.S) (R : Roles.S) (S : Status.S) (K : Knowledge.S) :
   let has_index (a : index) (x : t) : bool = Index.equal a x.index
   let has_role (a : role) (x : t) : bool = Roles.Role.equal a x.role
   let has_status (a : status) (x : t) : bool = S.equal a x.status
-  let has_knowledge (a : knowledge) (x : t) : bool = K.equal a x.knowledge
+
+  let has_knowledge (a : knowledge) (x : t) : bool =
+    Knowledge.equal a x.knowledge
+  ;;
 
   let has_group (a : group) (x : t) : bool =
     Roles.Group.is_role_of_group a x.role
