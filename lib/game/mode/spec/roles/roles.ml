@@ -36,13 +36,14 @@ module type S = sig
      and type role_kind = Role.kind
      and type role_alignment = Role.alignment
 
-    type group = Group.t
+  type group = Group.t
 end
 
 module type InputS = sig
   (* include Role.S *)
-  module Alignment : Role.Alignment.S
-  module Kind : Role.Kind.S with type alignment = Alignment.t
+  (* module Alignment : Role.Alignment.S *)
+  module Kind : Role.Kind.S
+(* with type alignment = Alignment.t *)
   module Role : Role.InputS with type kind = Kind.t
   (* module Role : sig
      type t
@@ -56,15 +57,19 @@ module Make
     (* (A : Enum_type.InputS) *)
     (* (K : Enum_type.InputS) *)
     (* (R : Enum_type.InputS) *)
-    (* (R : Role.S) *)
-     (X :
+    (R : Role.S )
+     (* (X :
        InputS
        (* with type role = R.t *)
        (* and type kind = K.t *)
-       (* and type alignment = A.t *)) :
+       (* and type alignment = A.t *)) *)
+        :
+
   S
-  (* with  *)
-  (* module Role = Role.Make (X.Alignment) (X.Kind) (X.Role) *)
+  with
+  module Role = R
+  and type role = R.t
+
 
   (* type role = R.t  *)
   (* module Alignment = Role.Alignment.Make (A) *)
@@ -85,19 +90,10 @@ module Make
      let alignment : t -> alignment = X.alignment_of_kind
      end) *)
 
-  module Role =
-    Role.Make (X.Alignment) (X.Kind)
-      (struct
-        include X.Role
-
-        (* type kind = X.Kind.t *)
-
-        (* let kind : t -> X.Role.kind = X.Role.kind *)
-      end)
-
+  module Role = R
   module Group = Group.Make (Role)
-    type group = Group.t
 
+  type group = Group.t
   type role = Role.t
   type role_kind = Role.kind
   type role_alignment = Role.alignment

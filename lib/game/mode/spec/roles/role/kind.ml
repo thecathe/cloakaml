@@ -2,9 +2,11 @@
 
 module type S = sig
   include Enum_map.S
+  module Alignment : Alignment.S
 
-  type alignment
+  type alignment = Alignment.t
 
+  val equal_alignment : alignment -> alignment -> bool
   val alignment : t -> alignment
   val is_alignment : alignment -> t -> bool
 end
@@ -18,11 +20,16 @@ module type InputS = sig
 end
 
 module Make (A : Alignment.S) (X : InputS with type alignment = A.t) :
-  S with type t = X.t and type alignment = A.t = struct
+  S with type t = X.t and module Alignment = A and type alignment = A.t = struct
   include Enum_map.Make (X)
+  module Alignment = A
 
-  type alignment = A.t
+  type alignment = Alignment.t
 
+  let equal_alignment = Alignment.equal
   let alignment = X.alignment
-  let is_alignment (a : alignment) (x : t) : bool = alignment x |> A.equal a
+
+  let is_alignment (a : alignment) (x : t) : bool =
+    alignment x |> equal_alignment a
+  ;;
 end

@@ -4,22 +4,42 @@
 
 module TheRoles = The_roles
 
-module Roles =
-  Mode.Spec.Roles.Make (TheRoles.Alignment) (TheRoles.Kind) (TheRoles.Role)
-    (struct
-      open TheRoles
+module Alignment :
+  Mode.Spec.Role.Alignment.S with type t = TheRoles.Alignment.t =
+  Mode.Spec.Role.Alignment.Make (TheRoles.Alignment)
 
-      type role = Role.t
-      type kind = Kind.t
+module Kind :
+  Mode.Spec.Role.Kind.S
+  with type t = TheRoles.Kind.t
+   and module Alignment = Alignment
+   and type alignment = Alignment.t =
+  Mode.Spec.Role.Kind.Make
+    (Alignment)
+    (struct
+      include TheRoles.Kind
+
       type alignment = Alignment.t
 
-      let alignment_of_kind : kind -> alignment = function
+      let alignment : t -> alignment = function
         | Townsfolk | Outsider -> Good
         | Minion | Demon -> Evil
         | _ -> Neutral
       ;;
+    end)
 
-      let kind_of_role : role -> kind = function
+module Role :
+  Mode.Spec.Role.S
+  with type t = TheRoles.Role.t
+   and module Kind = Kind
+   and type kind = Kind.t =
+  Mode.Spec.Role.Make
+    (Kind)
+    (struct
+      include TheRoles.Role
+
+      type kind = Kind.t
+
+      let kind : t -> kind = function
         (* townsfolk *)
         | Washerwoman -> Townsfolk
         | Librarian -> Townsfolk
@@ -49,7 +69,8 @@ module Roles =
       ;;
     end)
 
-module Group = Mode.Spec.Group.Make (Roles)
+module Roles = Mode.Spec.Roles.Make (Role)
+module Group = Roles.Group
 
 (** {1 Players} *)
 
@@ -70,7 +91,7 @@ module Knowledge = Mode.Spec.Players.Knowledge.Make (struct
   end)
 
 module Player =
-  Mode.Spec.Players.Player.Make (Index) (Roles) (Status) (Knowledge) (Group)
+  Mode.Spec.Players.Player.Make (Index) (Roles) (Status) (Knowledge)
 
 module ThePlayers = Mode.Spec.Players.Make (Player)
 
@@ -90,9 +111,9 @@ module Triggers =
     (struct
       open TheTriggers
 
-      type role = Roles.Role.t
-      type role_kind = Roles.Kind.t
-      type role_alignment = Roles.Alignment.t
+      type role = Roles.role
+      type role_kind = Roles.role_kind
+      type role_alignment = Roles.role_alignment
       type trigger = Trigger.t
       type trigger_kind = Kind.t
 
