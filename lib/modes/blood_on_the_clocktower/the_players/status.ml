@@ -3,8 +3,14 @@
 type t =
   | Alive
   | Dead
+  | Alive_And of extra
+[@@deriving show { with_path = false }, eq]
+
+and extra =
   | Asleep
+  | Nominated
   | Poisoned
-[@@deriving show { with_path = false }, eq, enum]
+  | Both of (extra * extra)
+[@@deriving show { with_path = false }, eq]
 
 let initial : t = Alive
