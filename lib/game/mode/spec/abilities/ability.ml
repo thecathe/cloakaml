@@ -15,79 +15,45 @@ module type S = sig
   type triggers
   type trigger
   type trigger_kind
-  (* type data *)
 
-  (* type t = trigger * data f *)
-  (* type nonrec t = (data, trigger) t *)
-  (* val triggers : triggers
-
-  exception TriggerNotFound of trigger
-
-  val trigger : trigger -> data f *)
+  val triggers : triggers
 end
 
 module type InputS = sig
-  type role
-  type role_kind
-  type role_alignment
+  include Data.S
+
   type triggers
   type trigger
   type trigger_kind
-  type data
 
   val triggers : triggers
-
-  (* val abilty_of_role : role -> (trigger, data) t *)
-  val of_trigger : trigger -> data f option
 end
 
 module Make
-    (R : Role.S)
-    (TK : Triggers.Kind.S)
-    (TT : Triggers.Trigger.S with type kind = TK.t)
-    (TS :
+    (R : Roles.S)
+    (T :
        Triggers.S
-       with type role = R.t
-        and type role_kind = R.kind
-        and type role_alignment = R.alignment
-        and type trigger = TT.t
-        and type trigger_kind = TK.t)
+       with type role = R.role
+        and type role_kind = R.role_kind
+        and type role_alignment = R.role_alignment)
     (X :
        InputS
-       with type role = R.t
-        and type role_kind = R.kind
-        and type role_alignment = R.alignment
-        and type triggers = TS.t
-        and type trigger = TT.t
-        and type trigger_kind = TK.t) :
+       with type triggers = T.t
+        and type trigger = T.trigger
+        and type trigger_kind = T.trigger_kind) :
   S
-  with type role = X.role
-   and type role_kind = X.role_kind
-   and type role_alignment = X.role_alignment
-   and type triggers = X.triggers
-   and type trigger = X.trigger
-   and type trigger_kind = X.trigger_kind
-   (* and type data = X.data  *)
-   = struct
-  type role = X.role
-  type role_kind = X.role_kind
-  type role_alignment = X.role_alignment
-  type triggers = X.triggers
-  type trigger = X.trigger
-  type trigger_kind = X.trigger_kind
+  with type role = R.role
+   and type role_kind = R.role_kind
+   and type role_alignment = R.role_alignment
+   and type triggers = T.t
+   and type trigger = T.trigger
+   and type trigger_kind = T.trigger_kind = struct
+  type role = R.role
+  type role_kind = R.role_kind
+  type role_alignment = R.role_alignment
+  type triggers = T.t
+  type trigger = T.trigger
+  type trigger_kind = T.trigger_kind
 
-  (** {2 Ability Type} *)
-
-  (* type data = X.data *)
-
-  (* type t = trigger * data f *)
-  (* type nonrec t = (data, trigger) t *)
-
-  (* let triggers : triggers = X.triggers
-
-  exception TriggerNotFound of trigger
-
-  let trigger (x : trigger) : data f =
-    match X.of_trigger x with None -> raise (TriggerNotFound x) | Some y -> y
-  ;; *)
+  let triggers : triggers = X.triggers
 end

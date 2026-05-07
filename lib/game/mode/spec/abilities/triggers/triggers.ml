@@ -7,8 +7,11 @@ module type S = sig
   type role
   type role_kind
   type role_alignment
-  type trigger
-  type trigger_kind
+
+  module Trigger : Trigger.S
+
+  type trigger = Trigger.t
+  type trigger_kind = Trigger.kind
   type t = trigger list
   type k = trigger_kind list
 
@@ -27,73 +30,20 @@ module type S = sig
   (* val kinds_of_role : role -> k *)
 end
 
-module type InputS = sig
-  type role
-  type role_kind
-  type role_alignment
-  type trigger
-  type trigger_kind
-
-  (* val triggers_of_role : role -> trigger list *)
-  val kind_of_trigger : trigger -> trigger_kind
-end
-
-module Make
-    (* (RA : Roles.Alignment.S) *)
-    (* (RK : Roles.Kind.S with type alignment = RA.t) *)
-    (* (RR : Roles.Role.S with type kind = RK.t and type alignment = RA.t) *)
-     (R : Roles.S)
-    (K : Enum_type.InputS)
-    (T : Enum_type.InputS)
-    (* (T : Trigger.InputS with type kind = K.t) *)
-     (X :
-       InputS
-       with type role = R.role
-        and type role_kind = R.role_kind
-        and type role_alignment = R.role_alignment
-        and type trigger = T.t
-        and type trigger_kind = K.t) :
+module Make (R : Roles.S) (T : Trigger.S) :
   S
   with type role = R.role
    and type role_kind = R.role_kind
    and type role_alignment = R.role_alignment
-   and type trigger = T.t
-   and type trigger_kind = K.t =
-(* (Kind : Kind.S) *)
-(* (Trigger : Trigger.S with type kind = Kind.t) *)
-
-(* (X :
-   InputS
-   with type role = RR.t
-   and type role_kind = RK.t
-   and type role_alignment = RA.t
-   and type trigger = Trigger.t
-   and type trigger_kind = Kind.t) *)
-(* : S
-   with type role = X.role
-   and type role_kind = X.role_kind
-   and type role_alignment = X.role_alignment
-   and type trigger = X.trigger
-   and type trigger_kind = X.trigger_kind *)
-struct
-  module Kind : Kind.S with type t = K.t = Kind.Make (K)
-
-  module Trigger : Trigger.S with type t = T.t and type kind = Kind.t =
-    Trigger.Make
-      (Kind)
-      (struct
-        include T
-
-        type kind = Kind.t
-
-        let kind = X.kind_of_trigger
-      end)
-
+   and module Trigger = T = struct
   type role = R.role
   type role_kind = R.role_kind
   type role_alignment = R.role_alignment
+
+  module Trigger = T
+
   type trigger = Trigger.t
-  type trigger_kind = Kind.t
+  type trigger_kind = Trigger.kind
   type t = trigger list
   type k = trigger_kind list
 

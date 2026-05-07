@@ -3,7 +3,8 @@
 module type S = sig
   include Enum_map.S
 
-  type kind
+  module Kind : Kind.S
+  type kind = Kind.t
 
   val kind : t -> kind
   val is_kind : kind -> t -> bool
@@ -19,9 +20,10 @@ module type InputS = sig
 end
 
 module Make (K : Kind.S) (X : InputS with type kind = K.t) :
-  S with type t = X.t and type kind = K.t = struct
+  S with type t = X.t and module Kind = K = struct
   include Enum_map.Make (X)
 
+  module Kind = K
   type kind = K.t
 
   let kind = X.kind

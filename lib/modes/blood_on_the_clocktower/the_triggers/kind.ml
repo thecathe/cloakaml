@@ -3,9 +3,8 @@
 type t =
   | Setup
   | StartOfGame
-  | PhaseDependant
+  | OnPhase
   | Passive
   | OnEvent
   | OneTimeUse
-  | Conditional
 [@@deriving show { with_path = false }, eq, enum]
