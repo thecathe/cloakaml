@@ -1,8 +1,17 @@
 (library
+ (name term)
+ (public_name cloakaml.game.mode.spec.term)
+ (preprocess
+  (pps ppx_deriving.std))
+ (modules term)
+ (wrapped true))
+
+(library
  (name enum_type)
  (public_name cloakaml.game.mode.spec.enum_type)
  (preprocess
   (pps ppx_deriving.std))
+ (libraries cloakaml.game.mode.spec.term)
  (modules enum_type)
  (wrapped true))
 
@@ -11,7 +20,7 @@
  (public_name cloakaml.game.mode.spec.enum_map)
  (preprocess
   (pps ppx_deriving.std))
- (libraries cloakaml.game.mode.spec.enum_type)
+ (libraries cloakaml.game.mode.spec.term cloakaml.game.mode.spec.enum_type)
  (modules enum_map)
  (wrapped true))
 
@@ -21,6 +30,7 @@
  (preprocess
   (pps ppx_deriving.std))
  (libraries
+  cloakaml.game.mode.spec.term
   cloakaml.game.mode.spec.enum_type
   cloakaml.game.mode.spec.enum_map
   cloakaml.game.mode.spec.role
