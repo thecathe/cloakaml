@@ -1,3 +1,3 @@
 (** @canonical Cloakaml.Modes *)
 
-module BloodOnTheClockTower : Mode.S = Blood_on_the_clocktower.Make ()
+module BloodOnTheClockTower : Mode.S = Blood_on_the_clocktower.Build ()
