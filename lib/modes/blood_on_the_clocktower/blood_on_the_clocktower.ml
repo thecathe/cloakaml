@@ -94,7 +94,7 @@ let yesterday x = During (Previous, day, x)
 let there_is x = Query x
 let there_are = there_is
 let num c op n = Num (c, op, n)
-let ( =:= ) c n = num c Eq n
+let ( == ) c n = c Eq n
 
 (** {2 Examples} *)
 
@@ -104,7 +104,7 @@ let ( =:= ) c n = num c Eq n
 *)
 
 let end_of_day : condition = After day
-let only_3_players_alive : query = num Players Eq 3
+let only_3_players_alive : query = num Players == 3
 let no_execution_occurred : condition = yesterday (Not (Any Nomination))
 
 let mayor_1 : enabled_when =
