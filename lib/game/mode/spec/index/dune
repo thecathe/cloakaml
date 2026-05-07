@@ -1,9 +1,9 @@
 (library
- (name utils)
- (public_name cloakaml.utils)
+ (name index)
+ (public_name cloakaml.game.mode.spec.index)
  (preprocess
   (pps ppx_deriving.std))
- (modules todo cata selector utils)
+ (modules index)
  (wrapped true))
 
 (include_subdirs no)

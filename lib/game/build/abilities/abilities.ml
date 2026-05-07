@@ -10,7 +10,7 @@ type t = AbilityMap.t' Players.Map.t
 
 let fresh
       ?(round : Round.t option)
-      ?(players : Players.t = Utils.cata Round.players Players.empty round)
+      ?(players : Players.t = Utils.Cata.cata Round.players Players.empty round)
       ?(n : int = Players.cardinal players)
       ()
   : t

@@ -1,0 +1,10 @@
+(library
+ (name modes)
+ (public_name cloakaml.modes)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries cloakaml.game.mode cloakaml.modes.blood_on_the_clocktower)
+ (modules modes)
+ (wrapped true))
+
+(include_subdirs no)

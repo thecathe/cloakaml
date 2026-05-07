@@ -4,7 +4,7 @@ let logl (x : string) : unit = Printf.sprintf "\n%s" x |> log
 
 open Game
 
-module Utils = struct
+(* module Utils = struct
   let setup_players (n : int) : Players.t =
     let players = Setup.players n in
     Printf.printf "players (%i) %s\n" n (Players.show players);
@@ -135,7 +135,7 @@ module Run = struct
     log "neighbours (filter statuses)" n;
     player_neighbours_statuses n ()
   ;;
-end
+end *)
 
 (** {1 Tests} *)
 
@@ -145,7 +145,7 @@ let n : int = 10
 (** {2 Player Setup} *)
 
 (** {b Test:} show randomally generated set of [n] players. *)
-let () = Run.players_setup n
+(* let () = Run.players_setup n
 
 (** {2 Neighbours} *)
 
@@ -158,7 +158,7 @@ let () = Run.player_neighbours n
 let () = Run.player_neighbours_groups n
 
 (** {b Test:} show neighbours by statuses. *)
-let () = Run.player_neighbours_statuses n
+let () = Run.player_neighbours_statuses n *)
 
 (** {2 Round} *)
 
@@ -171,7 +171,7 @@ let () = ()
 
 (** {3 s} *)
 
-let players_with_kinds_of_ability
+(* let players_with_kinds_of_ability
       (ys : Ability.Trigger.Kind.t list)
       (x : Rounds.t)
   : Players.t
@@ -222,7 +222,7 @@ let test_round_role_abilities (phase : Phase.t) (n : int) : unit =
 let () = test_round_role_abilities Night n
 
 (** {b test:} 5 players, first day, who has active abilities *)
-let () = test_round_role_abilities Day n
+let () = test_round_role_abilities Day n *)
 
 (** {1 Erlang Processes} *)
 
@@ -230,4 +230,14 @@ let () = test_round_role_abilities Day n
 let () =
 logl "Server:";
 Server.run ();
+()
+
+(** {1 Examples} *)
+
+(** {2 Blood on the Clocktower} *)
+
+let () =
+logl "[Mode] Blood on the Clocktower:";
+ let open Modes.BloodOnTheClockTower in
+
 ()

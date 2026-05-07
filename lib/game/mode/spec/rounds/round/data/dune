@@ -1,0 +1,14 @@
+(library
+ (name data)
+ (public_name cloakaml.game.mode.spec.round.data)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.game.mode.spec.enum_type
+  cloakaml.game.mode.spec.enum_map
+  cloakaml.game.mode.spec.roles
+  cloakaml.game.mode.spec.players)
+ (modules phase data)
+ (wrapped true))
+
+(include_subdirs no)

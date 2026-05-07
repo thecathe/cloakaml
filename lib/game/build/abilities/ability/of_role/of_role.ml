@@ -1,5 +1,7 @@
 (** @canonical Game.Build.Abilities.Ability.Of_role *)
 
+open Utils.Todo
+
 include Sig
 open Types
 
@@ -55,10 +57,10 @@ let setup () : (module S) =
 let start_of_game () : (module S) =
   make
     StartOfGame
-    (let washerwoman = fun x -> Utils.todo __FUNCTION__ in
-     let librarian = fun x -> Utils.todo __FUNCTION__ in
-     let investigator = fun x -> Utils.todo __FUNCTION__ in
-     let chef = fun x -> Utils.todo __FUNCTION__ in
+    (let washerwoman = fun x -> todo __FUNCTION__ in
+     let librarian = fun x -> todo __FUNCTION__ in
+     let investigator = fun x -> todo __FUNCTION__ in
+     let chef = fun x -> todo __FUNCTION__ in
      [ Washerwoman, washerwoman
      ; Librarian, librarian
      ; Investigator, investigator
@@ -69,8 +71,8 @@ let start_of_game () : (module S) =
 let perceived_as () : (module S) =
   make
     PerceivedAs
-    (let recluse = fun x -> Utils.todo __FUNCTION__ in
-     let spy = fun x -> Utils.todo __FUNCTION__ in
+    (let recluse = fun x -> todo __FUNCTION__ in
+     let spy = fun x -> todo __FUNCTION__ in
      [ Recluse, recluse; Spy, spy ])
 ;;
 
@@ -79,14 +81,14 @@ let each_day () : (module S) = make EachDay []
 let each_night () : (module S) =
   make
     EachNight
-    (let empath = fun x -> Utils.todo __FUNCTION__ in
-     let fortune_teller = fun x -> Utils.todo __FUNCTION__ in
-     let undertaker = fun x -> Utils.todo __FUNCTION__ in
-     let monk = fun x -> Utils.todo __FUNCTION__ in
-     let butler = fun x -> Utils.todo __FUNCTION__ in
-     let poisoner = fun x -> Utils.todo __FUNCTION__ in
-     let spy = fun x -> Utils.todo __FUNCTION__ in
-     let imp = fun x -> Utils.todo __FUNCTION__ in
+    (let empath = fun x -> todo __FUNCTION__ in
+     let fortune_teller = fun x -> todo __FUNCTION__ in
+     let undertaker = fun x -> todo __FUNCTION__ in
+     let monk = fun x -> todo __FUNCTION__ in
+     let butler = fun x -> todo __FUNCTION__ in
+     let poisoner = fun x -> todo __FUNCTION__ in
+     let spy = fun x -> todo __FUNCTION__ in
+     let imp = fun x -> todo __FUNCTION__ in
      [ Empath, empath
      ; FortuneTeller, fortune_teller
      ; Undertaker, undertaker
@@ -101,44 +103,44 @@ let each_night () : (module S) =
 let action () : (module S) =
   make
     Action
-    (let slayer = fun x -> Utils.todo __FUNCTION__ in
+    (let slayer = fun x -> todo __FUNCTION__ in
      [ Slayer, slayer ])
 ;;
 
 let on_death () : (module S) =
   make
     OnDeath
-    (let ravenkeeper = fun x -> Utils.todo __FUNCTION__ in
-     let saint = fun x -> Utils.todo __FUNCTION__ in
-     let imp = fun x -> Utils.todo __FUNCTION__ in
+    (let ravenkeeper = fun x -> todo __FUNCTION__ in
+     let saint = fun x -> todo __FUNCTION__ in
+     let imp = fun x -> todo __FUNCTION__ in
      [ Ravenkeeper, ravenkeeper; Saint, saint; Imp, imp ])
 ;;
 
 let on_nomination () : (module S) =
   make
     OnNomination
-    (let virgin = fun x -> Utils.todo __FUNCTION__ in
+    (let virgin = fun x -> todo __FUNCTION__ in
      [ Virgin, virgin ])
 ;;
 
 let always_active () : (module S) =
   make
     AlwaysActive
-    (let solider = fun x -> Utils.todo __FUNCTION__ in
+    (let solider = fun x -> todo __FUNCTION__ in
      [ Soldier, solider ])
 ;;
 
 let end_day () : (module S) =
   make
     EndDay
-    (let mayor = fun x -> Utils.todo __FUNCTION__ in
+    (let mayor = fun x -> todo __FUNCTION__ in
      [ Mayor, mayor ])
 ;;
 
 let demon_dies () : (module S) =
   make
     DemonDies
-    (let scarlet_woman = fun x -> Utils.todo __FUNCTION__ in
+    (let scarlet_woman = fun x -> todo __FUNCTION__ in
      [ ScarletWoman, scarlet_woman ])
 ;;
 

@@ -1,0 +1,12 @@
+(library
+ (name the_players)
+ (public_name cloakaml.modes.blood_on_the_clocktower.the_players)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.game.mode
+  cloakaml.modes.blood_on_the_clocktower.the_roles)
+ (modules status the_players)
+ (wrapped true))
+
+(include_subdirs no)

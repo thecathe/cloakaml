@@ -1,22 +1,25 @@
 (** @canonical Cloakaml.Game *)
 
+(** [module Mode] ... *)
+module Mode = Mode
+
 (** [module Build] ... *)
 module Build = Build
 
 (** [module Setup] is ... *)
-module Setup = Setup
+(* module Setup = Setup *)
 
 (** [module Live] is ... *)
-module Live = Live
+(* module Live = Live *)
 
 (** [module Server] is ... *)
-module Server = Server
+(* module Server = Server *)
 
 (** {1 todo} *)
 
-type t = { round : Rounds.t }
+(* type t = { round : Rounds.t } *)
 
-module Debug = struct
+(* module Debug = struct
   let players : Players.t =
     Players.create
       [ Player.create 0 Washerwoman
@@ -36,4 +39,4 @@ module Debug = struct
 
      let initial = round
      end) *)
-end
+end *)

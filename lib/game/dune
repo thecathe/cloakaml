@@ -4,6 +4,7 @@
  (preprocess
   (pps ppx_deriving.std))
  (libraries
+  cloakaml.game.mode
   cloakaml.game.build
   cloakaml.game.server
   cloakaml.game.setup
