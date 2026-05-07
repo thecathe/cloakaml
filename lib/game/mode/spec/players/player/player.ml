@@ -16,15 +16,18 @@ module type S = sig
 
   module Roles : Roles.S
 
-  module Knowledge :
-    Knowledge.S with type index = index and type group = Roles.group
-
   type role = Roles.role
   type role_kind = Roles.role_kind
   type role_alignment = Roles.role_alignment
   type group = Roles.group
-  type status
-  type knowledge
+
+  module Status : Status.S
+
+  type status = Status.t
+
+  module Knowledge : Knowledge.S with type index = index and type group = group
+
+  type knowledge = Knowledge.t
   type nonrec t = (index, role, status, knowledge) t
 
   val create : index -> role -> t
@@ -45,7 +48,7 @@ module type S = sig
 end
 
 module Make (I : Index.S) (R : Roles.S) (S : Status.S) :
-  S with module Index = I and module Roles = R and type status = S.t = struct
+  S with module Index = I and module Roles = R and module Status = S = struct
   module Index = I
 
   type index = Index.t
@@ -57,7 +60,10 @@ module Make (I : Index.S) (R : Roles.S) (S : Status.S) :
   type role_kind = Roles.role_kind
   type role_alignment = Roles.role_alignment
   type group = R.group
-  type status = S.t
+
+  module Status = S
+
+  type status = Status.t
   type knowledge = Knowledge.t
   type nonrec t = (index, role, status, knowledge) t
 
