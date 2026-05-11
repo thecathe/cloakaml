@@ -18,7 +18,7 @@ module type S = sig
   val equal : t -> t -> bool
 end
 
-module Make (I : Index.S) (R : Roles.S) :
+module Make (I : Id.S) (R : Roles.S) :
   S
   with type index = I.t
    and type group = R.group

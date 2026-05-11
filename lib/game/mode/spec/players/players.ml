@@ -65,7 +65,7 @@ struct
   (** [add_role x ys] takes a {!Roles.Role.t} [x] and makes a fresh {!Player.t} with [index] equal to {!cardinal}.
   *)
   let add_role (x : role) (ys : t) : t =
-    add (P.create (cardinal ys |> P.Index.of_int) x) ys
+    add (P.create (cardinal ys |> P.Id.of_int) x) ys
   ;;
 
   exception CouldNotFindValidPlayer

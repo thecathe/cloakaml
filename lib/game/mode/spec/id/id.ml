@@ -1,4 +1,4 @@
-(** @canonical Cloakaml.Game.Mode.Spec.Index *)
+(** @canonical Cloakaml.Game.Mode.Spec.Id *)
 
 module type S = sig
   type t

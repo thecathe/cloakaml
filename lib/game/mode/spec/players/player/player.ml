@@ -10,9 +10,9 @@ type ('index, 'role, 'status, 'knowledge) t =
   }
 
 module type S = sig
-  module Index : Index.S
+  module Id : Id.S
 
-  type index = Index.t
+  type index = Id.t
 
   module Roles : Roles.S
 
@@ -47,11 +47,11 @@ module type S = sig
   val replace_role : t -> role -> unit
 end
 
-module Make (I : Index.S) (R : Roles.S) (S : Status.S) :
-  S with module Index = I and module Roles = R and module Status = S = struct
-  module Index = I
+module Make (I : Id.S) (R : Roles.S) (S : Status.S) :
+  S with module Id = I and module Roles = R and module Status = S = struct
+  module Id = I
 
-  type index = Index.t
+  type index = Id.t
 
   module Roles = R
   module Knowledge = Knowledge.Make (I) (R)
@@ -80,14 +80,14 @@ module Make (I : Index.S) (R : Roles.S) (S : Status.S) :
     Printf.sprintf
       "%s (%s, %s)"
       (Roles.Role.show x.role)
-      (Index.show x.index)
+      (Id.show x.index)
       (S.show x.status)
   ;;
 
-  let compare a b : int = Index.compare a.index b.index
-  let equal a b : bool = Index.equal a.index b.index
-  let hash x : int = Index.hash x.index
-  let has_index (a : index) (x : t) : bool = Index.equal a x.index
+  let compare a b : int = Id.compare a.index b.index
+  let equal a b : bool = Id.equal a.index b.index
+  let hash x : int = Id.hash x.index
+  let has_index (a : index) (x : t) : bool = Id.equal a x.index
   let has_role (a : role) (x : t) : bool = Roles.Role.equal a x.role
   let has_status (a : status) (x : t) : bool = S.equal a x.status
 

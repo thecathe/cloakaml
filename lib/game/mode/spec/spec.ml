@@ -2,7 +2,7 @@
 
 (** {1 ...} *)
 
-module Index = Index
+module Id = Id
 module Role = Role
 module Group = Group
 module Roles = Roles

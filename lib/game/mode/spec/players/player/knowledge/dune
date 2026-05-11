@@ -8,7 +8,7 @@
   cloakaml.game.mode.spec.enum_type
   cloakaml.game.mode.spec.enum_map
   cloakaml.game.mode.spec.roles
-  cloakaml.game.mode.spec.index)
+  cloakaml.game.mode.spec.id)
  (modules knowledge)
  (wrapped true))
 
