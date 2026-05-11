@@ -229,7 +229,7 @@ let () = test_round_role_abilities Day n *)
 (* open Unix *)
 let () =
 logl "Server:";
-Server.run ();
+(* Server.run (); *)
 ()
 
 (** {1 Examples} *)

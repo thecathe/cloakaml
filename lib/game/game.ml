@@ -4,7 +4,7 @@
 module Mode = Mode
 
 (** [module Build] ... *)
-module Build = Build
+(* module Build = Build *)
 
 (** [module Setup] is ... *)
 (* module Setup = Setup *)
