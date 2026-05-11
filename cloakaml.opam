@@ -11,7 +11,7 @@ bug-reports: "https://github.com/thecathe/cloakaml/issues"
 depends: [
   "dune" {>= "3.22"}
   "ocaml"
-  "deriving"
+  "ppx_deriving"
   "odoc"
   "yojson"
 ]
