@@ -1,0 +1,33 @@
+
+(library
+ (name selector)
+ (public_name cloakaml.game.spec.player.selector)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.game.spec.enum_type
+  cloakaml.game.spec.enum_map
+  cloakaml.game.spec.roles
+  cloakaml.game.spec.roles.group
+  cloakaml.game.spec.id
+  cloakaml.game.spec.player)
+ (modules selector)
+ (wrapped true))
+
+(library
+ (name players)
+ (public_name cloakaml.game.spec.players)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.game.spec.enum_type
+  cloakaml.game.spec.enum_map
+  cloakaml.game.spec.roles
+  cloakaml.game.spec.roles.group
+  cloakaml.game.spec.id
+  cloakaml.game.spec.player
+  cloakaml.game.spec.player.selector)
+ (modules players)
+ (wrapped true))
+
+(include_subdirs no)

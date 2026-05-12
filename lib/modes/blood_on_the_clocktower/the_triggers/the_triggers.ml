@@ -1,9 +1,9 @@
 (** @canonical Modes.BloodOnTheClockTower.TheTriggers *)
 
-module Kind = Mode.Spec.Abilities.Triggers.Kind.Make (Kind)
+module Kind = Spec.Abilities.Ability.Triggers.Trigger.Kind.Make (Kind)
 
 module Trigger =
-  Mode.Spec.Abilities.Triggers.Trigger.Make
+  Spec.Abilities.Ability.Triggers.Trigger.Make
     (Kind)
     (struct
       include Trigger
@@ -21,4 +21,4 @@ module Trigger =
     end)
 
 module Build () =
-  Mode.Spec.Abilities.Triggers.Make (The_roles.Build ()) (Trigger)
+  Spec.Abilities.Ability.Triggers.Make (The_roles.Build ()) (Trigger)

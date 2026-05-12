@@ -4,11 +4,13 @@
  (preprocess
   (pps ppx_deriving.std))
  (libraries
-  cloakaml.game.mode
-  cloakaml.game.build
+  cloakaml.game.spec
+  ; cloakaml.game.build
+  cloakaml.game.system
   cloakaml.game.server
-  cloakaml.game.setup
-  cloakaml.game.live)
+  ; cloakaml.game.setup
+  ; cloakaml.game.live
+  )
  (modules game)
  (wrapped true))
 

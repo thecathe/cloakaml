@@ -2,22 +2,7 @@
 
 This is the documentation for [cloakaml]!
 
-{1 Modules}
-
-{2 [module] {!Game}}
-
-See {!Game}
-
-{2 [module] {!Utils}}
-
-See {!Utils}
-
-{2 {i Dev Speed dial}}
-
-{ul
-  {- {{!Game.Build.Players.Player.Roles.Role.t}Role.t}}
-  {- {{!Game.Build.Players.Player.t}Player.t}}
-  {- {{!Game.Live}Live}}}
+For details on the project, see the {{:overviwe}Overview}.
 
 {1 Background}
 
@@ -38,3 +23,64 @@ Below are the games that I am {i consciously} studying whilst developing this. P
   {- {{: https://en.wikipedia.org/wiki/Among_Us}Among Us}}
   {- {{: https://wiki.bloodontheclocktower.com/Main_Page}Blood on the clocktower}}}
 
+{1:overview Cloakaml Overview}
+
+{2 {{!Game}Game}}
+
+{3 {{!Game.Spec}Spec}}
+
+{ul
+  {- {{!Game.Spec.Term}Term}, {{!Game.Spec.EnumType}EnumType}, {{!Game.Spec.EnumMap}EnumMap}, {{!Game.Spec.Id}Id}}
+  {- {{!Game.Spec.Roles}Roles}
+  {ul
+    {- {{!Game.Spec.Roles.Role}Role}
+    {ul
+      {- {{!Game.Spec.Roles.Role.Alignment}Alignment}}
+      {- {{!Game.Spec.Roles.Role.Kind}Kind}}
+      {- {{!Game.Spec.Roles.Group}Group}}
+    }}
+  }}
+  {- {{!Game.Spec.Rounds}Rounds}
+  {ul
+    {- {{!Game.Spec.Rounds.Round}Round}
+    {ul
+      {- {{!Game.Spec.Rounds.Round.Data}Data}
+      {ul
+        {- {{!Game.Spec.Rounds.Round.Data.Phase}Phase}}
+      }}
+    }}
+  }}
+  {- {{!Game.Spec.Players}Players}
+  {ul
+    {- {{!Game.Spec.Players.Selector}Selector}}
+    {- {{!Game.Spec.Players.Player}Player}
+    {ul
+      {- {{!Game.Spec.Players.Player.Status}Status}}
+      {- {{!Game.Spec.Players.Player.Knowledge}Knowledge}}
+    }}
+  }}
+  {- {{!Game.Spec.Abilities}Abilities}
+  {ul
+    {- {{!Game.Spec.Abilities.Ability}Ability}
+    {ul
+      {- {{!Game.Spec.Abilities.Ability.Triggers}Triggers}
+      {ul
+        {- {{!Game.Spec.Abilities.Ability.Triggers.Trigger}Trigger}
+        {ul
+          {- {{!Game.Spec.Abilities.Ability.Triggers.Trigger.Kind}kind}}}
+        }}
+      }}
+    }}
+  }}
+
+{3 {{!Game.System}System}}
+
+{3 {{!Game.Server}Server}}
+
+{2 {{!Utils}Utils}}
+
+{ul
+  {- {{!Utils.Cata}Cata}}
+  {- {{!Utils.Selector}Selector}}
+  {- {{!Utils.Todo}Todo}}
+}

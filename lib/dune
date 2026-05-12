@@ -1,6 +1,7 @@
 (library
  (name cloakaml)
- (libraries cloakaml.utils cloakaml.game cloakaml.modes)
+ ; (libraries cloakaml.utils cloakaml.game cloakaml.modes)
+ (modules cloakaml)
  (wrapped true))
 
 (include_subdirs no)

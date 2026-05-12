@@ -1,14 +1,14 @@
 (** @canonical Modes.BloodOnTheClockTower.TheRoles *)
 
-module Alignment : Mode.Spec.Role.Alignment.S with type t = Alignment.t =
-  Mode.Spec.Role.Alignment.Make (Alignment)
+module Alignment : Spec.Roles.Role.Alignment.S with type t = Alignment.t =
+  Spec.Roles.Role.Alignment.Make (Alignment)
 
 module Kind :
-  Mode.Spec.Role.Kind.S
+  Spec.Roles.Role.Kind.S
   with type t = Kind.t
    and module Alignment = Alignment
    and type alignment = Alignment.t =
-  Mode.Spec.Role.Kind.Make
+  Spec.Roles.Role.Kind.Make
     (Alignment)
     (struct
       include Kind
@@ -23,11 +23,11 @@ module Kind :
     end)
 
 module Role :
-  Mode.Spec.Role.S
+  Spec.Roles.Role.S
   with type t = Role.t
    and module Kind = Kind
    and type kind = Kind.t =
-  Mode.Spec.Role.Make
+  Spec.Roles.Role.Make
     (Kind)
     (struct
       include Role
@@ -64,4 +64,4 @@ module Role :
       ;;
     end)
 
-module Build () : Mode.Spec.Roles.S = Mode.Spec.Roles.Make (Role)
+module Build () : Spec.Roles.S = Spec.Roles.Make (Role)

@@ -3,7 +3,7 @@
  (public_name cloakaml.modes.blood_on_the_clocktower.the_rounds)
  (preprocess
   (pps ppx_deriving.std))
- (libraries cloakaml.game.mode
+ (libraries cloakaml.game.spec
  cloakaml.modes.blood_on_the_clocktower.the_players
  )
  (modules phase the_rounds)
