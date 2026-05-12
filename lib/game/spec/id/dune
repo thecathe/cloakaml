@@ -1,0 +1,9 @@
+(library
+ (name id)
+ (public_name cloakaml.game.spec.id)
+ (preprocess
+  (pps ppx_deriving.std))
+ (modules id)
+ (wrapped true))
+
+(include_subdirs no)

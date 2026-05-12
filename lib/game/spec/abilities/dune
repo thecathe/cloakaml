@@ -1,0 +1,15 @@
+(library
+ (name abilities)
+ (public_name cloakaml.game.spec.abilities)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.game.spec.enum_type
+  cloakaml.game.spec.enum_map
+  cloakaml.game.spec.round.data
+  cloakaml.game.spec.roles
+  cloakaml.game.spec.abilities.ability)
+ (modules abilities)
+ (wrapped true))
+
+(include_subdirs no)

@@ -2,7 +2,7 @@ let () = print_endline "Hello, World!"
 let log : string -> unit = Printf.printf "%s\n"
 let logl (x : string) : unit = Printf.sprintf "\n%s" x |> log
 
-open Game
+(* open Game *)
 
 (* module Utils = struct
   let setup_players (n : int) : Players.t =
@@ -238,6 +238,6 @@ logl "Server:";
 
 let () =
 logl "[Mode] Blood on the Clocktower:";
- let open Modes.BloodOnTheClockTower in
+ (* let open Modes.BloodOnTheClockTower in *)
 
 ()

@@ -1,0 +1,15 @@
+(library
+ (name knowledge)
+ (public_name cloakaml.game.spec.player.knowledge)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.utils
+  cloakaml.game.spec.enum_type
+  cloakaml.game.spec.enum_map
+  cloakaml.game.spec.roles
+  cloakaml.game.spec.id)
+ (modules knowledge)
+ (wrapped true))
+
+(include_subdirs no)

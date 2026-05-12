@@ -1,9 +1,0 @@
-(library
- (name id)
- (public_name cloakaml.game.mode.spec.id)
- (preprocess
-  (pps ppx_deriving.std))
- (modules id)
- (wrapped true))
-
-(include_subdirs no)

@@ -1,7 +1,7 @@
 (** @canonical Cloakaml.Game *)
 
-(** [module Mode] ... *)
-module Mode = Mode
+(** [module Spec] ... *)
+module Spec = Spec
 
 (** [module Build] ... *)
 (* module Build = Build *)
@@ -12,8 +12,11 @@ module Mode = Mode
 (** [module Live] is ... *)
 (* module Live = Live *)
 
+(** [module System] is ... *)
+module System = System
+
 (** [module Server] is ... *)
-(* module Server = Server *)
+module Server = Server
 
 (** {1 todo} *)
 

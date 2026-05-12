@@ -1,0 +1,13 @@
+(library
+ (name trigger)
+ (public_name cloakaml.game.spec.abilities.ability.triggers.trigger)
+ (preprocess
+  (pps ppx_deriving.std))
+ (libraries
+  cloakaml.game.spec.enum_type
+  cloakaml.game.spec.enum_map
+  cloakaml.game.spec.roles)
+ (modules kind trigger)
+ (wrapped true))
+
+(include_subdirs no)
