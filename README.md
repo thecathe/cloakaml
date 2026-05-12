@@ -2,7 +2,7 @@
 
 > "cloak and dagger" games
 
-For details first [build](#building) the project, then open [./doc/index.html](./doc/index.html) locally.
+Docs and Details are on: [cloakaml.cathe.dev](https://cloakaml.cathe.dev)
 
 ## current state
 
