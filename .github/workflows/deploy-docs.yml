@@ -24,19 +24,19 @@ jobs:
       - name: Create subdomain directory on server
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          host: ${{ secrets.WEBSERVER_IP }}
+          username: ${{ secrets.WEBSERVER_USER }}
+          key: ${{ secrets.WEBSERVER_SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.WEBSERVER_SSH_PASSPHRASE }}
           script: mkdir -p /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}
 
       - name: Copy docs to server
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          host: ${{ secrets.WEBSERVER_IP }}
+          username: ${{ secrets.WEBSERVER_USER }}
+          key: ${{ secrets.WEBSERVER_SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.WEBSERVER_SSH_PASSPHRASE }}
           source: "./_build/default/_doc/_html/"
           target: /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/
           strip_components: 4
