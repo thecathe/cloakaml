@@ -41,12 +41,15 @@ jobs:
           target: /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/
           strip_components: 4
 
-      - name: Create symlink to _html/cloakaml/index.html
+      - name: Extract html dir
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.WEBSERVER_IP }}
           username: ${{ secrets.WEBSERVER_USER }}
           key: ${{ secrets.WEBSERVER_SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.WEBSERVER_SSH_PASSPHRASE }}
-          script: ln -fs /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/_html/${{ github.event.repository.name }}/index.html /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/index.html
+          script: |
+            mv /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/_html/${{ github.event.repository.name }}/ /var/tmp/${{ vars.SITE }}/
+            rm -rf /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/
+            mv /var/tmp/${{ vars.SITE }}/ /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/
 
