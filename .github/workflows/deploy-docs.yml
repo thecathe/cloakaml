@@ -48,5 +48,5 @@ jobs:
           username: ${{ secrets.WEBSERVER_USER }}
           key: ${{ secrets.WEBSERVER_SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.WEBSERVER_SSH_PASSPHRASE }}
-          script: ln -s /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/_html/${{ github.event.repository.name }}/index.html /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/index.html
+          script: ln -fs /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/_html/${{ github.event.repository.name }}/index.html /var/www/${{ vars.SITE }}/subdomains/${{ github.event.repository.name }}/index.html
 
