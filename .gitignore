@@ -1,6 +1,43 @@
-_build
-.direnv
-.vscode
+*.annot
+*.cmo
+*.cma
+*.cmi
+*.a
+*.o
+*.cmx
+*.cmxs
+*.cmxa
 
+# dune generates opam
+*.opam
+
+# ocamlbuild working directory
+_build/
+
+# ocamlbuild targets
+*.byte
+*.native
+
+# oasis generated files
+setup.data
+setup.log
+
+# Merlin configuring file for Vim and Emacs
+.merlin
+
+# Dune generated files
+*.install
+
+# Local OPAM switch
+_opam/
+.vscode/
+
+# direnv
+.direnv
+
+# local stash
+_old
+
+# erlang
 *.beam
 erl_crash.dump
